@@ -185,51 +185,44 @@
 		return
 	var/amount_to_heal = max_integrity - obj_integrity
 	var/healing_for_cycle = min(amount_to_heal, repair_amount)
-	var/proselytizer_cost = 0
+	var/alloy_required = healing_for_cycle
 	if(!proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK))
-		healing_for_cycle = min(healing_for_cycle, proselytizer.stored_alloy * 0.5)
-		proselytizer_cost = healing_for_cycle * 2
-	if(!proselytizer.can_use_alloy(proselytizer_cost))
-		user << "<span class='warning'>You need more liquified alloy to repair [src]!</span>"
+		healing_for_cycle = min(healing_for_cycle, proselytizer.stored_alloy)
+	if(!healing_for_cycle || (!proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) && !proselytizer.can_use_alloy(healing_for_cycle)))
+		user << "<span class='warning'>You need at least <b>[alloy_required]</b> liquified alloy to start repairing [src], and at least <b>[amount_to_heal]</b> to fully repair it!</span>"
 		return
 	user.visible_message("<span class='notice'>[user]'s [proselytizer.name] starts covering [src] in black liquid metal...</span>", \
 	"<span class='alloy'>You start repairing [src]...</span>")
 	//hugeass while because we need to re-check after the do_after
 	proselytizer.repairing = src
-	while(proselytizer && user && src && obj_integrity != max_integrity)
+	while(proselytizer && user && src && obj_integrity < max_integrity)
 		amount_to_heal = max_integrity - obj_integrity
 		if(amount_to_heal <= 0)
 			break
 		healing_for_cycle = min(amount_to_heal, repair_amount)
 		if(!proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK))
-			healing_for_cycle = min(healing_for_cycle, proselytizer.stored_alloy * 0.5)
-			proselytizer_cost = healing_for_cycle * 2
-			if(!proselytizer.can_use_alloy(proselytizer_cost))
-				break
-		else
-			proselytizer_cost = 0
-		if(!proselytizer.can_use_alloy(proselytizer_cost) || !do_after(user, proselytizer_cost, target = src) || !proselytizer || !proselytizer.can_use_alloy(proselytizer_cost))
+			healing_for_cycle = min(healing_for_cycle, proselytizer.stored_alloy)
+		if(!healing_for_cycle || (!proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) && !proselytizer.can_use_alloy(healing_for_cycle)) || \
+		!do_after(user, healing_for_cycle * proselytizer.speed_multiplier, target = src) || \
+		!proselytizer || (!proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) && !proselytizer.can_use_alloy(healing_for_cycle)))
 			break
 		amount_to_heal = max_integrity - obj_integrity
 		if(amount_to_heal <= 0)
 			break
 		healing_for_cycle = min(amount_to_heal, repair_amount)
 		if(!proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK))
-			healing_for_cycle = min(healing_for_cycle, proselytizer.stored_alloy * 0.5)
-			proselytizer_cost = healing_for_cycle * 2
-			if(!proselytizer.can_use_alloy(proselytizer_cost))
-				break
-		else
-			proselytizer_cost = 0
+			healing_for_cycle = min(healing_for_cycle, proselytizer.stored_alloy)
+		if(!healing_for_cycle || (!proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) && !proselytizer.can_use_alloy(healing_for_cycle)))
+			break
 		obj_integrity = Clamp(obj_integrity + healing_for_cycle, 0, max_integrity)
-		proselytizer.modify_stored_alloy(-proselytizer_cost)
+		proselytizer.modify_stored_alloy(-healing_for_cycle)
 		playsound(src, 'sound/machines/click.ogg', 50, 1)
 
 	if(proselytizer)
 		proselytizer.repairing = null
 		if(user)
 			user.visible_message("<span class='notice'>[user]'s [proselytizer.name] stops covering [src] with black liquid metal.</span>", \
-		"<span class='alloy'>You finish repairing [src]. It is now at <b>[obj_integrity]/[max_integrity]</b> integrity.</span>")
+			"<span class='alloy'>You finish repairing [src]. It is now at <b>[obj_integrity]/[max_integrity]</b> integrity.</span>")
 	return
 
 //Hitting a tinkerer's cache will try to fill the proselytizer with alloy after trying to repair.
@@ -238,6 +231,9 @@
 	if(proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) || proselytizer.stored_alloy + REPLICANT_ALLOY_UNIT > proselytizer.max_alloy)
 		user << "<span class='warning'>[proselytizer]'s containers of liquified alloy are full!</span>"
 		return
+	if(!anchored)
+		user << "<span class='warning'>You need to anchor [src] to fill your [proselytizer.name] from it!</span>"
+		return
 	if(!clockwork_component_cache["replicant_alloy"])
 		user << "<span class='warning'>There is no Replicant Alloy in the global component cache!</span>"
 		return
@@ -245,9 +241,9 @@
 	user.visible_message("<span class='notice'>[user] places the end of [proselytizer] in the hole in [src]...</span>", \
 	"<span class='notice'>You start filling [proselytizer] with liquified alloy...</span>")
 	//hugeass check because we need to re-check after the do_after
-	while(proselytizer && !proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) && proselytizer.stored_alloy + REPLICANT_ALLOY_UNIT <= proselytizer.max_alloy && clockwork_component_cache["replicant_alloy"] \
+	while(anchored && proselytizer && !proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) && proselytizer.stored_alloy + REPLICANT_ALLOY_UNIT <= proselytizer.max_alloy && clockwork_component_cache["replicant_alloy"] \
 	&& do_after(user, 10, target = src) \
-	&& proselytizer && !proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) &&  proselytizer.stored_alloy + REPLICANT_ALLOY_UNIT <= proselytizer.max_alloy && clockwork_component_cache["replicant_alloy"])
+	&& anchored && proselytizer && !proselytizer.can_use_alloy(RATVAR_ALLOY_CHECK) &&  proselytizer.stored_alloy + REPLICANT_ALLOY_UNIT <= proselytizer.max_alloy && clockwork_component_cache["replicant_alloy"])
 		proselytizer.modify_stored_alloy(REPLICANT_ALLOY_UNIT)
 		clockwork_component_cache["replicant_alloy"]--
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -257,10 +253,6 @@
 			user.visible_message("<span class='notice'>[user] removes [proselytizer] from the hole in [src], apparently satisfied.</span>", \
 		"<span class='brass'>You finish filling [proselytizer] with liquified alloy. It now contains <b>[proselytizer.stored_alloy]/[proselytizer.max_alloy]</b> units of liquified alloy.</span>")
 	return
-
-//convert wall gears back to brass sheets
-/obj/structure/destructible/clockwork/wall_gear/proselytize_vals(mob/living/user, obj/item/clockwork/clockwork_proselytizer/proselytizer)
-	return list("operation_time" = 10, "new_obj_type" = /obj/item/stack/sheet/brass, "alloy_cost" = 0, "spawn_dir" = 3, "dir_in_new" = TRUE)
 
 //Convert shards and replicant alloy directly to liquid alloy
 /obj/item/clockwork/alloy_shards/proselytize_vals(mob/living/user, obj/item/clockwork/clockwork_proselytizer/proselytizer)
