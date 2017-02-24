@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
+
 
 /obj/machinery/computer/secure_data//TODO:SANITY
 	name = "security records console"
@@ -469,7 +469,7 @@ What a mess.*/
 				var/counter = 1
 				while(active2.fields[text("com_[]", counter)])
 					counter++
-				active2.fields[text("com_[]", counter)] = text("Made by [] ([]) on [] [], []<BR>[]", src.authenticated, src.rank, worldtime2text(), time2text(world.realtime, "MMM DD"), year_integer+540, t1,)
+				active2.fields[text("com_[]", counter)] = text("Made by [] ([]) on [] [], []<BR>[]", src.authenticated, src.rank, worldtime2text(), time2text(world.realtime, "MMM DD"), year_integer+540, t1)
 
 			if("Delete Record (ALL)")
 				if(active1)
@@ -762,7 +762,7 @@ What a mess.*/
 				if(4)
 					R.fields["criminal"] = pick("None", "*Arrest*", "Incarcerated", "Parolled", "Discharged")
 				if(5)
-					R.fields["p_stat"] = pick("*Unconcious*", "Active", "Physically Unfit")
+					R.fields["p_stat"] = pick("*Unconscious*", "Active", "Physically Unfit")
 				if(6)
 					R.fields["m_stat"] = pick("*Insane*", "*Unstable*", "*Watch*", "Stable")
 				if(7)

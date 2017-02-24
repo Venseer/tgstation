@@ -22,8 +22,9 @@ var/datum/subsystem/augury/SSaugury
 	var/biggest_doom = null
 	var/biggest_threat = null
 
-	for(var/d in doombringers)
-		if(!d || qdeleted(d))
+	for(var/db in doombringers)
+		var/datum/d = db
+		if(!d || QDELETED(d))
 			doombringers -= d
 			continue
 		var/threat = doombringers[d]
@@ -76,7 +77,7 @@ var/datum/subsystem/augury/SSaugury
 	active = FALSE
 	UpdateButtonIcon()
 
-/datum/action/innate/augury/UpdateButtonIcon()
+/datum/action/innate/augury/UpdateButtonIcon(status_only = FALSE)
 	..()
 	if(active)
 		button.icon_state = "template_active"

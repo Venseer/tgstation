@@ -52,6 +52,7 @@
 	visor_flags_inv = HIDEFACE
 	toggle_cooldown = 0
 	flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
+	visor_flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
 	dog_fashion = null
 
 /obj/item/clothing/head/helmet/attack_self(mob/user)
@@ -234,8 +235,8 @@
 
 	return
 
-/obj/item/clothing/head/helmet/ui_action_click(mob/user, actiontype)
-	if(actiontype == /datum/action/item_action/toggle_helmet_flashlight)
+/obj/item/clothing/head/helmet/ui_action_click(mob/user, action)
+	if(istype(action, /datum/action/item_action/toggle_helmet_flashlight))
 		toggle_helmlight()
 	else
 		..()
@@ -245,13 +246,12 @@
 		var/obj/item/device/flashlight/seclite/S = I
 		if(can_flashlight)
 			if(!F)
-				if(!user.unEquip(S))
+				if(!user.transferItemToLoc(S, src))
 					return
 				user << "<span class='notice'>You click [S] into place on [src].</span>"
 				if(S.on)
 					SetLuminosity(0)
 				F = S
-				S.loc = src
 				update_icon()
 				update_helmlight(user)
 				verbs += /obj/item/clothing/head/helmet/proc/toggle_helmlight

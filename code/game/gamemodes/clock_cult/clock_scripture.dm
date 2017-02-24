@@ -15,7 +15,6 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 	var/desc = "Ancient Ratvarian lore. This piece seems particularly mundane."
 	var/list/invocations = list() //Spoken over time in the ancient language of Ratvar. See clock_unsorted.dm for more details on the language and how to make it.
 	var/channel_time = 10 //In deciseconds, how long a ritual takes to chant
-	var/list/required_components = list(BELLIGERENT_EYE = 0, VANGUARD_COGWHEEL = 0, GEIS_CAPACITOR = 0, REPLICANT_ALLOY = 0, HIEROPHANT_ANSIBLE = 0) //Components required
 	var/list/consumed_components = list(BELLIGERENT_EYE = 0, VANGUARD_COGWHEEL = 0, GEIS_CAPACITOR = 0, REPLICANT_ALLOY = 0, HIEROPHANT_ANSIBLE = 0) //Components consumed
 	var/obj/item/clockwork/slab/slab //The parent clockwork slab
 	var/mob/living/invoker //The slab's holder
@@ -46,7 +45,14 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 	var/static/list/nzcrentr_penalty = list("You'd be easy to hunt in that little hunk of metal.", "Boss says you need to get back to the beacon.", "Boss says I can kill you if you do this again.", \
 	"Sending you power is too difficult here.", "Boss says stop wasting time.")
 
+/datum/clockwork_scripture/New()
+	creation_update()
+
+/datum/clockwork_scripture/proc/creation_update() //updates any on-creation effects
+	return FALSE //return TRUE if updated
+
 /datum/clockwork_scripture/proc/run_scripture()
+	var/successful = FALSE
 	if(can_recite() && has_requirements())
 		if(slab.busy)
 			invoker << "<span class='warning'>[slab] refuses to work, displaying the message: \"[slab.busy]!\"</span>"
@@ -64,6 +70,7 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 						else
 							clockwork_component_cache[i]--
 							used_cache_components[i]++
+			update_slab_info()
 		channel_time *= slab.speed_multiplier
 		if(!recital() || !check_special_requirements() || !scripture_effects()) //if we fail any of these, refund components used
 			for(var/i in used_slab_components)
@@ -75,15 +82,18 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 			for(var/i in used_cache_components)
 				if(used_cache_components[i])
 					clockwork_component_cache[i] += consumed_components[i]
-		else if(slab && !slab.no_cost && !ratvar_awakens) //if the slab exists and isn't debug and ratvar isn't up, log the scripture as being used
-			feedback_add_details("clockcult_scripture_recited", name)
+			update_slab_info()
+		else
+			successful = TRUE
+			if(slab && !slab.no_cost && !ratvar_awakens) //if the slab exists and isn't debug and ratvar isn't up, log the scripture as being used
+				feedback_add_details("clockcult_scripture_recited", name)
 	if(slab)
 		slab.busy = null
 	qdel(src)
-	return TRUE
+	return successful
 
 /datum/clockwork_scripture/proc/can_recite() //If the words can be spoken
-	if(!slab || !invoker)
+	if(!invoker || !slab || invoker.get_active_held_item() != slab)
 		return FALSE
 	if(!invoker.can_speak_vocal())
 		invoker << "<span class='warning'>You are unable to speak the words of the scripture!</span>"
@@ -96,11 +106,11 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 		checked_penalty = check_offstation_penalty()
 		var/component_printout = "<span class='warning'>You lack the components to recite this piece of scripture!"
 		var/failed = FALSE
-		for(var/i in required_components)
+		for(var/i in consumed_components)
 			var/cache_components = clockwork_caches ? clockwork_component_cache[i] : 0
 			var/total_components = slab.stored_components[i] + cache_components
-			if(required_components[i] && total_components < required_components[i])
-				component_printout += "\nYou have <span class='[get_component_span(i)]_small'><b>[total_components]/[required_components[i]]</b> \
+			if(consumed_components[i] && total_components < consumed_components[i])
+				component_printout += "\nYou have <span class='[get_component_span(i)]_small'><b>[total_components]/[consumed_components[i]]</b> \
 				[get_component_name(i)][i != REPLICANT_ALLOY ? "s":""].</span>"
 				failed = TRUE
 		if(failed)
@@ -123,23 +133,24 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 		switch(primary_component)
 			if(BELLIGERENT_EYE)
 				message = pick(neovgre_penalty)
-				ratvarian_prob = 80
+				ratvarian_prob = 55
 			if(VANGUARD_COGWHEEL)
 				message = pick(inathneq_penalty)
-				ratvarian_prob = 30
+				ratvarian_prob = 25
 			if(GEIS_CAPACITOR)
 				message = pick(sevtug_penalty)
-				ratvarian_prob = 50
+				ratvarian_prob = 40
 			if(REPLICANT_ALLOY)
 				message = pick(nezbere_penalty)
 				ratvarian_prob = 10
 			if(HIEROPHANT_ANSIBLE)
 				message = pick(nzcrentr_penalty)
-				ratvarian_prob = 100
+				ratvarian_prob = 70
 		if(message)
 			if(prob(ratvarian_prob))
 				message = text2ratvar(message)
-			invoker << "<span class='[get_component_span(primary_component)]'>\"[message]\"</span>"
+			invoker << "<span class='[get_component_span(primary_component)]_large'>\"[message]\"</span>"
+			invoker << 'sound/magic/clockwork/invoke_general.ogg'
 	return TRUE
 
 /datum/clockwork_scripture/proc/check_offstation_penalty()
@@ -149,8 +160,6 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 		for(var/i in consumed_components)
 			if(consumed_components[i])
 				consumed_components[i] *= 2
-				if(required_components[i])
-					required_components[i] = max(consumed_components[i], required_components[i])
 		return TRUE
 	return FALSE
 
@@ -171,7 +180,7 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 	if(!channel_time)
 		return TRUE
 	for(var/invocation in invocations)
-		if(!check_special_requirements() || !do_after(invoker, channel_time / invocations.len, target = invoker) || !check_special_requirements())
+		if(!do_after(invoker, channel_time / invocations.len, target = invoker, extra_checks = CALLBACK(src, .proc/check_special_requirements)))
 			slab.busy = null
 			return FALSE
 		if(multiple_invokers_used)
@@ -198,12 +207,11 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 
 /datum/clockwork_scripture/channeled/scripture_effects()
 	for(var/i in 1 to chant_amount)
-		if(!can_recite())
-			break
-		if(!do_after(invoker, chant_interval, target = invoker))
+		if(!do_after(invoker, chant_interval, target = invoker, extra_checks = CALLBACK(src, .proc/can_recite)))
 			break
 		clockwork_say(invoker, text2ratvar(pick(chant_invocations)), whispered)
-		chant_effects(i)
+		if(!chant_effects(i))
+			break
 	if(invoker && slab)
 		chant_end_effects()
 	return TRUE
@@ -243,7 +251,10 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 		invoker.visible_message(observer_message, creator_message)
 	else if(creator_message)
 		invoker << creator_message
-	new object_path (get_turf(invoker))
+	var/obj/O = new object_path (get_turf(invoker))
+	O.ratvar_act() //update the new object so it gets buffed if ratvar is alive
+	if(istype(O, /obj/item))
+		invoker.put_in_hands(O)
 	return TRUE
 
 //Uses a ranged slab ability, returning only when the ability no longer exists(ie, when interrupted) or finishes.
@@ -252,6 +263,7 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 	var/ranged_type = /obj/effect/proc_holder/slab
 	var/ranged_message = "This is a huge goddamn bug, how'd you cast this?"
 	var/timeout_time = 0
+	var/allow_mobility = TRUE //if moving and swapping hands is allowed during the while
 	var/datum/progressbar/progbar
 
 /datum/clockwork_scripture/ranged_ability/Destroy()
@@ -268,8 +280,9 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 	var/successful = FALSE
 	if(timeout_time)
 		progbar = new(invoker, timeout_time, slab)
-	while(slab && slab.slab_ability && !slab.slab_ability.finished && (slab.slab_ability.in_progress || !timeout_time || world.time <= end_time))
-		successful = slab.slab_ability.successful
+	var/turf/T = get_turf(invoker)
+	while(slab && slab.slab_ability && !slab.slab_ability.finished && (slab.slab_ability.in_progress || !timeout_time || world.time <= end_time) && \
+		(allow_mobility || (can_recite() && T == get_turf(invoker))))
 		if(progbar)
 			if(slab.slab_ability.in_progress)
 				qdel(progbar)
@@ -277,8 +290,10 @@ Judgement: 12 servants, 5 caches, 300 CV, and any existing AIs are converted or 
 				progbar.update(end_time - world.time)
 		sleep(1)
 	if(slab)
-		if(slab.slab_ability && !slab.slab_ability.finished)
-			slab.slab_ability.remove_ranged_ability()
+		if(slab.slab_ability)
+			successful = slab.slab_ability.successful
+			if(!slab.slab_ability.finished)
+				slab.slab_ability.remove_ranged_ability()
 		slab.icon_state = "dread_ipad"
 		if(invoker)
 			invoker.update_inv_hands()

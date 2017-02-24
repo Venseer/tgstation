@@ -28,11 +28,10 @@
 		user << "<span class='warning'>This power cell is too large for \the [holder]!</span>"
 		return FALSE
 
-	if(user && !user.unEquip(I))
+	if(user && !user.transferItemToLoc(I, src))
 		return FALSE
 
 	battery = I
-	I.forceMove(src)
 	user << "<span class='notice'>You connect \the [I] to \the [src].</span>"
 
 	return TRUE
@@ -66,7 +65,7 @@
 	icon = 'icons/obj/module.dmi'
 	icon_state = "cell_mini"
 	origin_tech = "powerstorage=2;engineering=1"
-	w_class = 1
+	w_class = WEIGHT_CLASS_TINY
 	maxcharge = 750
 
 
@@ -75,7 +74,7 @@
 	desc = "An advanced power cell, often used in most laptops. It is too large to be fitted into smaller devices."
 	icon_state = "cell"
 	origin_tech = "powerstorage=2;engineering=2"
-	w_class = 2
+	w_class = WEIGHT_CLASS_SMALL
 	maxcharge = 1500
 
 /obj/item/weapon/stock_parts/cell/computer/super
@@ -83,7 +82,7 @@
 	desc = "An advanced power cell, often used in high-end laptops."
 	icon_state = "cell"
 	origin_tech = "powerstorage=3;engineering=3"
-	w_class = 2
+	w_class = WEIGHT_CLASS_SMALL
 	maxcharge = 2000
 
 /obj/item/weapon/stock_parts/cell/computer/micro

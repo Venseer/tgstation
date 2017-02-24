@@ -7,7 +7,7 @@
 	flags =  CONDUCT
 	slot_flags = SLOT_BELT
 	materials = list(MAT_METAL=2000)
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	throwforce = 5
 	throw_speed = 3
 	throw_range = 5
@@ -77,7 +77,7 @@
 		G.loc = loc
 		qdel(G.pin)
 		G.pin = null
-		visible_message("[G] can now fit a new pin, but old one was destroyed in the process.", null, null, 3)
+		visible_message("[G] can now fit a new pin, but the old one was destroyed in the process.", null, null, 3)
 		qdel(src)
 
 /obj/item/weapon/gun/examine(mob/user)
@@ -130,7 +130,7 @@
 	if(flag) //It's adjacent, is the user, or is on the user's person
 		if(target in user.contents) //can't shoot stuff inside us.
 			return
-		if(!ismob(target) || user.a_intent == "harm") //melee attack
+		if(!ismob(target) || user.a_intent == INTENT_HARM) //melee attack
 			return
 		if(target == user && user.zone_selected != "mouth") //so we can't shoot ourselves (unless mouth selected)
 			return
@@ -167,7 +167,7 @@
 	//DUAL (or more!) WIELDING
 	var/bonus_spread = 0
 	var/loop_counter = 0
-	if(ishuman(user) && user.a_intent == "harm")
+	if(ishuman(user) && user.a_intent == INTENT_HARM)
 		var/mob/living/carbon/human/H = user
 		for(var/obj/item/weapon/gun/G in H.held_items)
 			if(G == src || G.weapon_weight >= WEAPON_MEDIUM)
@@ -267,9 +267,10 @@
 	if(user)
 		user.update_inv_hands()
 	feedback_add_details("gun_fired","[src.type]")
+	return 1
 
 /obj/item/weapon/gun/attack(mob/M as mob, mob/user)
-	if(user.a_intent == "harm") //Flogging
+	if(user.a_intent == INTENT_HARM) //Flogging
 		..()
 	else
 		return
@@ -279,13 +280,12 @@
 		if(istype(I, /obj/item/device/flashlight/seclite))
 			var/obj/item/device/flashlight/seclite/S = I
 			if(!gun_light)
-				if(!user.unEquip(I))
+				if(!user.transferItemToLoc(I, src))
 					return
 				user << "<span class='notice'>You click [S] into place on [src].</span>"
 				if(S.on)
 					SetLuminosity(0)
 				gun_light = S
-				I.loc = src
 				update_icon()
 				update_gunlight(user)
 				verbs += /obj/item/weapon/gun/proc/toggle_gunlight
@@ -305,6 +305,8 @@
 					verbs -= /obj/item/weapon/gun/proc/toggle_gunlight
 				for(var/datum/action/item_action/toggle_gunlight/TGL in actions)
 					qdel(TGL)
+	else
+		..()
 
 
 
@@ -408,9 +410,9 @@
 	if(!do_mob(user, target, 120) || user.zone_selected != "mouth")
 		if(user)
 			if(user == target)
-				user.visible_message("<span class='notice'>[user] decided life was worth living.</span>")
+				user.visible_message("<span class='notice'>[user] decided not to shoot.</span>")
 			else if(target && target.Adjacent(user))
-				target.visible_message("<span class='notice'>[user] has decided to spare [target]'s life.</span>", "<span class='notice'>[user] has decided to spare your life!</span>")
+				target.visible_message("<span class='notice'>[user] has decided to spare [target]</span>", "<span class='notice'>[user] has decided to spare your life!</span>")
 		semicd = 0
 		return
 

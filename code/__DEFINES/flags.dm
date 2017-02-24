@@ -16,14 +16,13 @@
 #define CONDUCT			64		// conducts electricity (metal etc.)
 #define ABSTRACT    	128		// for all things that are technically items but used for various different stuff, made it 128 because it could conflict with other flags other way
 #define NODECONSTRUCT  	128		// For machines and structures that should not break into parts, eg, holodeck stuff
-#define FPRINT			256		// takes a fingerprint
+#define OVERLAY_QUEUED  256		//atom queued to SSoverlay
 #define ON_BORDER		512		// item has priority to check when entering or leaving
 
 #define EARBANGPROTECT		1024
 
 #define NOSLIP		1024 		//prevents from slipping on wet floors, in space etc (NOTE: flag shared with THICKMATERIAL for external suits and helmet)
 
-#define OPENCONTAINER	4096	// is an open container for chemistry purposes
 #define HEADBANGPROTECT		4096
 
 // BLOCK_GAS_SMOKE_EFFECT only used in masks at the moment.
@@ -36,6 +35,7 @@
 #define NOJAUNT		1
 #define UNUSED_TRANSIT_TURF 2
 #define CAN_BE_DIRTY 4 //If a turf can be made dirty at roundstart. This is also used in areas.
+#define NO_DEATHRATTLE 16 // Do not notify deadchat about any deaths that occur on this turf.
 
 /*
 	These defines are used specifically with the atom/pass_flags bitmask

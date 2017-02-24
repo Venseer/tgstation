@@ -3,7 +3,7 @@
 	desc = "A module allowing this computer to interface with most common intelliCard modules. Necessary for some programs to run properly."
 	power_usage = 100 //W
 	icon_state = "card_mini"
-	w_class = 2
+	w_class = WEIGHT_CLASS_SMALL
 	origin_tech = "programming=2"
 	device_type = MC_AI
 
@@ -32,13 +32,10 @@
 	if(stored_card)
 		user << "<span class='warning'>You try to insert \the [I] into \the [src], but the slot is occupied.</span>"
 		return FALSE
-	if(user && !user.unEquip(I))
+	if(user && !user.transferItemToLoc(I, src))
 		return FALSE
 
-
 	stored_card = I
-
-	I.forceMove(src)
 	user << "<span class='notice'>You insert \the [I] into \the [src].</span>"
 
 	return TRUE

@@ -11,7 +11,7 @@
 	item_state = "render"
 	force = 15
 	throwforce = 10
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	var/charges = 1
 	var/spawn_type = /obj/singularity/wizard
@@ -128,7 +128,7 @@
 	icon_state = "necrostone"
 	item_state = "electronic"
 	origin_tech = "bluespace=4;materials=4"
-	w_class = 1
+	w_class = WEIGHT_CLASS_TINY
 	var/list/spooky_scaries = list()
 	var/unlimited = 0
 
@@ -159,7 +159,7 @@
 	M.revive(full_heal = 1, admin_revive = 1)
 	spooky_scaries |= M
 	M << "<span class='userdanger'>You have been revived by </span><B>[user.real_name]!</B>"
-	M << "<span class='userdanger'>They are your master now, assist them even if it costs you your new life!</span>"
+	M << "<span class='userdanger'>[user.p_they(TRUE)] [user.p_are()] your master now, assist them even if it costs you your new life!</span>"
 
 	equip_roman_skeleton(M)
 
@@ -182,7 +182,7 @@
 //Funny gimmick, skeletons always seem to wear roman/ancient armour
 /obj/item/device/necromantic_stone/proc/equip_roman_skeleton(mob/living/carbon/human/H)
 	for(var/obj/item/I in H)
-		H.unEquip(I)
+		H.dropItemToGround(I)
 
 	var/hat = pick(/obj/item/clothing/head/helmet/roman, /obj/item/clothing/head/helmet/roman/legionaire)
 	H.equip_to_slot_or_del(new hat(H), slot_head)
@@ -209,7 +209,7 @@ var/global/list/multiverse = list()
 	sharpness = IS_SHARP
 	force = 20
 	throwforce = 10
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 	var/faction = list("unassigned")
 	var/cooldown = 0
@@ -322,7 +322,7 @@ var/global/list/multiverse = list()
 		if("wizard")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/color/lightpurple(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(M), slot_wear_suit)
-			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal/magic(M), slot_shoes)
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(M), slot_head)
 			M.put_in_hands_or_del(sword)
@@ -477,7 +477,7 @@ var/global/list/multiverse = list()
 		return
 
 	if(!link)
-		if(I.loc == user && istype(I) && I.w_class <= 2)
+		if(I.loc == user && istype(I) && I.w_class <= WEIGHT_CLASS_SMALL)
 			user.drop_item()
 			I.loc = src
 			link = I
@@ -520,16 +520,8 @@ var/global/list/multiverse = list()
 				var/turf/T = get_step(target,pick(cardinal))
 				target.Move(T)
 			if("r_arm","l_arm")
-				//use active hand on random nearby mob
-				var/list/nearby_mobs = list()
-				for(var/mob/living/L in range(1, target))
-					if(L!=target)
-						nearby_mobs |= L
-				if(nearby_mobs.len)
-					var/mob/living/T = pick(nearby_mobs)
-					log_game("[user][user.key] made [target][target.key] click on [T] with a voodoo doll.")
-					target.ClickOn(T)
-					GiveHint(target)
+				target.click_random_mob()
+				GiveHint(target)
 			if("head")
 				user << "<span class='notice'>You smack the doll's head with your hand.</span>"
 				target.Dizzy(10)
@@ -579,7 +571,7 @@ var/global/list/multiverse = list()
 	var/mob/living/carbon/last_user
 
 /obj/item/warpwhistle/proc/interrupted(mob/living/carbon/user)
-	if(!user || qdeleted(src))
+	if(!user || QDELETED(src))
 		on_cooldown = FALSE
 		return TRUE
 	return FALSE
@@ -592,7 +584,7 @@ var/global/list/multiverse = list()
 	var/turf/T = get_turf(user)
 	playsound(T,'sound/magic/WarpWhistle.ogg', 200, 1)
 	user.canmove = 0
-	PoolOrNew(/obj/effect/overlay/temp/tornado,T)
+	new /obj/effect/overlay/temp/tornado(T)
 	sleep(20)
 	if(interrupted(user))
 		return
@@ -610,7 +602,7 @@ var/global/list/multiverse = list()
 			T = potential_T
 			break
 		breakout += 1
-	PoolOrNew(/obj/effect/overlay/temp/tornado,T)
+	new /obj/effect/overlay/temp/tornado(T)
 	sleep(20)
 	if(interrupted(user))
 		return

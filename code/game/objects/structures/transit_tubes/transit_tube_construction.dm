@@ -67,8 +67,8 @@
 		user << "<span class='notice'>You start attaching the [name]...</span>"
 		add_fingerprint(user)
 		playsound(src.loc, I.usesound, 50, 1)
-		if(do_after(user, 40/I.toolspeed, target = src))
-			if(qdeleted(src))
+		if(do_after(user, 40*I.toolspeed, target = src))
+			if(QDELETED(src))
 				return
 			user << "<span class='notice'>You attach the [name].</span>"
 			var/obj/structure/transit_tube/R = new build_type(loc, dir)

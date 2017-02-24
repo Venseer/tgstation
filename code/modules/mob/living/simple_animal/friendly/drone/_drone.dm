@@ -27,7 +27,7 @@
 	unsuitable_atmos_damage = 0
 	wander = 0
 	speed = 0
-	ventcrawler = 2
+	ventcrawler = VENTCRAWLER_ALWAYS
 	healable = 0
 	density = 0
 	pass_flags = PASSTABLE | PASSMOB
@@ -45,7 +45,7 @@
 	staticOverlays = list()
 	hud_possible = list(DIAG_STAT_HUD, DIAG_HUD, ANTAG_HUD)
 	unique_name = TRUE
-	faction = list("neutral","silicon")
+	faction = list("neutral","silicon","turret")
 	dextrous = TRUE
 	dextrous_hud_type = /datum/hud/dextrous/drone
 	var/staticChoice = "static"
@@ -130,9 +130,9 @@
 /mob/living/simple_animal/drone/death(gibbed)
 	..(gibbed)
 	if(internal_storage)
-		unEquip(internal_storage)
+		dropItemToGround(internal_storage)
 	if(head)
-		unEquip(head)
+		dropItemToGround(head)
 
 	alert_drones(DRONE_NET_DISCONNECT)
 
@@ -142,9 +142,9 @@
 
 /mob/living/simple_animal/drone/ratvar_act()
 	if(internal_storage)
-		unEquip(internal_storage)
+		dropItemToGround(internal_storage)
 	if(head)
-		unEquip(head)
+		dropItemToGround(head)
 	var/mob/living/simple_animal/drone/cogscarab/ratvar/R = new /mob/living/simple_animal/drone/cogscarab/ratvar(loc)
 	R.setDir(dir)
 	if(mind)

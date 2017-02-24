@@ -3,7 +3,7 @@
 	desc = "A module allowing this computer to read or write data on ID cards. Necessary for some programs to run properly."
 	power_usage = 10 //W
 	icon_state = "card_mini"
-	w_class = 1
+	w_class = WEIGHT_CLASS_TINY
 	origin_tech = "programming=2"
 	device_type = MC_CARD
 
@@ -46,14 +46,16 @@
 	if(stored_card && stored_card2)
 		user << "<span class='warning'>You try to insert \the [I] into \the [src], but its slots are occupied.</span>"
 		return FALSE
-	if(user && !user.unEquip(I))
-		return FALSE
+	if(user)
+		if(!user.transferItemToLoc(I, src))
+			return FALSE
+	else
+		I.forceMove(src)
 
 	if(!stored_card)
 		stored_card = I
 	else
 		stored_card2 = I
-	I.forceMove(src)
 	user << "<span class='notice'>You insert \the [I] into \the [src].</span>"
 
 	return TRUE
@@ -66,14 +68,18 @@
 
 	var/ejected = 0
 	if(stored_card && (!slot || slot == 1))
-		stored_card.forceMove(get_turf(src))
-		stored_card.verb_pickup()
+		if(user)
+			user.put_in_hands(stored_card)
+		else
+			stored_card.forceMove(get_turf(src))
 		stored_card = null
 		ejected++
 
 	if(stored_card2 && (!slot || slot == 2))
-		stored_card2.forceMove(get_turf(src))
-		stored_card2.verb_pickup()
+		if(user)
+			user.put_in_hands(stored_card2)
+		else
+			stored_card2.forceMove(get_turf(src))
 		stored_card2 = null
 		ejected++
 

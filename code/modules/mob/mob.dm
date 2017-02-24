@@ -28,6 +28,7 @@ var/next_mob_id = 0
 	else
 		living_mob_list += src
 	prepare_huds()
+	can_ride_typecache = typecacheof(can_ride_typecache)
 	..()
 
 /atom/proc/prepare_huds()
@@ -290,7 +291,7 @@ var/next_mob_id = 0
 	if (!tile)
 		return 0
 
-	PoolOrNew(/obj/effect/overlay/temp/point, list(A,invisibility))
+	new /obj/effect/overlay/temp/point(A,invisibility)
 
 	return 1
 
@@ -302,6 +303,10 @@ var/next_mob_id = 0
 		return
 	if(AM.anchored || AM.throwing)
 		return
+	if(isliving(AM))
+		var/mob/living/L = AM
+		if(L.buckled && L.buckled.buckle_prevents_pull)
+			return
 	if(throwing || incapacitated())
 		return
 
@@ -326,7 +331,6 @@ var/next_mob_id = 0
 	update_pull_hud_icon()
 
 	if(ismob(AM))
-		changeNext_move(CLICK_CD_MELEE)
 		var/mob/M = AM
 		if(!supress_message)
 			visible_message("<span class='warning'>[src] has grabbed [M] passively!</span>")
@@ -334,6 +338,23 @@ var/next_mob_id = 0
 			M.LAssailant = null
 		else
 			M.LAssailant = usr
+
+/mob/proc/spin(spintime, speed)
+	set waitfor = 0
+	var/D = dir
+	while(spintime >= speed)
+		sleep(speed)
+		switch(D)
+			if(NORTH)
+				D = EAST
+			if(SOUTH)
+				D = WEST
+			if(EAST)
+				D = SOUTH
+			if(WEST)
+				D = NORTH
+		setDir(D)
+		spintime -= speed
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -464,7 +485,8 @@ var/next_mob_id = 0
 			else
 				what = get_item_by_slot(slot)
 			if(what)
-				usr.stripPanelUnequip(what,src,slot)
+				if(!(what.flags & ABSTRACT))
+					usr.stripPanelUnequip(what,src,slot)
 			else
 				usr.stripPanelEquip(what,src,slot)
 
@@ -516,12 +538,15 @@ var/next_mob_id = 0
 	..()
 
 	if(statpanel("Status"))
+		if (client)
+			stat(null, "Ping: [round(client.lastping, 1)]ms (Average: [round(client.avgping, 1)]ms)")
 		stat(null, "Map: [MAP_NAME]")
 		if(nextmap && istype(nextmap))
 			stat(null, "Next Map: [nextmap.friendlyname]")
-		stat(null, "Server Time: [time2text(world.realtime, "YYYY-MM-DD hh:mm")]")
+		stat(null, "Server Time: [time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss")]")
+		stat(null, "Station Time: [worldtime2text()]")
+		stat(null, "Time Dilation: [round(SStime_track.time_dilation_current,1)]% AVG:([round(SStime_track.time_dilation_avg_fast,1)]%, [round(SStime_track.time_dilation_avg,1)]%, [round(SStime_track.time_dilation_avg_slow,1)]%)")
 		if(SSshuttle.emergency)
-			stat(null, "Current Shuttle: [SSshuttle.emergency.name]")
 			var/ETA = SSshuttle.emergency.getModeStr()
 			if(ETA)
 				stat(null, "[ETA] [SSshuttle.emergency.getTimerStr()]")
@@ -641,11 +666,14 @@ var/next_mob_id = 0
 		if(layer == LYING_MOB_LAYER)
 			layer = initial(layer)
 	update_transform()
-	update_action_buttons_icon()
+	update_action_buttons_icon(status_only=TRUE)
 	if(isliving(src))
 		var/mob/living/L = src
 		if(L.has_status_effect(/datum/status_effect/freon))
 			canmove = 0
+	if(!lying && lying_prev)
+		if(client)
+			client.move_delay = world.time + movement_delay()
 	lying_prev = lying
 	return canmove
 
@@ -709,10 +737,10 @@ var/next_mob_id = 0
 	if(mind)
 		return mind.grab_ghost(force = force)
 
-/mob/proc/notify_ghost_cloning(var/message = "Someone is trying to revive you. Re-enter your corpse if you want to be revived!", var/sound = 'sound/effects/genetics.ogg', var/atom/source = null)
+/mob/proc/notify_ghost_cloning(var/message = "Someone is trying to revive you. Re-enter your corpse if you want to be revived!", var/sound = 'sound/effects/genetics.ogg', var/atom/source = null, flashwindow)
 	var/mob/dead/observer/ghost = get_ghost()
 	if(ghost)
-		ghost.notify_cloning(message, sound, source)
+		ghost.notify_cloning(message, sound, source, flashwindow)
 		return ghost
 
 /mob/proc/AddSpell(obj/effect/proc_holder/spell/S)
@@ -918,3 +946,8 @@ var/next_mob_id = 0
 		if ("attack_log")
 			return debug_variable(var_name, attack_log, 0, src, FALSE)
 	. = ..()
+
+/mob/post_buckle_mob(mob/living/M)
+	if(riding_datum)
+		riding_datum.handle_vehicle_offsets()
+		riding_datum.handle_vehicle_layer()

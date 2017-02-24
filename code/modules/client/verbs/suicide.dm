@@ -4,7 +4,10 @@
 	set hidden = 1
 	if(!canSuicide())
 		return
+	var/oldkey = ckey
 	var/confirm = alert("Are you sure you want to commit suicide?", "Confirm Suicide", "Yes", "No")
+	if(ckey != oldkey)
+		return
 	if(!canSuicide())
 		return
 	if(confirm == "Yes")
@@ -43,10 +46,10 @@
 				death(0)
 				return
 
-		var/suicide_message = pick("[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.", \
-							"[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.", \
-							"[src] is twisting \his own neck! It looks like \he's trying to commit suicide.", \
-							"[src] is holding \his breath! It looks like \he's trying to commit suicide.")
+		var/suicide_message = pick("[src] is attempting to bite [p_their()] tongue off! It looks like [p_theyre()] trying to commit suicide.", \
+							"[src] is jamming [p_their()] thumbs into [p_their()] eye sockets! It looks like [p_theyre()] trying to commit suicide.", \
+							"[src] is twisting [p_their()] own neck! It looks like [p_theyre()] trying to commit suicide.", \
+							"[src] is holding [p_their()] breath! It looks like [p_theyre()] trying to commit suicide.")
 
 		visible_message("<span class='danger'>[suicide_message]</span>", "<span class='userdanger'>[suicide_message]</span>")
 
@@ -62,10 +65,9 @@
 		return
 	if(confirm == "Yes")
 		suiciding = 1
-		visible_message("<span class='danger'>[src]'s brain is growing dull and lifeless. It looks like it's lost the will to live.</span>", \
-						"<span class='userdanger'>[src]'s brain is growing dull and lifeless. It looks like it's lost the will to live.</span>")
-		spawn(50)
-			death(0)
+		visible_message("<span class='danger'>[src]'s brain is growing dull and lifeless. [p_they(TRUE)] look[p_s()] like [p_theyve()] lost the will to live.</span>", \
+						"<span class='userdanger'>[src]'s brain is growing dull and lifeless. [p_they(TRUE)] look[p_s()] like [p_theyve()] lost the will to live.</span>")
+		death(0)
 
 /mob/living/carbon/monkey/verb/suicide()
 	set hidden = 1
@@ -76,9 +78,8 @@
 		return
 	if(confirm == "Yes")
 		suiciding = 1
-		//instead of killing them instantly, just put them at -175 health and let 'em gasp for a while
-		visible_message("<span class='danger'>[src] is attempting to bite \his tongue. It looks like \he's trying to commit suicide.</span>", \
-				"<span class='userdanger'>[src] is attempting to bite \his tongue. It looks like \he's trying to commit suicide.</span>")
+		visible_message("<span class='danger'>[src] is attempting to bite [p_their()] tongue. It looks like [p_theyre()] trying to commit suicide.</span>", \
+				"<span class='userdanger'>[src] is attempting to bite [p_their()] tongue. It looks like [p_theyre()] trying to commit suicide.</span>")
 		adjustOxyLoss(max(200- getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		death(0)
 
@@ -91,8 +92,8 @@
 		return
 	if(confirm == "Yes")
 		suiciding = 1
-		visible_message("<span class='danger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>", \
-				"<span class='userdanger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>")
+		visible_message("<span class='danger'>[src] is powering down. It looks like [p_theyre()] trying to commit suicide.</span>", \
+				"<span class='userdanger'>[src] is powering down. It looks like [p_theyre()] trying to commit suicide.</span>")
 		//put em at -175
 		adjustOxyLoss(max(maxHealth * 2 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		death(0)
@@ -106,8 +107,8 @@
 		return
 	if(confirm == "Yes")
 		suiciding = 1
-		visible_message("<span class='danger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>", \
-				"<span class='userdanger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>")
+		visible_message("<span class='danger'>[src] is powering down. It looks like [p_theyre()] trying to commit suicide.</span>", \
+				"<span class='userdanger'>[src] is powering down. It looks like [p_theyre()] trying to commit suicide.</span>")
 		//put em at -175
 		adjustOxyLoss(max(maxHealth * 2 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		death(0)
@@ -134,8 +135,8 @@
 		return
 	if(confirm == "Yes")
 		suiciding = 1
-		visible_message("<span class='danger'>[src] is thrashing wildly! It looks like \he's trying to commit suicide.</span>", \
-				"<span class='userdanger'>[src] is thrashing wildly! It looks like \he's trying to commit suicide.</span>", \
+		visible_message("<span class='danger'>[src] is thrashing wildly! It looks like [p_theyre()] trying to commit suicide.</span>", \
+				"<span class='userdanger'>[src] is thrashing wildly! It looks like [p_theyre()] trying to commit suicide.</span>", \
 				"<span class='italics'>You hear thrashing.</span>")
 		//put em at -175
 		adjustOxyLoss(max(200 - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
@@ -150,8 +151,8 @@
 		return
 	if(confirm == "Yes")
 		suiciding = 1
-		visible_message("<span class='danger'>[src] begins to fall down. It looks like \he's lost the will to live.</span>", \
-						"<span class='userdanger'>[src] begins to fall down. It looks like \he's lost the will to live.</span>")
+		visible_message("<span class='danger'>[src] begins to fall down. It looks like [p_theyve()] lost the will to live.</span>", \
+						"<span class='userdanger'>[src] begins to fall down. It looks like [p_theyve()] lost the will to live.</span>")
 		death(0)
 
 

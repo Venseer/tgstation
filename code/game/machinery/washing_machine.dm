@@ -193,7 +193,7 @@
 		update_icon()
 		return
 
-	else if(user.a_intent != "harm")
+	else if(user.a_intent != INTENT_HARM)
 
 		if (!state_open)
 			user << "<span class='warning'>Open the door first!</span>"
@@ -207,13 +207,12 @@
 			user << "<span class='warning'>The washing machine is full!</span>"
 			return 1
 
-		if(!user.unEquip(W))
+		if(!user.transferItemToLoc(W, src))
 			user << "<span class='warning'>\The [W] is stuck to your hand, you cannot put it in the washing machine!</span>"
 			return 1
 
 		if(istype(W,/obj/item/toy/crayon) || istype(W,/obj/item/weapon/stamp))
 			color_source = W
-		W.loc = src
 		update_icon()
 
 	else
@@ -224,7 +223,7 @@
 		user << "<span class='warning'>[src] is busy.</span>"
 		return
 
-	if(user.pulling && user.a_intent == "grab" && isliving(user.pulling))
+	if(user.pulling && user.a_intent == INTENT_GRAB && isliving(user.pulling))
 		var/mob/living/L = user.pulling
 		if(L.buckled || L.has_buckled_mobs())
 			return

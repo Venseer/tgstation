@@ -28,22 +28,22 @@
 	. = ..()
 	if(!silent_update && new_body)
 		if(.)
-			new_body.visible_message("<span class='heavy_brass'>[new_body]'s eyes glow a blazing yellow!</span>", \
-			"<span class='heavy_brass'>Assist your new companions in their righteous efforts. Your goal is theirs, and theirs yours. You serve the Clockwork Justiciar above all else. Perform his every \
-			whim without hesitation.</span>")
+			new_body.visible_message("<span class='heavy_brass'>[new_body]'s eyes glow a blazing yellow!</span>")
+			new_body << "<span class='heavy_brass'>Assist your new companions in their righteous efforts. Your goal is theirs, and theirs yours. You serve the Clockwork Justiciar above all else. \
+			Perform his every whim without hesitation.</span>"
 		else
-			new_body.visible_message("<span class='warning'>[new_body] seems to resist an unseen force!</span>")
-			new_body << "<span class='warning'><b>And yet, you somehow push it all away.</b></span>"
+			new_body.visible_message("<span class='boldwarning'>[new_body] seems to resist an unseen force!</span>")
+			new_body << "<span class='userdanger'>And yet, you somehow push it all away.</span>"
 
 /datum/antagonist/clockcultist/on_gain()
 	if(ticker && ticker.mode && owner.mind)
 		ticker.mode.servants_of_ratvar += owner.mind
 		ticker.mode.update_servant_icons_added(owner.mind)
 		if(jobban_isbanned(owner, ROLE_SERVANT_OF_RATVAR))
-			addtimer(ticker.mode, "replace_jobbaned_player", 0, TIMER_NORMAL, owner, ROLE_SERVANT_OF_RATVAR, ROLE_SERVANT_OF_RATVAR)
+			INVOKE_ASYNC(ticker.mode, /datum/game_mode.proc/replace_jobbaned_player, owner, ROLE_SERVANT_OF_RATVAR, ROLE_SERVANT_OF_RATVAR)
 	if(owner.mind)
 		owner.mind.special_role = "Servant of Ratvar"
-	owner.attack_log += "\[[time_stamp()]\] <span class='brass'>Has been converted to the cult of Ratvar!</span>"
+	owner.attack_log += "\[[time_stamp()]\] <font color=#BE8700>Has been converted to the cult of Ratvar!</font>"
 	if(issilicon(owner))
 		var/mob/living/silicon/S = owner
 		if(iscyborg(S) && !silent_update)
@@ -73,13 +73,18 @@
 			R.module.rebuild_modules()
 		else if(isAI(S))
 			var/mob/living/silicon/ai/A = S
+			A.can_be_carded = FALSE
 			A.requires_power = POWER_REQ_CLOCKCULT
+			A.languages_spoken &= ~HUMAN
+			var/list/AI_frame = list(image('icons/mob/clockwork_mobs.dmi', A, "aiframe")) //make the AI's cool frame
+			for(var/d in cardinal)
+				AI_frame += image('icons/mob/clockwork_mobs.dmi', A, "eye[rand(1, 10)]", dir = d) //the eyes are randomly fast or slow
+			A.add_overlay(AI_frame)
 			if(!A.lacks_power())
 				A.ai_restore_power()
 			if(A.eyeobj)
 				A.eyeobj.relay_speech = TRUE
-			for(var/C in A.connected_robots)
-				var/mob/living/silicon/robot/R = C
+			for(var/mob/living/silicon/robot/R in A.connected_robots)
 				if(R.connected_ai == A)
 					R.visible_message("<span class='heavy_brass'>[R]'s eyes glow a blazing yellow!</span>", \
 					"<span class='heavy_brass'>Assist your new companions in their righteous efforts. Your goal is theirs, and theirs yours. You serve the Clockwork Justiciar above all else. Perform his every \
@@ -107,6 +112,7 @@
 	owner.throw_alert("clockinfo", /obj/screen/alert/clockwork/infodump)
 	if(!clockwork_gateway_activated)
 		owner.throw_alert("scripturereq", /obj/screen/alert/clockwork/scripture_reqs)
+	update_slab_info()
 	..()
 
 /datum/antagonist/clockcultist/remove_innate_effects()
@@ -122,7 +128,10 @@
 		var/mob/living/silicon/S = owner
 		if(isAI(S))
 			var/mob/living/silicon/ai/A = S
+			A.can_be_carded = initial(A.can_be_carded)
 			A.requires_power = initial(A.requires_power)
+			A.languages_spoken |= HUMAN
+			A.cut_overlays()
 		S.make_laws()
 		S.update_icons()
 		S.show_laws()
@@ -133,6 +142,7 @@
 		R.module.rebuild_modules()
 	if(temp_owner)
 		temp_owner.update_action_buttons_icon() //because a few clockcult things are action buttons and we may be wearing/holding them, we need to update buttons
+	update_slab_info()
 
 /datum/antagonist/clockcultist/on_remove()
 	if(!silent_update)
@@ -144,7 +154,7 @@
 	if(owner.mind)
 		owner.mind.wipe_memory()
 		owner.mind.special_role = null
-	owner.attack_log += "\[[time_stamp()]\] <span class='brass'>Has renounced the cult of Ratvar!</span>"
+	owner.attack_log += "\[[time_stamp()]\] <font color=#BE8700>Has renounced the cult of Ratvar!</font>"
 	if(iscyborg(owner))
 		owner << "<span class='warning'>Despite your freedom from Ratvar's influence, you are still irreparably damaged and no longer possess certain functions such as AI linking.</span>"
 	..()

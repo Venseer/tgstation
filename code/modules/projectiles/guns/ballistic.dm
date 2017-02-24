@@ -3,7 +3,7 @@
 	name = "projectile gun"
 	icon_state = "pistol"
 	origin_tech = "combat=2;materials=2"
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	var/spawnwithmagazine = 1
 	var/mag_type = /obj/item/ammo_box/magazine/m10mm //Removes the need for max_ammo and caliber info
 	var/obj/item/ammo_box/magazine/magazine
@@ -56,29 +56,30 @@
 	if (istype(A, /obj/item/ammo_box/magazine))
 		var/obj/item/ammo_box/magazine/AM = A
 		if (!magazine && istype(AM, mag_type))
-			user.remove_from_mob(AM)
-			magazine = AM
-			magazine.forceMove(src)
-			user << "<span class='notice'>You load a new magazine into \the [src].</span>"
-			chamber_round()
-			A.update_icon()
-			update_icon()
-			return 1
+			if(user.transferItemToLoc(AM, src))
+				magazine = AM
+				user << "<span class='notice'>You load a new magazine into \the [src].</span>"
+				chamber_round()
+				A.update_icon()
+				update_icon()
+				return 1
+			else
+				user << "<span class='warning'>You cannot seem to get \the [src] out of your hands!</span>"
+				return
 		else if (magazine)
 			user << "<span class='notice'>There's already a magazine in \the [src].</span>"
 	if(istype(A, /obj/item/weapon/suppressor))
 		var/obj/item/weapon/suppressor/S = A
 		if(can_suppress)
 			if(!suppressed)
-				if(!user.unEquip(A))
+				if(!user.transferItemToLoc(A, src))
 					return
 				user << "<span class='notice'>You screw [S] onto [src].</span>"
 				suppressed = A
 				S.oldsound = fire_sound
 				S.initial_w_class = w_class
 				fire_sound = 'sound/weapons/Gunshot_silenced.ogg'
-				w_class = 3 //so pistols do not fit in pockets when suppressed
-				A.loc = src
+				w_class = WEIGHT_CLASS_NORMAL //so pistols do not fit in pockets when suppressed
 				update_icon()
 				return
 			else
@@ -172,7 +173,7 @@
 		user.visible_message("[user] shortens \the [src]!", "<span class='notice'>You shorten \the [src].</span>")
 		name = "sawn-off [src.name]"
 		desc = sawn_desc
-		w_class = 3
+		w_class = WEIGHT_CLASS_NORMAL
 		item_state = "gun"
 		slot_flags &= ~SLOT_BACK	//you can't sling it on your back
 		slot_flags |= SLOT_BELT		//but you can wear it on your belt (poorly concealed under a trenchcoat, ideally)
@@ -194,7 +195,7 @@
 	desc = "A universal syndicate small-arms suppressor for maximum espionage."
 	icon = 'icons/obj/guns/projectile.dmi'
 	icon_state = "suppressor"
-	w_class = 2
+	w_class = WEIGHT_CLASS_SMALL
 	var/oldsound = null
 	var/initial_w_class = null
 

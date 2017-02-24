@@ -13,12 +13,12 @@
 	icon_state = "bcircuit"
 	floor_tile = /obj/item/stack/tile/plasteel
 
-/turf/open/floor/bluegrid/New()
+/turf/open/floor/bluegrid/Initialize()
+	SSmapping.nuke_tiles += src
 	..()
-	nuke_tiles += src
 
 /turf/open/floor/bluegrid/Destroy()
-	nuke_tiles -= src
+	SSmapping.nuke_tiles -= src
 	return ..()
 
 /turf/open/floor/greengrid
@@ -67,28 +67,26 @@
 	icon_state = "plating"
 	var/obj/effect/clockwork/overlay/floor/realappearence
 
-/turf/open/floor/clockwork/New()
+/turf/open/floor/clockwork/Initialize()
 	..()
-	PoolOrNew(/obj/effect/overlay/temp/ratvar/floor, src)
-	PoolOrNew(/obj/effect/overlay/temp/ratvar/beam, src)
-	realappearence = PoolOrNew(/obj/effect/clockwork/overlay/floor, src)
+	new /obj/effect/overlay/temp/ratvar/floor(src)
+	new /obj/effect/overlay/temp/ratvar/beam(src)
+	realappearence = new /obj/effect/clockwork/overlay/floor(src)
 	realappearence.linked = src
 	change_construction_value(1)
 
 /turf/open/floor/clockwork/Destroy()
-	be_removed()
-	return ..()
-
-/turf/open/floor/clockwork/ChangeTurf(path, defer_change = FALSE)
-	if(path != type)
-		be_removed()
-	return ..()
-
-/turf/open/floor/clockwork/proc/be_removed()
 	STOP_PROCESSING(SSobj, src)
 	change_construction_value(-1)
-	qdel(realappearence)
-	realappearence = null
+	if(realappearence)
+		qdel(realappearence)
+		realappearence = null
+	return ..()
+
+/turf/open/floor/clockwork/ReplaceWithLattice()
+	..()
+	for(var/obj/structure/lattice/L in src)
+		L.ratvar_act()
 
 /turf/open/floor/clockwork/Entered(atom/movable/AM)
 	..()
@@ -116,36 +114,22 @@
 			if(M.client && (is_servant_of_ratvar(M) || isobserver(M) || M.stat == DEAD))
 				viewing += M.client
 		flick_overlay(I, viewing, 8)
-
-		var/swapdamage = FALSE
-		if(L.has_dna()) //if has_dna() is true they're at least carbon
-			var/mob/living/carbon/C = L
-			if(TOXINLOVER in C.dna.species.species_traits)
-				swapdamage = TRUE
-		if(isanimal(L))
-			var/mob/living/simple_animal/A = L
-			if(A.damage_coeff[TOX] < 0)
-				swapdamage = TRUE
-		if(swapdamage) //they'd take damage, we need to swap it
-			L.adjustToxLoss(3)
-		else
-			L.adjustToxLoss(-3)
+		L.adjustToxLoss(-3, TRUE, TRUE)
 
 /turf/open/floor/clockwork/attackby(obj/item/I, mob/living/user, params)
 	if(istype(I, /obj/item/weapon/crowbar))
 		user.visible_message("<span class='notice'>[user] begins slowly prying up [src]...</span>", "<span class='notice'>You begin painstakingly prying up [src]...</span>")
-		playsound(src, 'sound/items/Crowbar.ogg', 20, 1)
-		if(!do_after(user, 70 / I.toolspeed, target = src))
+		playsound(src, I.usesound, 20, 1)
+		if(!do_after(user, 70*I.toolspeed, target = src))
 			return 0
-		user.visible_message("<span class='notice'>[user] pries up [src]!</span>", "<span class='notice'>You pry up [src], destroying it!</span>")
-		playsound(src, 'sound/items/Crowbar.ogg', 80, 1)
+		user.visible_message("<span class='notice'>[user] pries up [src]!</span>", "<span class='notice'>You pry up [src]!</span>")
+		playsound(src, I.usesound, 80, 1)
 		make_plating()
 		return 1
 	return ..()
 
 /turf/open/floor/clockwork/make_plating()
-	new/obj/item/clockwork/alloy_shards/small(src)
-	new/obj/item/clockwork/alloy_shards/medium(src)
+	new /obj/item/stack/tile/brass(src)
 	return ..()
 
 /turf/open/floor/clockwork/narsie_act()
@@ -154,7 +138,7 @@
 		var/previouscolor = color
 		color = "#960000"
 		animate(src, color = previouscolor, time = 8)
-		addtimer(src, "update_atom_colour", 8)
+		addtimer(CALLBACK(src, /atom/proc/update_atom_colour), 8)
 
 
 /turf/open/floor/bluespace
@@ -212,7 +196,9 @@
 			ChangeTurf(src.baseturf)
 
 /turf/open/floor/vines/ChangeTurf(turf/open/floor/T)
-	for(var/obj/structure/spacevine/SV in src)
-		qdel(SV)
 	. = ..()
+	//Do this *after* the turf has changed as qdel in spacevines will call changeturf again if it hasn't
+	for(var/obj/structure/spacevine/SV in src)
+		if(!QDESTROYING(SV))//Helps avoid recursive loops
+			qdel(SV)
 	UpdateAffectingLights()

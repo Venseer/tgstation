@@ -21,6 +21,7 @@
 	can_be_unanchored = 1
 	resistance_flags = ACID_PROOF
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0, fire = 80, acid = 100)
+	CanAtmosPass = ATMOS_PASS_PROC
 
 /obj/structure/window/examine(mob/user)
 	..()
@@ -54,7 +55,6 @@
 	if(rods)
 		debris += new /obj/item/stack/rods(src, rods)
 
-
 /obj/structure/window/narsie_act()
 	add_atom_colour(NARSIE_WINDOW_COLOUR, FIXED_COLOUR_PRIORITY)
 	for(var/obj/item/weapon/shard/shard in debris)
@@ -84,9 +84,17 @@
 		return 0	//full tile window, you can't move into it!
 	if(get_dir(loc, target) == dir)
 		return !density
-	else
-		return 1
-
+	if(istype(mover, /obj/structure/window))
+		var/obj/structure/window/W = mover
+		if(!valid_window_location(loc, W.ini_dir))
+			return FALSE
+	else if(istype(mover, /obj/structure/windoor_assembly))
+		var/obj/structure/windoor_assembly/W = mover
+		if(!valid_window_location(loc, W.ini_dir))
+			return FALSE
+	else if(istype(mover, /obj/machinery/door/window) && !valid_window_location(loc, mover.dir))
+		return FALSE
+	return 1
 
 /obj/structure/window/CheckExit(atom/movable/O as mob|obj, target)
 	if(istype(O) && O.checkpass(PASSGLASS))
@@ -128,13 +136,13 @@
 		return 1 //skip the afterattack
 
 	add_fingerprint(user)
-	if(istype(I, /obj/item/weapon/weldingtool) && user.a_intent == "help")
+	if(istype(I, /obj/item/weapon/weldingtool) && user.a_intent == INTENT_HELP)
 		var/obj/item/weapon/weldingtool/WT = I
 		if(obj_integrity < max_integrity)
 			if(WT.remove_fuel(0,user))
 				user << "<span class='notice'>You begin repairing [src]...</span>"
-				playsound(loc, 'sound/items/Welder.ogg', 40, 1)
-				if(do_after(user, 40/I.toolspeed, target = src))
+				playsound(loc, WT.usesound, 40, 1)
+				if(do_after(user, 40*I.toolspeed, target = src))
 					obj_integrity = max_integrity
 					playsound(loc, 'sound/items/Welder2.ogg', 50, 1)
 					update_nearby_icons()
@@ -154,7 +162,7 @@
 			else if(!reinf)
 				user << (anchored ? "<span class='notice'>You begin to unscrew the window from the floor...</span>" : "<span class='notice'>You begin to screw the window to the floor...</span>")
 
-			if(do_after(user, 30/I.toolspeed, target = src))
+			if(do_after(user, 30*I.toolspeed, target = src))
 				if(reinf && (state == 1 || state == 2))
 					//If state was unfastened, fasten it, else do the reverse
 					state = (state == 1 ? 2 : 1)
@@ -172,7 +180,7 @@
 		else if (istype(I, /obj/item/weapon/crowbar) && reinf && (state == 0 || state == 1))
 			user << (state == 0 ? "<span class='notice'>You begin to lever the window into the frame...</span>" : "<span class='notice'>You begin to lever the window out of the frame...</span>")
 			playsound(loc, I.usesound, 75, 1)
-			if(do_after(user, 40/I.toolspeed, target = src))
+			if(do_after(user, 40*I.toolspeed, target = src))
 				//If state was out of frame, put into frame, else do the reverse
 				state = (state == 0 ? 1 : 0)
 				user << (state == 1 ? "<span class='notice'>You pry the window into the frame.</span>" : "<span class='notice'>You pry the window out of the frame.</span>")
@@ -181,8 +189,8 @@
 		else if(istype(I, /obj/item/weapon/wrench) && !anchored)
 			playsound(loc, I.usesound, 75, 1)
 			user << "<span class='notice'> You begin to disassemble [src]...</span>"
-			if(do_after(user, 40/I.toolspeed, target = src))
-				if(qdeleted(src))
+			if(do_after(user, 40*I.toolspeed, target = src))
+				if(QDELETED(src))
 					return
 
 				var/obj/item/stack/sheet/G = new glass_type(user.loc, glass_amount)
@@ -225,7 +233,7 @@
 
 
 /obj/structure/window/deconstruct(disassembled = TRUE)
-	if(qdeleted(src))
+	if(QDELETED(src))
 		return
 	if(!disassembled)
 		playsound(src, "shatter", 70, 1)
@@ -250,13 +258,19 @@
 
 	if(anchored)
 		usr << "<span class='warning'>[src] cannot be rotated while it is fastened to the floor!</span>"
-		return 0
+		return FALSE
 
-	setDir(turn(dir, 90))
+	var/target_dir = turn(dir, 90)
+
+	if(!valid_window_location(loc, target_dir))
+		usr << "<span class='warning'>[src] cannot be rotated in that direction!</span>"
+		return FALSE
+
+	setDir(target_dir)
 	air_update_turf(1)
 	ini_dir = dir
 	add_fingerprint(usr)
-	return
+	return TRUE
 
 
 /obj/structure/window/verb/revrotate()
@@ -269,13 +283,19 @@
 
 	if(anchored)
 		usr << "<span class='warning'>[src] cannot be rotated while it is fastened to the floor!</span>"
-		return 0
+		return FALSE
 
-	setDir(turn(dir, 270))
+	var/target_dir = turn(dir, 270)
+
+	if(!valid_window_location(loc, target_dir))
+		usr << "<span class='warning'>[src] cannot be rotated in that direction!</span>"
+		return FALSE
+
+	setDir(target_dir)
 	air_update_turf(1)
 	ini_dir = dir
 	add_fingerprint(usr)
-	return
+	return TRUE
 
 /obj/structure/window/AltClick(mob/user)
 	..()
@@ -315,7 +335,7 @@
 
 //merges adjacent full-tile windows into one
 /obj/structure/window/update_icon()
-	if(!qdeleted(src))
+	if(!QDELETED(src))
 		if(!fulltile)
 			return
 
@@ -325,7 +345,7 @@
 		if(smooth)
 			queue_smooth(src)
 
-		overlays -= crack_overlay
+		cut_overlay(crack_overlay)
 		if(ratio > 75)
 			return
 		crack_overlay = image('icons/obj/structures.dmi',"damage[ratio]",-(layer+0.1))
@@ -347,6 +367,9 @@
 
 	return 1
 
+/obj/structure/window/unanchored
+	anchored = FALSE
+
 /obj/structure/window/reinforced
 	name = "reinforced window"
 	icon_state = "rwindow"
@@ -355,6 +378,9 @@
 	max_integrity = 50
 	explosion_block = 1
 	glass_type = /obj/item/stack/sheet/rglass
+
+/obj/structure/window/reinforced/unanchored
+	anchored = FALSE
 
 /obj/structure/window/reinforced/tinted
 	name = "tinted window"
@@ -378,6 +404,9 @@
 	canSmoothWith = list(/obj/structure/window/fulltile, /obj/structure/window/reinforced/fulltile, /obj/structure/window/reinforced/tinted/fulltile)
 	glass_amount = 2
 
+/obj/structure/window/fulltile/unanchored
+	anchored = FALSE
+
 /obj/structure/window/reinforced/fulltile
 	icon = 'icons/obj/smooth_structures/reinforced_window.dmi'
 	icon_state = "r_window"
@@ -388,6 +417,9 @@
 	canSmoothWith = list(/obj/structure/window/fulltile, /obj/structure/window/reinforced/fulltile, /obj/structure/window/reinforced/tinted/fulltile)
 	level = 3
 	glass_amount = 2
+
+/obj/structure/window/reinforced/fulltile/unanchored
+	anchored = FALSE
 
 /obj/structure/window/reinforced/tinted/fulltile
 	icon = 'icons/obj/smooth_structures/tinted_window.dmi'
@@ -437,10 +469,10 @@
 	icon = 'icons/obj/smooth_structures/clockwork_window.dmi'
 	icon_state = "clockwork_window_single"
 	resistance_flags = FIRE_PROOF | ACID_PROOF
-	max_integrity = 100
+	max_integrity = 80
 	armor = list(melee = 60, bullet = 25, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 100, fire = 80, acid = 100)
 	explosion_block = 2 //fancy AND hard to destroy. the most useful combination.
-	glass_type = /obj/item/stack/sheet/brass
+	glass_type = /obj/item/stack/tile/brass
 	glass_amount = 1
 	var/made_glow = FALSE
 
@@ -452,12 +484,13 @@
 	var/amount_of_gears = 2
 	if(!fulltile)
 		if(direct)
-			var/obj/effect/E = PoolOrNew(/obj/effect/overlay/temp/ratvar/window/single, get_turf(src))
+			var/obj/effect/E = new /obj/effect/overlay/temp/ratvar/window/single(get_turf(src))
 			setDir(direct)
+			ini_dir = direct
 			E.setDir(direct)
 			made_glow = TRUE
 	else
-		PoolOrNew(/obj/effect/overlay/temp/ratvar/window, get_turf(src))
+		new /obj/effect/overlay/temp/ratvar/window(get_turf(src))
 		made_glow = TRUE
 		amount_of_gears = 4
 	for(var/i in 1 to amount_of_gears)
@@ -466,7 +499,7 @@
 
 /obj/structure/window/reinforced/clockwork/setDir(direct)
 	if(!made_glow)
-		var/obj/effect/E = PoolOrNew(/obj/effect/overlay/temp/ratvar/window/single, get_turf(src))
+		var/obj/effect/E = new /obj/effect/overlay/temp/ratvar/window/single(get_turf(src))
 		E.setDir(direct)
 		made_glow = TRUE
 	..()
@@ -476,8 +509,9 @@
 	return ..()
 
 /obj/structure/window/reinforced/clockwork/ratvar_act()
-	obj_integrity = max_integrity
-	update_icon()
+	if(ratvar_awakens)
+		obj_integrity = max_integrity
+		update_icon()
 
 /obj/structure/window/reinforced/clockwork/narsie_act()
 	take_damage(rand(25, 75), BRUTE)
@@ -485,7 +519,10 @@
 		var/previouscolor = color
 		color = "#960000"
 		animate(src, color = previouscolor, time = 8)
-		addtimer(src, "update_atom_colour", 8)
+		addtimer(CALLBACK(src, /atom/proc/update_atom_colour), 8)
+
+/obj/structure/window/reinforced/clockwork/unanchored
+	anchored = FALSE
 
 /obj/structure/window/reinforced/clockwork/fulltile
 	icon_state = "clockwork_window"
@@ -493,6 +530,10 @@
 	canSmoothWith = null
 	fulltile = 1
 	dir = FULLTILE_WINDOW_DIR
-	max_integrity = 150
+	max_integrity = 120
+	level = 3
 	glass_amount = 2
 	made_glow = TRUE
+
+/obj/structure/window/reinforced/clockwork/fulltile/unanchored
+	anchored = FALSE

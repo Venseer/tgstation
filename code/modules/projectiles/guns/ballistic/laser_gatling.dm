@@ -8,7 +8,7 @@
 	icon_state = "holstered"
 	item_state = "backpack"
 	slot_flags = SLOT_BACK
-	w_class = 5
+	w_class = WEIGHT_CLASS_HUGE
 	var/obj/item/weapon/gun/ballistic/minigun/gun = null
 	var/armed = 0 //whether the gun is attached, 0 is attached, 1 is the gun is wielded.
 	var/overheat = 0
@@ -46,13 +46,13 @@
 
 /obj/item/weapon/minigunpack/attackby(obj/item/weapon/W, mob/user, params)
 	if(W == gun) //Don't need armed check, because if you have the gun assume its armed.
-		user.unEquip(gun,1)
+		user.dropItemToGround(gun, TRUE)
 	else
 		..()
 
 /obj/item/weapon/minigunpack/dropped(mob/user)
 	if(armed)
-		user.unEquip(gun,1)
+		user.dropItemToGround(gun, TRUE)
 
 /obj/item/weapon/minigunpack/MouseDrop(atom/over_object)
 	if(armed)
@@ -63,13 +63,11 @@
 		if(!over_object)
 			return
 
-		if(!M.restrained() && !M.stat)
+		if(!M.incapacitated())
 
 			if(istype(over_object, /obj/screen/inventory/hand))
 				var/obj/screen/inventory/hand/H = over_object
-				if(!M.unEquip(src))
-					return
-				M.put_in_hand(src, H.held_index)
+				M.putItemFromInventoryInHandIfPossible(src, H.held_index)
 
 
 /obj/item/weapon/minigunpack/update_icon()
@@ -101,7 +99,7 @@
 	flags = CONDUCT | HANDSLOW
 	slowdown = 1
 	slot_flags = null
-	w_class = 5
+	w_class = WEIGHT_CLASS_HUGE
 	materials = list()
 	burst_size = 3
 	automatic = 0

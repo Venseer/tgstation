@@ -26,6 +26,12 @@
 	if(!burn_stuff())
 		STOP_PROCESSING(SSobj, src)
 
+/turf/open/floor/plating/lava/singularity_act()
+	return
+
+/turf/open/floor/plating/lava/singularity_pull(S, current_size)
+	return
+
 /turf/open/floor/plating/lava/make_plating()
 	return
 
@@ -37,17 +43,31 @@
 
 /turf/open/floor/plating/lava/TakeTemperature(temp)
 
+
+/turf/open/floor/plating/lava/proc/is_safe()
+	//if anything matching this typecache is found in the lava, we don't burn things
+	var/static/list/lava_safeties_typecache = typecacheof(list(/obj/structure/lattice/catwalk))
+	var/list/found_safeties = typecache_filter_list(contents, lava_safeties_typecache)
+	return LAZYLEN(found_safeties)
+
+
 /turf/open/floor/plating/lava/proc/burn_stuff(AM)
 	. = 0
+
+	if(is_safe())
+		return FALSE
+
 	var/thing_to_check = src
 	if (AM)
 		thing_to_check = list(AM)
 	for(var/thing in thing_to_check)
 		if(isobj(thing))
 			var/obj/O = thing
-			if((O.resistance_flags & (LAVA_PROOF|ON_FIRE|INDESTRUCTIBLE)) || O.throwing)
+			if((O.resistance_flags & (LAVA_PROOF|INDESTRUCTIBLE)) || O.throwing)
 				continue
 			. = 1
+			if((O.resistance_flags & (ON_FIRE)))
+				continue
 			if(!(O.resistance_flags & FLAMMABLE))
 				O.resistance_flags |= FLAMMABLE //Even fireproof things burn up in lava
 			if(O.resistance_flags & FIRE_PROOF)

@@ -31,6 +31,7 @@
 	..()
 	ConsumeTile()
 	if(atmosblock)
+		CanAtmosPass = ATMOS_PASS_NO
 		air_update_turf(1)
 
 /obj/structure/blob/proc/creation_action() //When it's created by the overmind, do this.
@@ -61,9 +62,6 @@
 					if(C)
 						result++
 		. -= result - 1
-
-/obj/structure/blob/CanAtmosPass(turf/T)
-	return !atmosblock
 
 /obj/structure/blob/BlockSuperconductivity()
 	return atmosblock
@@ -142,7 +140,7 @@
 		loc.blob_act(src) //don't ask how a wall got on top of the core, just eat it
 
 /obj/structure/blob/proc/blob_attack_animation(atom/A = null, controller) //visually attacks an atom
-	var/obj/effect/overlay/temp/blob/O = PoolOrNew(/obj/effect/overlay/temp/blob, src.loc)
+	var/obj/effect/overlay/temp/blob/O = new /obj/effect/overlay/temp/blob(src.loc)
 	O.setDir(dir)
 	if(controller)
 		var/mob/camera/blob/BO = controller
@@ -210,7 +208,7 @@
 		if(overmind)
 			overmind.blob_reagent_datum.emp_reaction(src, severity)
 		if(prob(100 - severity * 30))
-			PoolOrNew(/obj/effect/overlay/temp/emp, get_turf(src))
+			new /obj/effect/overlay/temp/emp(get_turf(src))
 
 /obj/structure/blob/tesla_act(power)
 	..()

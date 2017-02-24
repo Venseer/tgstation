@@ -54,12 +54,12 @@ var/const/SLIDE_ICE = 8
 
 /mob/living/carbon/Move(NewLoc, direct)
 	. = ..()
-	if(.)
+	if(. && mob_has_gravity()) //floating is easy
 		if(dna && dna.species && (NOHUNGER in dna.species.species_traits))
 			nutrition = NUTRITION_LEVEL_FED - 1	//just less than feeling vigorous
 		else if(nutrition && stat != DEAD)
 			nutrition -= HUNGER_FACTOR/10
-			if(m_intent == "run")
+			if(m_intent == MOVE_INTENT_RUN)
 				nutrition -= HUNGER_FACTOR/10
-		if((disabilities & FAT) && m_intent == "run" && bodytemperature <= 360)
+		if((disabilities & FAT) && m_intent == MOVE_INTENT_RUN && bodytemperature <= 360)
 			bodytemperature += 2

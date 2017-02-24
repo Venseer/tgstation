@@ -1,6 +1,6 @@
 /obj/item/weapon/gun/ballistic/automatic
 	origin_tech = "combat=4;materials=2"
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	var/alarmed = 0
 	var/select = 1
 	can_suppress = 1
@@ -34,21 +34,22 @@
 	if(istype(A, /obj/item/ammo_box/magazine))
 		var/obj/item/ammo_box/magazine/AM = A
 		if(istype(AM, mag_type))
-			if(magazine)
-				user << "<span class='notice'>You perform a tactical reload on \the [src], replacing the magazine.</span>"
-				magazine.dropped()
-				magazine.forceMove(get_turf(src.loc))
-				magazine.update_icon()
-				magazine = null
+			var/obj/item/ammo_box/magazine/oldmag = magazine
+			if(user.transferItemToLoc(AM, src))
+				magazine = AM
+				if(oldmag)
+					user << "<span class='notice'>You perform a tactical reload on \the [src], replacing the magazine.</span>"
+					oldmag.dropped()
+					oldmag.forceMove(get_turf(src.loc))
+					oldmag.update_icon()
+				else
+					user << "<span class='notice'>You insert the magazine into \the [src].</span>"
+				chamber_round()
+				A.update_icon()
+				update_icon()
+				return 1
 			else
-				user << "<span class='notice'>You insert the magazine into \the [src].</span>"
-			user.remove_from_mob(AM)
-			magazine = AM
-			magazine.loc = src
-			chamber_round()
-			A.update_icon()
-			update_icon()
-			return 1
+				user << "<span class='warning'>You cannot seem to get \the [src] out of your hands!</span>"
 
 /obj/item/weapon/gun/ballistic/automatic/ui_action_click()
 	burst_select()
@@ -212,7 +213,7 @@
 	desc = "Based on the classic 'Chicago Typewriter'."
 	icon_state = "tommygun"
 	item_state = "shotgun"
-	w_class = 5
+	w_class = WEIGHT_CLASS_HUGE
 	slot_flags = 0
 	origin_tech = "combat=5;materials=1;syndicate=3"
 	mag_type = /obj/item/ammo_box/magazine/tommygunm45
@@ -243,7 +244,7 @@
 	desc = "A semi-auto, mag-fed shotgun for combat in narrow corridors, nicknamed 'Bulldog' by boarding parties. Compatible only with specialized 8-round drum magazines."
 	icon_state = "bulldog"
 	item_state = "bulldog"
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	origin_tech = "combat=6;materials=4;syndicate=6"
 	mag_type = /obj/item/ammo_box/magazine/m12g
 	fire_sound = 'sound/weapons/Gunshot.ogg'
@@ -259,17 +260,11 @@
 /obj/item/weapon/gun/ballistic/automatic/shotgun/bulldog/New()
 	..()
 	update_icon()
-	return
-
-/obj/item/weapon/gun/ballistic/automatic/shotgun/bulldog/proc/update_magazine()
-	if(magazine)
-		src.overlays = 0
-		add_overlay("[magazine.icon_state]")
-		return
 
 /obj/item/weapon/gun/ballistic/automatic/shotgun/bulldog/update_icon()
-	src.overlays = 0
-	update_magazine()
+	if(magazine)
+		cut_overlays()
+		add_overlay("[magazine.icon_state]")
 	icon_state = "bulldog[chambered ? "" : "-e"]"
 
 /obj/item/weapon/gun/ballistic/automatic/shotgun/bulldog/afterattack()
@@ -286,7 +281,7 @@
 	desc = "A heavily modified 5.56x45mm light machine gun, designated 'L6 SAW'. Has 'Aussec Armoury - 2531' engraved on the receiver below the designation."
 	icon_state = "l6closed100"
 	item_state = "l6closedmag"
-	w_class = 5
+	w_class = WEIGHT_CLASS_HUGE
 	slot_flags = 0
 	origin_tech = "combat=6;engineering=3;syndicate=6"
 	mag_type = /obj/item/ammo_box/magazine/mm556x45
@@ -363,7 +358,7 @@
 	origin_tech = "combat=7"
 	can_unsuppress = 1
 	can_suppress = 1
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	zoomable = TRUE
 	zoom_amt = 7 //Long range, enough to see in front of you, but no tiles behind you.
 	slot_flags = SLOT_BACK

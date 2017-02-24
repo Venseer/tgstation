@@ -103,9 +103,8 @@
 			user << "<span class='warning'>You cannot install the upgrade to [src] while wearing it.</span>"
 			return
 
-		if(user.unEquip(I))
+		if(user.transferItemToLoc(I, src))
 			jetpack = I
-			I.loc = src
 			user << "<span class='notice'>You successfully install the jetpack into [src].</span>"
 
 	else if(istype(I, /obj/item/weapon/screwdriver))
@@ -315,7 +314,7 @@
 	icon_state = "hardsuit1-syndi"
 	item_state = "syndie_hardsuit"
 	item_color = "syndi"
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	armor = list(melee = 40, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 50, fire = 50, acid = 90)
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_box,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword/saber,/obj/item/weapon/restraints/handcuffs,/obj/item/weapon/tank/internals)
 	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/syndi
@@ -388,7 +387,7 @@
 	name = "gem-encrusted hardsuit"
 	desc = "A bizarre gem-encrusted suit that radiates magical energies."
 	item_state = "wiz_hardsuit"
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	armor = list(melee = 40, bullet = 40, laser = 40, energy = 20, bomb = 35, bio = 100, rad = 50, fire = 100, acid = 100)
 	allowed = list(/obj/item/weapon/teleportation_scroll,/obj/item/weapon/tank/internals)
@@ -483,6 +482,7 @@
 	armor = list(melee = 30, bullet = 15, laser = 30, energy = 10, bomb = 10, bio = 100, rad = 50, fire = 75, acid = 75)
 	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/security
 
+	//Head of Security hardsuit
 /obj/item/clothing/head/helmet/space/hardsuit/security/hos
 	name = "head of security's hardsuit helmet"
 	desc = "a special bulky helmet designed for work in a hazardous, low pressure environment. Has an additional layer of armor."
@@ -497,29 +497,34 @@
 	desc = "A special bulky suit that protects against hazardous, low pressure environments. Has an additional layer of armor."
 	armor = list(melee = 45, bullet = 25, laser = 30, energy = 10, bomb = 25, bio = 100, rad = 50, fire = 95, acid = 95)
 	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/security/hos
+	jetpack = /obj/item/weapon/tank/jetpack/suit
 
 	//Captain
 /obj/item/clothing/head/helmet/space/hardsuit/captain
 	name = "captain's hardsuit helmet"
 	icon_state = "capspace"
 	item_state = "capspacehelmet"
-	desc = "A special hardsuit helmet designed for only the most fashionable of military figureheads."
+	desc = "A tactical SWAT helmet MK.II boasting better protection and a horrible fashion sense."
 	armor = list(melee = 40, bullet = 50, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 50, fire = 100, acid = 100)
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	flags_inv = HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR //we want to see the mask
+	heat_protection = HEAD
+	max_heat_protection_temperature = FIRE_IMMUNITY_HELM_MAX_TEMP_PROTECT
 	actions_types = list()
 
 /obj/item/clothing/head/helmet/space/hardsuit/captain/attack_self()
 	return //Sprites required for flashlight
 
 /obj/item/clothing/suit/space/hardsuit/captain
-	name = "captain's hardsuit"
-	desc = "A bulky, heavy-duty piece of exclusive Nanotrasen hardsuit armor. YOU are in charge!"
+	name = "captain's SWAT suit"
+	desc = "A MK.II SWAT suit with streamlined joints and armor made out of superior materials, insulated against intense heat. The most advanced tactical armor available Usually reserved for heavy hitter corporate security, this one has a regal finish in Nanotrasen company colors. Better not let the assistants get a hold of it."
 	icon_state = "caparmor"
 	item_state = "capspacesuit"
 	allowed = list(/obj/item/weapon/tank/internals, /obj/item/device/flashlight,/obj/item/weapon/gun/energy, /obj/item/weapon/gun/ballistic, /obj/item/ammo_box, /obj/item/ammo_casing, /obj/item/weapon/melee/baton,/obj/item/weapon/restraints/handcuffs)
 	armor = list(melee = 40, bullet = 50, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 50, fire = 100, acid = 100)
 	resistance_flags = FIRE_PROOF | ACID_PROOF
+	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
+	max_heat_protection_temperature = FIRE_IMMUNITY_SUIT_MAX_TEMP_PROTECT //this needed to be added a long fucking time ago
 	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/captain
 
 	//Clown
@@ -604,7 +609,7 @@
 /obj/item/clothing/suit/space/hardsuit/shielded/worn_overlays(isinhands)
     . = list()
     if(!isinhands)
-        . += image(icon = 'icons/effects/effects.dmi', icon_state = "[shield_state]")
+        . += image(layer = MOB_LAYER+0.01, icon = 'icons/effects/effects.dmi', icon_state = "[shield_state]")
 
 /obj/item/clothing/head/helmet/space/hardsuit/shielded
 	resistance_flags = FIRE_PROOF | ACID_PROOF

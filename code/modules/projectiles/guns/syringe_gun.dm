@@ -3,7 +3,7 @@
 	desc = "A spring loaded rifle designed to fit syringes, used to incapacitate unruly patients from a distance."
 	icon_state = "syringegun"
 	item_state = "syringegun"
-	w_class = 3
+	w_class = WEIGHT_CLASS_NORMAL
 	throw_speed = 3
 	throw_range = 7
 	force = 4
@@ -52,11 +52,10 @@
 /obj/item/weapon/gun/syringe/attackby(obj/item/A, mob/user, params, show_msg = 1)
 	if(istype(A, /obj/item/weapon/reagent_containers/syringe))
 		if(syringes.len < max_syringes)
-			if(!user.unEquip(A))
+			if(!user.transferItemToLoc(A, src))
 				return
 			user << "<span class='notice'>You load [A] into \the [src].</span>"
 			syringes.Add(A)
-			A.forceMove(src)
 			recharge_newshot()
 			return 1
 		else
@@ -74,7 +73,7 @@
 	desc = "A small spring-loaded sidearm that functions identically to a syringe gun."
 	icon_state = "syringe_pistol"
 	item_state = "gun" //Smaller inhand
-	w_class = 2
+	w_class = WEIGHT_CLASS_SMALL
 	origin_tech = "combat=2;syndicate=2;biotech=3"
 	force = 2 //Also very weak because it's smaller
 	suppressed = 1 //Softer fire sound

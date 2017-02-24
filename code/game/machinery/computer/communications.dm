@@ -1,5 +1,3 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-
 var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 
 // The communications computer
@@ -32,8 +30,6 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 	var/const/STATE_CONFIRM_LEVEL = 9
 	var/const/STATE_TOGGLE_EMERGENCY = 10
 	var/const/STATE_PURCHASE = 11
-	var/const/COMMUNICATION_COOLDOWN = 600
-	var/const/COMMUNICATION_COOLDOWN_AI = 600
 
 	var/status_display_freq = "1435"
 	var/stat_msg1
@@ -117,7 +113,7 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 							if(SEC_LEVEL_BLUE)
 								feedback_inc("alert_comms_blue",1)
 					tmp_alertlevel = 0
-				else:
+				else
 					usr << "<span class='warning'>You are not authorized to do this!</span>"
 					playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, 0)
 					tmp_alertlevel = 0
@@ -152,14 +148,16 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 
 		if("buyshuttle")
 			if(authenticated==2)
-				var/list/shuttles = flatten_list(shuttle_templates)
+				var/list/shuttles = flatten_list(SSmapping.shuttle_templates)
 				var/datum/map_template/shuttle/S = locate(href_list["chosen_shuttle"]) in shuttles
 				if(S && istype(S))
-					if(SSshuttle.emergency.mode != SHUTTLE_CALL && SSshuttle.emergency.mode != SHUTTLE_RECALL && SSshuttle.emergency.mode != SHUTTLE_IDLE)
+					if(SSshuttle.emergency.mode != SHUTTLE_RECALL && SSshuttle.emergency.mode != SHUTTLE_IDLE)
 						usr << "It's a bit late to buy a new shuttle, don't you think?"
 						return
 					if(SSshuttle.shuttle_purchased)
 						usr << "A replacement shuttle has already been purchased."
+					else if(!S.prerequisites_met())
+						usr << "You have not met the requirements for purchasing this shuttle."
 					else
 						if(SSshuttle.points >= S.credit_cost)
 							var/obj/machinery/shuttle_manipulator/M  = locate() in machines
@@ -172,7 +170,7 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 								SSshuttle.points -= S.credit_cost
 								minor_announce("[usr.name] has purchased [S.name] for [S.credit_cost] credits." , "Shuttle Purchase")
 								message_admins("[key_name_admin(usr)] purchased [S.name].")
-								feedback_add_details("shuttle_manipulator", S.name)
+								feedback_add_details("shuttle_purchase", S.name)
 							else
 								usr << "Something went wrong! The shuttle exchange system seems to be down."
 						else
@@ -429,11 +427,12 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 	switch(src.state)
 		if(STATE_DEFAULT)
 			if (src.authenticated)
-				if(SSshuttle.emergencyLastCallLoc)
-					dat += "<BR>Most recent shuttle call/recall traced to: <b>[format_text(SSshuttle.emergencyLastCallLoc.name)]</b>"
-				else
-					dat += "<BR>Unable to trace most recent shuttle call/recall signal."
-				dat += "<BR>Logged in as: [auth_id]"
+				if(SSshuttle.emergencyCallAmount)
+					if(SSshuttle.emergencyLastCallLoc)
+						dat += "Most recent shuttle call/recall traced to: <b>[format_text(SSshuttle.emergencyLastCallLoc.name)]</b><BR>"
+					else
+						dat += "Unable to trace most recent shuttle call/recall signal.<BR>"
+				dat += "Logged in as: [auth_id]"
 				dat += "<BR>"
 				dat += "<BR>\[ <A HREF='?src=\ref[src];operation=logout'>Log Out</A> \]<BR>"
 				dat += "<BR><B>General Functions</B>"
@@ -476,7 +475,7 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 			if (src.currmsg)
 				dat += "<B>[src.messagetitle[src.currmsg]]</B><BR><BR>[src.messagetext[src.currmsg]]"
 				if (src.authenticated)
-					dat += "<BR><BR>\[ <A HREF='?src=\ref[src];operation=delmessage'>Delete \]"
+					dat += "<BR><BR>\[ <A HREF='?src=\ref[src];operation=delmessage'>Delete</a> \]"
 			else
 				src.state = STATE_MESSAGELIST
 				src.attack_hand(user)
@@ -522,11 +521,13 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 
 		if(STATE_PURCHASE)
 			dat += "Budget: [SSshuttle.points] Credits.<BR>"
-			for(var/shuttle_id in shuttle_templates)
-				var/datum/map_template/shuttle/S = shuttle_templates[shuttle_id]
+			for(var/shuttle_id in SSmapping.shuttle_templates)
+				var/datum/map_template/shuttle/S = SSmapping.shuttle_templates[shuttle_id]
 				if(S.can_be_bought && S.credit_cost < INFINITY)
 					dat += "[S.name] | [S.credit_cost] Credits<BR>"
 					dat += "[S.description]<BR>"
+					if(S.prerequisites)
+						dat += "Prerequisites: [S.prerequisites]<BR>"
 					dat += "<A href='?src=\ref[src];operation=buyshuttle;chosen_shuttle=\ref[S]'>(<font color=red><i>Purchase</i></font>)</A><BR><BR>"
 
 	dat += "<BR><BR>\[ [(src.state != STATE_DEFAULT) ? "<A HREF='?src=\ref[src];operation=main'>Main Menu</A> | " : ""]<A HREF='?src=\ref[user];mach_close=communications'>Close</A> \]"
@@ -577,10 +578,11 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 	var/dat = ""
 	switch(src.aistate)
 		if(STATE_DEFAULT)
-			if(SSshuttle.emergencyLastCallLoc)
-				dat += "<BR>Latest emergency signal trace attempt successful.<BR>Last signal origin: <b>[format_text(SSshuttle.emergencyLastCallLoc.name)]</b>.<BR>"
-			else
-				dat += "<BR>Latest emergency signal trace attempt failed.<BR>"
+			if(SSshuttle.emergencyCallAmount)
+				if(SSshuttle.emergencyLastCallLoc)
+					dat += "Latest emergency signal trace attempt successful.<BR>Last signal origin: <b>[format_text(SSshuttle.emergencyLastCallLoc.name)]</b>.<BR>"
+				else
+					dat += "Latest emergency signal trace attempt failed.<BR>"
 			if(authenticated)
 				dat += "Current login: [auth_id]"
 			else
@@ -648,26 +650,13 @@ var/const/CALL_SHUTTLE_REASON_LENGTH = 12
 	return dat
 
 /obj/machinery/computer/communications/proc/make_announcement(mob/living/user, is_silicon)
-	if((is_silicon && ai_message_cooldown > world.time) || (!is_silicon && message_cooldown > world.time))
+	if(!SScommunications.can_announce(user, is_silicon))
 		user << "Intercomms recharging. Please stand by."
 		return
 	var/input = stripped_input(user, "Please choose a message to announce to the station crew.", "What?")
 	if(!input || !user.canUseTopic(src))
 		return
-	if(is_silicon)
-		if(ai_message_cooldown > world.time)
-			return
-		minor_announce(input,"[user.name] Announces:")
-		ai_message_cooldown = world.time + COMMUNICATION_COOLDOWN_AI
-	else
-		if(message_cooldown > world.time)
-			return
-		priority_announce(html_decode(input), null, 'sound/misc/announce.ogg', "Captain")
-		message_cooldown = world.time + COMMUNICATION_COOLDOWN
-	log_say("[key_name(user)] has made a priority announcement: [input]")
-	message_admins("[key_name_admin(user)] has made a priority announcement.")
-
-
+	SScommunications.make_announcement(user, is_silicon, input)
 
 /obj/machinery/computer/communications/proc/post_status(command, data1, data2)
 

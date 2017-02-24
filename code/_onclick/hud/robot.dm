@@ -151,10 +151,9 @@
 	mymobR.thruster_button = using
 
 //Intent
-	using = new /obj/screen/act_intent/robot()
-	using.icon_state = mymob.a_intent
-	static_inventory += using
-	action_intent = using
+	action_intent = new /obj/screen/act_intent/robot()
+	action_intent.icon_state = mymob.a_intent
+	static_inventory += action_intent
 
 //Health
 	healths = new /obj/screen/healths/robot()
@@ -197,6 +196,9 @@
 	var/mob/screenmob = viewer || R
 
 	if(!R.module)
+		return
+
+	if(!R.client)
 		return
 
 	if(R.shown_robot_modules && screenmob.hud_used.hud_shown)
@@ -247,7 +249,7 @@
 		hud_used = new /datum/hud/robot(src)
 
 
-/datum/hud/robot/persistant_inventory_update(mob/viewer)
+/datum/hud/robot/persistent_inventory_update(mob/viewer)
 	if(!mymob)
 		return
 	var/mob/living/silicon/robot/R = mymob

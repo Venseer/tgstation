@@ -162,6 +162,7 @@
 	name = "In Transit"
 	turf_type = /turf/open/space/transit
 	var/list/turf/assigned_turfs = list()
+	var/area/shuttle/transit/assigned_area
 	var/obj/docking_port/mobile/owner
 
 /obj/docking_port/stationary/transit/New()
@@ -236,7 +237,10 @@
 		areaInstance = null
 	. = ..()
 
-/obj/docking_port/mobile/initialize()
+/obj/docking_port/mobile/Initialize(mapload)
+	..()
+	if(!mapload)
+		return
 	var/area/A = get_area(src)
 	if(istype(A, /area/shuttle))
 		areaInstance = A
@@ -341,6 +345,8 @@
 	mode = SHUTTLE_RECALL
 
 /obj/docking_port/mobile/proc/enterTransit()
+	if(SSshuttle.lockdown && z == ZLEVEL_STATION)	//emp went off, no escape
+		return
 	previous = null
 //		if(!destination)
 //			return
@@ -390,7 +396,7 @@
 /obj/docking_port/mobile/proc/create_ripples(obj/docking_port/stationary/S1)
 	var/list/turfs = ripple_area(S1)
 	for(var/t in turfs)
-		ripples += PoolOrNew(/obj/effect/overlay/temp/ripple, t)
+		ripples += new /obj/effect/overlay/temp/ripple(t)
 
 /obj/docking_port/mobile/proc/remove_ripples()
 	for(var/R in ripples)
@@ -458,8 +464,10 @@
 			A0 = new area_type(null)
 		for(var/turf/T0 in L0)
 			A0.contents += T0
-
-
+	if (istype(S1, /obj/docking_port/stationary/transit))
+		areaInstance.parallax_movedir = preferred_direction
+	else
+		areaInstance.parallax_movedir = FALSE
 	remove_ripples()
 
 	//move or squish anything in the way ship at destination
@@ -512,9 +520,14 @@
 	return SSshuttle.getDock(roundstart_move)
 
 /obj/docking_port/mobile/proc/dockRoundstart()
-	var/port = findRoundstartDock()
+	. = dock_id(roundstart_move)
+
+/obj/docking_port/mobile/proc/dock_id(id)
+	var/port = SSshuttle.getDock(id)
 	if(port)
-		return dock(port)
+		. = dock(port)
+	else
+		. = null
 
 /obj/effect/landmark/shuttle_import
 	name = "Shuttle Import"
@@ -554,7 +567,7 @@
 
 //used by shuttle subsystem to check timers
 /obj/docking_port/mobile/proc/check()
-	check_ripples()
+	check_effects()
 
 	if(mode == SHUTTLE_IGNITING)
 		check_transit_zone()
@@ -586,11 +599,27 @@
 	timer = 0
 	destination = null
 
-/obj/docking_port/mobile/proc/check_ripples()
+/obj/docking_port/mobile/proc/check_effects()
 	if(!ripples.len)
 		if((mode == SHUTTLE_CALL) || (mode == SHUTTLE_RECALL))
 			if(timeLeft(1) <= SHUTTLE_RIPPLE_TIME)
 				create_ripples(destination)
+
+	var/obj/docking_port/stationary/S0 = get_docked()
+	if(areaInstance.parallax_movedir && istype(S0, /obj/docking_port/stationary/transit) && timeLeft(1) <= PARALLAX_LOOP_TIME)
+		parallax_slowdown()
+
+/obj/docking_port/mobile/proc/parallax_slowdown()
+	areaInstance.parallax_movedir = FALSE
+	if(assigned_transit && assigned_transit.assigned_area)
+		assigned_transit.assigned_area.parallax_movedir = FALSE
+	var/list/L0 = return_ordered_turfs(x, y, z, dir, areaInstance)
+	for (var/thing in L0)
+		var/turf/T = thing
+		for (var/thing2 in T)
+			var/atom/movable/AM = thing2
+			if (length(AM.client_mobs_in_contents))
+				AM.update_parallax_contents()
 
 /obj/docking_port/mobile/proc/check_transit_zone()
 	if(assigned_transit)
@@ -601,6 +630,14 @@
 /obj/docking_port/mobile/proc/setTimer(wait)
 	timer = world.time + wait
 	last_timer_length = wait
+
+/obj/docking_port/mobile/proc/modTimer(multiple)
+	var/time_remaining = timer - world.time
+	if(time_remaining < 0 || !last_timer_length)
+		return
+	time_remaining *= multiple
+	last_timer_length *= multiple
+	setTimer(time_remaining)
 
 /obj/docking_port/mobile/proc/invertTimer()
 	if(!last_timer_length)
@@ -662,4 +699,13 @@
 		else
 			dst = destination
 		. += " towards [dst ? dst.name : "unknown location"] ([timeLeft(600)] minutes)"
+
+
+// attempts to locate /obj/machinery/computer/shuttle with matching ID inside the shuttle
+/obj/docking_port/mobile/proc/getControlConsole()
+	for(var/obj/machinery/computer/shuttle/S in areaInstance)
+		if(S.shuttleId == id)
+			return S
+	return null
+
 #undef DOCKING_PORT_HIGHLIGHT

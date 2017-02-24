@@ -9,6 +9,8 @@
 	var/block_chance = 0 //Chance to block melee attacks using items while on throw mode.
 	var/restraining = 0 //used in cqc's disarm_act to check if the disarmed is being restrained and so whether they should be put in a chokehold or not
 	var/help_verb = null
+	var/no_guns = FALSE
+	var/allow_temp_override = TRUE //if this martial art can be overridden by temporary martial arts
 
 /datum/martial_art/proc/disarm_act(mob/living/carbon/human/A, mob/living/carbon/human/D)
 	return 0
@@ -75,12 +77,14 @@
 	return 1
 
 /datum/martial_art/proc/teach(mob/living/carbon/human/H,make_temporary=0)
-	if(help_verb)
-		H.verbs += help_verb
 	if(make_temporary)
 		temporary = 1
-	if(H.martial_art && temporary)
+	if(temporary && H.martial_art)
+		if(!H.martial_art.allow_temp_override)
+			return
 		base = H.martial_art
+	if(help_verb)
+		H.verbs += help_verb
 	H.martial_art = src
 
 /datum/martial_art/proc/remove(mob/living/carbon/human/H)
@@ -248,6 +252,8 @@
 /datum/martial_art/the_sleeping_carp
 	name = "The Sleeping Carp"
 	deflection_chance = 100
+	no_guns = TRUE
+	allow_temp_override = FALSE
 	help_verb = /mob/living/carbon/human/proc/sleeping_carp_help
 
 /datum/martial_art/the_sleeping_carp/proc/check_streak(mob/living/carbon/human/A, mob/living/carbon/human/D)
@@ -349,7 +355,7 @@
 		if(A.pulling)
 			D.drop_all_held_items()
 			D.stop_pulling()
-			if(A.a_intent == "grab")
+			if(A.a_intent == INTENT_GRAB)
 				add_logs(A, D, "grabbed", addition="aggressively")
 				A.grab_state = GRAB_AGGRESSIVE //Instant aggressive grab
 			else
@@ -471,7 +477,7 @@
 		D.adjustStaminaLoss(20)
 		D.Stun(5)
 		restraining = 1
-		addtimer(src, "drop_restraining", 50, TIMER_UNIQUE)
+		addtimer(CALLBACK(src, .proc/drop_restraining), 50, TIMER_UNIQUE)
 	return 1
 
 /datum/martial_art/cqc/proc/Consecutive(mob/living/carbon/human/A, mob/living/carbon/human/D)
@@ -677,7 +683,7 @@
 	name = "bo staff"
 	desc = "A long, tall staff made of polished wood. Traditionally used in ancient old-Earth martial arts. Can be wielded to both kill and incapacitate."
 	force = 10
-	w_class = 4
+	w_class = WEIGHT_CLASS_BULKY
 	slot_flags = SLOT_BACK
 	force_unwielded = 10
 	force_wielded = 24
@@ -711,7 +717,7 @@
 	if(C.stat)
 		user << "<span class='warning'>It would be dishonorable to attack a foe while they cannot retaliate.</span>"
 		return
-	if(user.a_intent == "disarm")
+	if(user.a_intent == INTENT_DISARM)
 		if(!wielded)
 			return ..()
 		if(!ishuman(target))
