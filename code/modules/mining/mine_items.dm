@@ -10,7 +10,7 @@
 
 /obj/effect/light_emitter/New()
 	..()
-	SetLuminosity(set_luminosity, set_cap)
+	set_light(set_luminosity, set_cap)
 
 /**********************Miner Lockers**************************/
 
@@ -18,9 +18,7 @@
 	name = "mining wardrobe"
 	icon_door = "mixed"
 
-/obj/structure/closet/wardrobe/miner/New()
-	..()
-	contents = list()
+/obj/structure/closet/wardrobe/miner/PopulateContents()
 	new /obj/item/weapon/storage/backpack/dufflebag(src)
 	new /obj/item/weapon/storage/backpack/explorer(src)
 	new /obj/item/weapon/storage/backpack/satchel/explorer(src)
@@ -37,9 +35,9 @@
 /obj/structure/closet/secure_closet/miner
 	name = "miner's equipment"
 	icon_state = "mining"
-	req_access = list(access_mining)
+	req_access = list(GLOB.access_mining)
 
-/obj/structure/closet/secure_closet/miner/New()
+/obj/structure/closet/secure_closet/miner/PopulateContents()
 	..()
 	new /obj/item/stack/sheet/mineral/sandbags(src, 5)
 	new /obj/item/weapon/storage/box/emptysandbags(src)
@@ -68,8 +66,8 @@
 	var/global/list/dumb_rev_heads = list()
 
 /obj/machinery/computer/shuttle/mining/attack_hand(mob/user)
-	if(user.z == ZLEVEL_STATION && user.mind && (user.mind in ticker.mode.head_revolutionaries) && !(user.mind in dumb_rev_heads))
-		user << "<span class='warning'>You get a feeling that leaving the station might be a REALLY dumb idea...</span>"
+	if(user.z == ZLEVEL_STATION && user.mind && (user.mind in SSticker.mode.head_revolutionaries) && !(user.mind in dumb_rev_heads))
+		to_chat(user, "<span class='warning'>You get a feeling that leaving the station might be a REALLY dumb idea...</span>")
 		dumb_rev_heads += user.mind
 		return
 	..()
@@ -198,7 +196,7 @@
 
 /obj/item/weapon/emptysandbag/attackby(obj/item/W, mob/user, params)
 	if(istype(W,/obj/item/weapon/ore/glass))
-		user << "<span class='notice'>You fill the sandbag.</span>"
+		to_chat(user, "<span class='notice'>You fill the sandbag.</span>")
 		var/obj/item/stack/sheet/mineral/sandbags/I = new /obj/item/stack/sheet/mineral/sandbags
 		qdel(src)
 		user.put_in_hands(I)
@@ -248,8 +246,8 @@
 /obj/item/weapon/survivalcapsule/examine(mob/user)
 	. = ..()
 	get_template()
-	user << "This capsule has the [template.name] stored."
-	user << template.description
+	to_chat(user, "This capsule has the [template.name] stored.")
+	to_chat(user, template.description)
 
 /obj/item/weapon/survivalcapsule/attack_self()
 	// Can't grab when capsule is New() because templates aren't loaded then
@@ -297,7 +295,7 @@
 	icon = 'icons/obj/smooth_structures/pod_window.dmi'
 	icon_state = "smooth"
 	smooth = SMOOTH_MORE
-	canSmoothWith = list(/turf/closed/wall/shuttle/survival, /obj/machinery/door/airlock/survival_pod, /obj/structure/window/shuttle/survival_pod)
+	canSmoothWith = list(/turf/closed/wall/mineral/titanium/survival, /obj/machinery/door/airlock/survival_pod, /obj/structure/window/shuttle/survival_pod)
 
 //Door
 /obj/machinery/door/airlock/survival_pod
@@ -389,16 +387,18 @@
 	name = "dusty survival pod storage"
 	desc = "A heated storage unit. This one's seen better days."
 
-/obj/machinery/smartfridge/survival_pod/empty/New()
-	return()
+/obj/machinery/smartfridge/survival_pod/empty/Initialize(mapload)
+	..(mapload, TRUE)
 
 /obj/machinery/smartfridge/survival_pod/accept_check(obj/item/O)
 	if(istype(O, /obj/item))
 		return 1
 	return 0
 
-/obj/machinery/smartfridge/survival_pod/New()
+/obj/machinery/smartfridge/survival_pod/Initialize(mapload, empty)
 	..()
+	if(empty)
+		return
 	for(var/i in 1 to 5)
 		var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/warm/W = new(src)
 		load(W)
@@ -453,6 +453,12 @@
 	var/turf/T = loc
 	. = ..()
 	T.air_update_turf(1)
+
+//Inivisible, indestructible fans
+/obj/structure/fans/tiny/invisible
+	name = "air flow blocker"
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
+	invisibility = INVISIBILITY_ABSTRACT
 
 
 //Signs

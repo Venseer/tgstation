@@ -1,11 +1,11 @@
-/var/global/list/mutations_list = list()
+GLOBAL_LIST_EMPTY(mutations_list)
 
 /datum/mutation
 
 	var/name
 
 /datum/mutation/New()
-	mutations_list[name] = src
+	GLOB.mutations_list[name] = src
 
 /datum/mutation/human
 
@@ -66,7 +66,7 @@
 		return 1
 	owner.dna.mutations.Add(src)
 	if(text_gain_indication)
-		owner << text_gain_indication
+		to_chat(owner, text_gain_indication)
 	if(visual_indicators.len)
 		var/list/mut_overlay = list(get_visual_indicator(owner))
 		if(owner.overlays_standing[layer_used])
@@ -94,7 +94,7 @@
 /datum/mutation/human/proc/on_losing(mob/living/carbon/human/owner)
 	if(owner && istype(owner) && (owner.dna.mutations.Remove(src)))
 		if(text_lose_indication && owner.stat != DEAD)
-			owner << text_lose_indication
+			to_chat(owner, text_lose_indication)
 		if(visual_indicators.len)
 			var/list/mut_overlay = list()
 			if(owner.overlays_standing[layer_used])
@@ -137,7 +137,7 @@
 /datum/mutation/human/hulk/on_life(mob/living/carbon/human/owner)
 	if(owner.health < 0)
 		on_losing(owner)
-		owner << "<span class='danger'>You suddenly feel very weak.</span>"
+		to_chat(owner, "<span class='danger'>You suddenly feel very weak.</span>")
 
 /datum/mutation/human/hulk/on_losing(mob/living/carbon/human/owner)
 	if(..())
@@ -249,7 +249,7 @@
 	text_gain_indication = "<span class='danger'>You feel strange.</span>"
 
 /datum/mutation/human/bad_dna/on_acquiring(mob/living/carbon/human/owner)
-	owner << text_gain_indication
+	to_chat(owner, text_gain_indication)
 	var/mob/new_mob
 	if(prob(95))
 		if(prob(50))
@@ -378,7 +378,7 @@
 
 /datum/mutation/human/race/on_acquiring(mob/living/carbon/human/owner)
 	if(owner.has_brain_worms())
-		owner << "<span class='warning'>You feel something strongly clinging to your humanity!</span>"
+		to_chat(owner, "<span class='warning'>You feel something strongly clinging to your humanity!</span>")
 		return
 	if(..())
 		return
@@ -536,9 +536,9 @@
 	if(message)
 		message = replacetext(message,"w","v")
 		message = replacetext(message,"j","y")
-		message = replacetext(message,"a",pick("å","ä","æ","a"))
+		message = replacetext(message,"a",pick("ï¿½","ï¿½","ï¿½","a"))
 		message = replacetext(message,"bo","bjo")
-		message = replacetext(message,"o",pick("ö","ø","o"))
+		message = replacetext(message,"o",pick("ï¿½","ï¿½","o"))
 		if(prob(30))
 			message += " Bork[pick("",", bork",", bork, bork")]!"
 	return message

@@ -39,7 +39,7 @@
 	if(istype(W, /obj/item/device/multitool))
 		var/obj/item/device/multitool/M = W
 		M.buffer = src
-		user << "<span class='notice'>You store linkage information in [W]'s buffer.</span>"
+		to_chat(user, "<span class='notice'>You store linkage information in [W]'s buffer.</span>")
 	else if(istype(W, /obj/item/weapon/wrench))
 		default_unfasten_wrench(user, W, 10)
 		return TRUE
@@ -55,7 +55,7 @@
 	if(istype(W, /obj/item/device/multitool))
 		var/obj/item/device/multitool/M = W
 		M.buffer = src
-		user << "<span class='notice'>You store linkage information in [W]'s buffer.</span>"
+		to_chat(user, "<span class='notice'>You store linkage information in [W]'s buffer.</span>")
 	else if(istype(W, /obj/item/weapon/wrench))
 		default_unfasten_wrench(user, W, 10)
 		return TRUE
@@ -76,11 +76,11 @@
 			if(istype(M.buffer,/obj/machinery/bsa/back))
 				back = M.buffer
 				M.buffer = null
-				user << "<span class='notice'>You link [src] with [back].</span>"
+				to_chat(user, "<span class='notice'>You link [src] with [back].</span>")
 			else if(istype(M.buffer,/obj/machinery/bsa/front))
 				front = M.buffer
 				M.buffer = null
-				user << "<span class='notice'>You link [src] with [front].</span>"
+				to_chat(user, "<span class='notice'>You link [src] with [front].</span>")
 	else if(istype(W, /obj/item/weapon/wrench))
 		default_unfasten_wrench(user, W, 10)
 		return TRUE
@@ -248,7 +248,7 @@
 	var/area_aim = FALSE //should also show areas for targeting
 
 /obj/machinery/computer/bsa_control/ui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = 0, \
-										datum/tgui/master_ui = null, datum/ui_state/state = physical_state)
+										datum/tgui/master_ui = null, datum/ui_state/state = GLOB.physical_state)
 	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "bsa", name, 400, 305, master_ui, state)
@@ -280,12 +280,12 @@
 
 /obj/machinery/computer/bsa_control/proc/calibrate(mob/user)
 	var/list/gps_locators = list()
-	for(var/obj/item/device/gps/G in GPS_list) //nulls on the list somehow
+	for(var/obj/item/device/gps/G in GLOB.GPS_list) //nulls on the list somehow
 		gps_locators[G.gpstag] = G
 
 	var/list/options = gps_locators
 	if(area_aim)
-		options += teleportlocs
+		options += GLOB.teleportlocs
 	var/V = input(user,"Select target", "Select target",null) in options|null
 	target = options[V]
 

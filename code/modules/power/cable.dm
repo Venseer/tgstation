@@ -80,7 +80,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/turf/T = src.loc			// hide if turf is not intact
 
 	if(level==1) hide(T.intact)
-	cable_list += src //add it to the global cable list
+	GLOB.cable_list += src //add it to the global cable list
 
 	if(d1)
 		stored = new/obj/item/stack/cable_coil(null,2,cable_color)
@@ -90,7 +90,7 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/Destroy()					// called when a cable is deleted
 	if(powernet)
 		cut_cable_from_powernet()				// update the powernets
-	cable_list -= src							//remove it from global cable list
+	GLOB.cable_list -= src							//remove it from global cable list
 	return ..()									// then go ahead and delete the cable
 
 /obj/structure/cable/deconstruct(disassembled = TRUE)
@@ -138,15 +138,15 @@ By design, d1 is the smallest direction and d2 is the highest
 	else if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/coil = W
 		if (coil.get_amount() < 1)
-			user << "<span class='warning'>Not enough cable!</span>"
+			to_chat(user, "<span class='warning'>Not enough cable!</span>")
 			return
 		coil.cable_join(src, user)
 
 	else if(istype(W, /obj/item/device/multitool))
 		if(powernet && (powernet.avail > 0))		// is it powered?
-			user << "<span class='danger'>[powernet.avail]W in power network.</span>"
+			to_chat(user, "<span class='danger'>[powernet.avail]W in power network.</span>")
 		else
-			user << "<span class='danger'>The cable is not powered.</span>"
+			to_chat(user, "<span class='danger'>The cable is not powered.</span>")
 		shock(user, 5, 0.2)
 
 	src.add_fingerprint(user)
@@ -437,9 +437,7 @@ By design, d1 is the smallest direction and d2 is the highest
 // Definitions
 ////////////////////////////////
 
-var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
-	new/datum/stack_recipe("cable restraints", /obj/item/weapon/restraints/handcuffs/cable, 15), \
-	)
+GLOBAL_LIST_INIT(cable_coil_recipes, list (new/datum/stack_recipe("cable restraints", /obj/item/weapon/restraints/handcuffs/cable, 15)))
 
 /obj/item/stack/cable_coil
 	name = "cable coil"
@@ -479,15 +477,16 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 		user.visible_message("<span class='suicide'>[user] is strangling [user.p_them()]self with [src]! It looks like [user.p_theyre()] trying to commit suicide!</span>")
 	return(OXYLOSS)
 
-/obj/item/stack/cable_coil/New(loc, amount = MAXCOIL, var/param_color = null)
+/obj/item/stack/cable_coil/New(loc, new_amount = null, var/param_color = null)
 	..()
-	src.amount = amount
+	if(new_amount) // MAXCOIL by default
+		amount = new_amount
 	if(param_color)
 		item_color = param_color
 	pixel_x = rand(-2,2)
 	pixel_y = rand(-2,2)
 	update_icon()
-	recipes = cable_coil_recipes
+	recipes = GLOB.cable_coil_recipes
 
 ///////////////////////////////////
 // General procedures
@@ -555,15 +554,15 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 		return
 
 	if(!T.can_have_cabling())
-		user << "<span class='warning'>You can only lay cables on catwalks and plating!</span>"
+		to_chat(user, "<span class='warning'>You can only lay cables on catwalks and plating!</span>")
 		return
 
 	if(get_amount() < 1) // Out of cable
-		user << "<span class='warning'>There is no cable left!</span>"
+		to_chat(user, "<span class='warning'>There is no cable left!</span>")
 		return
 
 	if(get_dist(T,user) > 1) // Too far
-		user << "<span class='warning'>You can't lay cable at a place that far away!</span>"
+		to_chat(user, "<span class='warning'>You can't lay cable at a place that far away!</span>")
 		return
 
 	else
@@ -576,7 +575,7 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 
 		for(var/obj/structure/cable/LC in T)
 			if(LC.d2 == dirn && LC.d1 == 0)
-				user << "<span class='warning'>There's already a cable at that position!</span>"
+				to_chat(user, "<span class='warning'>There's already a cable at that position!</span>")
 				return
 
 		var/obj/structure/cable/C = get_new_cable(T)
@@ -617,7 +616,7 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 		return
 
 	if(get_dist(C, user) > 1)		// make sure it's close enough
-		user << "<span class='warning'>You can't lay cable at a place that far away!</span>"
+		to_chat(user, "<span class='warning'>You can't lay cable at a place that far away!</span>")
 		return
 
 
@@ -630,10 +629,10 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 	// one end of the clicked cable is pointing towards us
 	if(C.d1 == dirn || C.d2 == dirn)
 		if(!U.can_have_cabling())						//checking if it's a plating or catwalk
-			user << "<span class='warning'>You can only lay cables on catwalks and plating!</span>"
+			to_chat(user, "<span class='warning'>You can only lay cables on catwalks and plating!</span>")
 			return
 		if(U.intact)						//can't place a cable if it's a plating with a tile on it
-			user << "<span class='warning'>You can't lay cable there unless the floor tiles are removed!</span>"
+			to_chat(user, "<span class='warning'>You can't lay cable there unless the floor tiles are removed!</span>")
 			return
 		else
 			// cable is pointing at us, we're standing on an open tile
@@ -643,7 +642,7 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 
 			for(var/obj/structure/cable/LC in U)		// check to make sure there's not a cable there already
 				if(LC.d1 == fdirn || LC.d2 == fdirn)
-					user << "<span class='warning'>There's already a cable at that position!</span>"
+					to_chat(user, "<span class='warning'>There's already a cable at that position!</span>")
 					return
 
 			var/obj/structure/cable/NC = get_new_cable (U)
@@ -687,7 +686,7 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 			if(LC == C)			// skip the cable we're interacting with
 				continue
 			if((LC.d1 == nd1 && LC.d2 == nd2) || (LC.d1 == nd2 && LC.d2 == nd1) )	// make sure no cable matches either direction
-				user << "<span class='warning'>There's already a cable at that position!</span>"
+				to_chat(user, "<span class='warning'>There's already a cable at that position!</span>")
 				return
 
 

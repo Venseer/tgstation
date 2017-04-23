@@ -64,7 +64,7 @@ Difficulty: Very Hard
 			visible_message("<span class='colossus'>\"<b>You can't dodge.</b>\"</span>")
 		ranged_cooldown = world.time + 30
 		telegraph()
-		dir_shots(alldirs)
+		dir_shots(GLOB.alldirs)
 		move_to_delay = 3
 		return
 	else
@@ -91,7 +91,7 @@ Difficulty: Very Hard
 			INVOKE_ASYNC(src, .proc/alternating_dir_shots)
 
 
-/mob/living/simple_animal/hostile/megafauna/colossus/New()
+/mob/living/simple_animal/hostile/megafauna/colossus/Initialize()
 	..()
 	internal = new/obj/item/device/gps/internal/colossus(src)
 
@@ -101,11 +101,11 @@ Difficulty: Very Hard
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "at_shield2"
 	layer = FLY_LAYER
-	luminosity = 2
+	light_range = 2
 	duration = 8
 	var/target
 
-/obj/effect/overlay/temp/at_shield/New(new_loc, new_target)
+/obj/effect/overlay/temp/at_shield/Initialize(mapload, new_target)
 	..()
 	target = new_target
 	INVOKE_ASYNC(src, /atom/movable/proc/orbit, target, 0, FALSE, 0, 0, FALSE, TRUE)
@@ -127,13 +127,13 @@ Difficulty: Very Hard
 			. = TRUE
 
 /mob/living/simple_animal/hostile/megafauna/colossus/proc/alternating_dir_shots()
-	dir_shots(diagonals)
+	dir_shots(GLOB.diagonals)
 	sleep(10)
-	dir_shots(cardinal)
+	dir_shots(GLOB.cardinal)
 	sleep(10)
-	dir_shots(diagonals)
+	dir_shots(GLOB.diagonals)
 	sleep(10)
-	dir_shots(cardinal)
+	dir_shots(GLOB.cardinal)
 
 /mob/living/simple_animal/hostile/megafauna/colossus/proc/double_spiral()
 	visible_message("<span class='colossus'>\"<b>Die.</b>\"</span>")
@@ -224,7 +224,7 @@ Difficulty: Very Hard
 
 /mob/living/simple_animal/hostile/megafauna/colossus/proc/dir_shots(list/dirs)
 	if(!islist(dirs))
-		dirs = alldirs.Copy()
+		dirs = GLOB.alldirs.Copy()
 	playsound(get_turf(src), 'sound/magic/clockwork/invoke_general.ogg', 200, 1, 2)
 	for(var/d in dirs)
 		var/turf/E = get_step(src, d)
@@ -272,7 +272,7 @@ Difficulty: Very Hard
 	icon_state = "blackbox"
 	icon_on = "blackbox"
 	icon_off = "blackbox"
-	luminosity = 8
+	light_range = 8
 	max_n_of_items = INFINITY
 	resistance_flags = LAVA_PROOF | FIRE_PROOF | ACID_PROOF
 	pixel_y = -4
@@ -302,7 +302,7 @@ Difficulty: Very Hard
 
 /obj/machinery/smartfridge/black_box/process()
 	..()
-	if(!memory_saved && ticker.current_state == GAME_STATE_FINISHED)
+	if(!memory_saved && SSticker.current_state == GAME_STATE_FINISHED)
 		WriteMemory()
 
 /obj/machinery/smartfridge/black_box/proc/WriteMemory()
@@ -365,12 +365,10 @@ Difficulty: Very Hard
 	desc = "A strange chunk of crystal, being in the presence of it fills you with equal parts excitement and dread."
 	icon = 'icons/obj/lavaland/artefacts.dmi'
 	icon_state = "anomaly_crystal"
-	luminosity = 8
+	light_range = 8
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ACID_PROOF
 	use_power = 0
 	density = 1
-	languages_spoken = ALL
-	languages_understood = ALL
 	flags = HEAR
 	var/activation_method = "touch"
 	var/activation_damage_type = null
@@ -616,10 +614,8 @@ Difficulty: Very Hard
 	verb_exclaim = "zaps"
 	verb_yell = "bangs"
 	damage_coeff = list(BRUTE = 1, BURN = 1, TOX = 0, CLONE = 0, STAMINA = 0, OXY = 0)
-	luminosity = 4
+	light_range = 4
 	faction = list("neutral")
-	languages_spoken = SLIME
-	languages_understood = ALL
 	del_on_death = 1
 	unsuitable_atmos_damage = 0
 	movement_type = FLYING
@@ -631,15 +627,15 @@ Difficulty: Very Hard
 	stop_automated_movement = 1
 	var/heal_power = 5
 
-/mob/living/simple_animal/hostile/lightgeist/New()
+/mob/living/simple_animal/hostile/lightgeist/Initialize()
 	..()
 	verbs -= /mob/living/verb/pulled
 	verbs -= /mob/verb/me_verb
-	var/datum/atom_hud/medsensor = huds[DATA_HUD_MEDICAL_ADVANCED]
+	var/datum/atom_hud/medsensor = GLOB.huds[DATA_HUD_MEDICAL_ADVANCED]
 	medsensor.add_hud_to(src)
 
 /mob/living/simple_animal/hostile/lightgeist/AttackingTarget()
-	..()
+	. = ..()
 	if(isliving(target) && target != src)
 		var/mob/living/L = target
 		if(L.stat < DEAD)

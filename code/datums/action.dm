@@ -40,6 +40,7 @@
 		if(owner)
 			if(owner == M)
 				return
+			Remove(owner)
 		owner = M
 		M.actions += src
 		if(M.client)
@@ -198,6 +199,9 @@
 			if(target == C.internal)
 				button.icon_state = "template_active"
 
+/datum/action/item_action/pick_color
+	name = "Choose A Color"
+
 /datum/action/item_action/toggle_mister
 	name = "Toggle Mister"
 
@@ -333,6 +337,10 @@
 /datum/action/item_action/hands_free/shift_nerves
 	name = "Shift Nerves"
 
+/datum/action/item_action/explosive_implant
+	check_flags = 0
+	name = "Activate Explosive Implant"
+
 /datum/action/item_action/toggle_research_scanner
 	name = "Toggle Research Scanner"
 	button_icon_state = "scan_mode"
@@ -345,7 +353,7 @@
 			owner.research_scanner++
 		else
 			owner.research_scanner--
-		owner << "<span class='notice'>[target] research scanner has been [active ? "activated" : "deactivated"].</span>"
+		to_chat(owner, "<span class='notice'>[target] research scanner has been [active ? "activated" : "deactivated"].</span>")
 		return 1
 
 /datum/action/item_action/toggle_research_scanner/Remove(mob/M)
@@ -468,3 +476,16 @@
 	name = "Activate Jump Boots"
 	desc = "Activates the jump boot's internal propulsion system, allowing the user to dash over 4-wide gaps."
 	button_icon_state = "jetboot"
+
+/datum/action/language_menu
+	name = "Language Menu"
+	desc = "Open the language menu to review your languages, their keys, and select your default language."
+	button_icon_state = "language_menu"
+	check_flags = 0
+
+/datum/action/language_menu/Trigger()
+	if(!..())
+		return FALSE
+	if(isliving(owner))
+		var/mob/living/L = owner
+		L.open_language_menu(usr)

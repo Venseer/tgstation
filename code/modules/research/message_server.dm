@@ -1,4 +1,4 @@
-var/global/list/obj/machinery/message_server/message_servers = list()
+GLOBAL_LIST_INIT(message_servers, list())
 
 /datum/data_pda_msg
 	var/recipient = "Unspecified" //name of the person
@@ -79,14 +79,14 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	var/decryptkey = "password"
 
 /obj/machinery/message_server/New()
-	message_servers += src
+	GLOB.message_servers += src
 	decryptkey = GenerateKey()
 	send_pda_message("System Administrator", "system", "This is an automated message. The messaging system is functioning correctly.")
 	..()
 	return
 
 /obj/machinery/message_server/Destroy()
-	message_servers -= src
+	GLOB.message_servers -= src
 	return ..()
 
 /obj/machinery/message_server/proc/GenerateKey()
@@ -114,7 +114,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	rc_msgs += new/datum/data_rc_msg(recipient,sender,message,stamp,id_auth)
 
 /obj/machinery/message_server/attack_hand(mob/user)
-	user << "You toggle PDA message passing from [active ? "On" : "Off"] to [active ? "Off" : "On"]"
+	to_chat(user, "You toggle PDA message passing from [active ? "On" : "Off"] to [active ? "Off" : "On"]")
 	active = !active
 	update_icon()
 

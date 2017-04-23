@@ -20,6 +20,7 @@
 	var/max_damage = 0
 	var/list/embedded_objects = list()
 	var/held_index = 0 //are we a hand? if so, which one!
+	var/is_pseudopart = FALSE //For limbs that don't really exist, eg chainsaws
 
 	//Coloring and proper item icon update
 	var/skin_tone = ""
@@ -43,9 +44,9 @@
 /obj/item/bodypart/examine(mob/user)
 	..()
 	if(brute_dam > 0)
-		user << "<span class='warning'>This limb has [brute_dam > 30 ? "severe" : "minor"] bruising.</span>"
+		to_chat(user, "<span class='warning'>This limb has [brute_dam > 30 ? "severe" : "minor"] bruising.</span>")
 	if(burn_dam > 0)
-		user << "<span class='warning'>This limb has [burn_dam > 30 ? "severe" : "minor"] burns.</span>"
+		to_chat(user, "<span class='warning'>This limb has [burn_dam > 30 ? "severe" : "minor"] burns.</span>")
 
 /obj/item/bodypart/blob_act()
 	take_damage(max_damage)
@@ -76,7 +77,7 @@
 	if(W.sharpness)
 		add_fingerprint(user)
 		if(!contents.len)
-			user << "<span class='warning'>There is nothing left inside [src]!</span>"
+			to_chat(user, "<span class='warning'>There is nothing left inside [src]!</span>")
 			return
 		playsound(loc, 'sound/weapons/slice.ogg', 50, 1, -1)
 		user.visible_message("<span class='warning'>[user] begins to cut open [src].</span>",\
@@ -114,6 +115,10 @@
 	if(status == BODYPART_ROBOTIC) //This makes robolimbs not damageable by chems and makes it stronger
 		brute = max(0, brute - 5)
 		burn = max(0, burn - 4)
+
+	switch(animal_origin)
+		if(ALIEN_BODYPART,LARVA_BODYPART) //aliens take double burn
+			burn *= 2
 
 	var/can_inflict = max_damage - (brute_dam + burn_dam)
 	if(!can_inflict)
@@ -178,13 +183,20 @@
 
 
 //Change organ status
-/obj/item/bodypart/proc/change_bodypart_status(new_limb_status, heal_limb)
+/obj/item/bodypart/proc/change_bodypart_status(new_limb_status, heal_limb, change_icon_to_default)
 	status = new_limb_status
 	if(heal_limb)
 		burn_dam = 0
 		brute_dam = 0
 		brutestate = 0
 		burnstate = 0
+
+	if(change_icon_to_default)
+		if(status == BODYPART_ORGANIC)
+			icon = DEFAULT_BODYPART_ICON_ORGANIC
+		else if(status == BODYPART_ROBOTIC)
+			icon = DEFAULT_BODYPART_ICON_ROBOTIC
+
 	if(owner)
 		owner.updatehealth()
 		owner.update_body() //if our head becomes robotic, we remove the lizard horns and human hair.
@@ -316,9 +328,9 @@
 				I = image("icon"='icons/mob/human_parts.dmi', "icon_state"="[species_id]_[body_zone]", "layer"=-BODYPARTS_LAYER, "dir"=image_dir)
 	else
 		if(should_draw_gender)
-			I = image("icon"='icons/mob/augments.dmi', "icon_state"="[initial(icon_state)]_[icon_gender]", "layer"=-BODYPARTS_LAYER, "dir"=image_dir)
+			I = image("icon"= icon, "icon_state"="[body_zone]_[icon_gender]", "layer"=-BODYPARTS_LAYER, "dir"=image_dir)
 		else
-			I = image("icon"='icons/mob/augments.dmi', "icon_state"="[initial(icon_state)]", "layer"=-BODYPARTS_LAYER, "dir"=image_dir)
+			I = image("icon"= icon, "icon_state"="[body_zone]", "layer"=-BODYPARTS_LAYER, "dir"=image_dir)
 		standing += I
 		return standing
 

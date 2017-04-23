@@ -38,16 +38,16 @@
 	var/image/ghost_facial_hair = null
 	var/random = TRUE //if you want random names for ghosts or not
 
-/mob/living/simple_animal/hostile/retaliate/ghost/New()
+/mob/living/simple_animal/hostile/retaliate/ghost/Initialize()
 	..()
 	if(!random)
 		give_hair()
 	else
 		switch(rand(0,1))
 			if(0)
-				name = "ghost of [pick(first_names_male)] [pick(last_names)]"
+				name = "ghost of [pick(GLOB.first_names_male)] [pick(GLOB.last_names)]"
 			if(1)
-				name = "ghost of [pick(first_names_female)] [pick(last_names)]"
+				name = "ghost of [pick(GLOB.first_names_female)] [pick(GLOB.last_names)]"
 		give_hair()
 
 

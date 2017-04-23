@@ -34,7 +34,7 @@
 /obj/effect/overlay/temp/New()
 	..()
 	if(randomdir)
-		setDir(pick(cardinal))
+		setDir(pick(GLOB.cardinal))
 	flick("[icon_state]", src) //Because we might be pulling it from a pool, flick whatever icon it uses so it starts at the start of the icon's animation.
 
 	timerid = QDEL_IN(src, duration)
@@ -58,7 +58,7 @@
 	var/splatter_type = "splatter"
 
 /obj/effect/overlay/temp/dir_setting/bloodsplatter/New(loc, set_dir)
-	if(set_dir in diagonals)
+	if(set_dir in GLOB.diagonals)
 		icon_state = "[splatter_type][pick(1, 2, 6)]"
 	else
 		icon_state = "[splatter_type][pick(3, 4, 5)]"
@@ -210,6 +210,11 @@
 	icon_state = "smoke"
 	duration = 50
 
+/obj/effect/overlay/temp/fire
+	icon = 'icons/effects/fire.dmi'
+	icon_state = "3"
+	duration = 20
+	
 /obj/effect/overlay/temp/cult
 	randomdir = 0
 	duration = 10
@@ -325,7 +330,7 @@
 		damage *= multiplier
 	duration = max(round(damage * 0.2), 1)
 	..()
-	SetLuminosity(3, 2)
+	set_light(1.5, 2, LIGHT_COLOR_ORANGE)
 
 /obj/effect/overlay/temp/ratvar/volt_hit/true/New(loc, caster, multiplier)
 	..()
@@ -357,7 +362,7 @@
 		if(M.occupant)
 			if(is_servant_of_ratvar(M.occupant))
 				continue
-			M.occupant << "<span class='userdanger'>Your [M.name] is struck by a [name]!</span>"
+			to_chat(M.occupant, "<span class='userdanger'>Your [M.name] is struck by a [name]!</span>")
 		M.visible_message("<span class='warning'>[M] is struck by a [name]!</span>")
 		M.take_damage(damage, BURN, 0, 0)
 		hit_amount++
@@ -424,10 +429,13 @@
 	color = "#FAE48C"
 	layer = ABOVE_MOB_LAYER
 	duration = 70
-	luminosity = 6
+	light_range = 5
+	light_power = 2
+	light_color = "#FAE48C"
 
 /obj/effect/overlay/temp/ratvar/sigil/transgression/New()
 	..()
+	update_light()
 	var/oldtransform = transform
 	animate(src, transform = matrix()*2, time = 5)
 	animate(transform = oldtransform, alpha = 0, time = 65)
@@ -436,6 +444,13 @@
 	color = "#1E8CE1"
 	icon_state = "sigilactivepulse"
 	layer = ABOVE_MOB_LAYER
+	light_range = 1.4
+	light_power = 0.5
+	light_color = "#1E8CE1"
+
+/obj/effect/overlay/temp/ratvar/sigil/vitality/New()
+	..()
+	update_light()
 
 /obj/effect/overlay/temp/ratvar/sigil/accession
 	color = "#AF0AAF"
@@ -496,6 +511,11 @@
 /obj/effect/overlay/temp/dust_animation/New(loc, dust_icon)
 	icon_state = dust_icon // Before ..() so the correct icon is flick()'d
 	..()
+
+/obj/effect/overlay/temp/mummy_animation
+	icon = 'icons/mob/mob.dmi'
+	icon_state = "mummy_revive"
+	duration = 20
 
 /obj/effect/overlay/temp/heal //color is white by default, set to whatever is needed
 	name = "healing glow"
@@ -593,3 +613,8 @@
 	name = "Coconuts"
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "coconuts"
+
+/obj/effect/overlay/sparkles
+	name = "sparkles"
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "shieldsparkles"

@@ -2,11 +2,11 @@
 
 //TODO: Make these simple_animals
 
-var/const/MIN_IMPREGNATION_TIME = 100 //time it takes to impregnate someone
-var/const/MAX_IMPREGNATION_TIME = 150
+#define MIN_IMPREGNATION_TIME 100 //time it takes to impregnate someone
+#define MAX_IMPREGNATION_TIME 150
 
-var/const/MIN_ACTIVE_TIME = 200 //time between being dropped and going idle
-var/const/MAX_ACTIVE_TIME = 400
+#define MIN_ACTIVE_TIME 200 //time between being dropped and going idle
+#define MAX_ACTIVE_TIME 400
 
 /obj/item/clothing/mask/facehugger
 	name = "alien"
@@ -64,11 +64,11 @@ var/const/MAX_ACTIVE_TIME = 400
 		return
 	switch(stat)
 		if(DEAD,UNCONSCIOUS)
-			user << "<span class='boldannounce'>[src] is not moving.</span>"
+			to_chat(user, "<span class='boldannounce'>[src] is not moving.</span>")
 		if(CONSCIOUS)
-			user << "<span class='boldannounce'>[src] seems to be active!</span>"
+			to_chat(user, "<span class='boldannounce'>[src] seems to be active!</span>")
 	if (sterile)
-		user << "<span class='boldannounce'>It looks like the proboscis has been removed.</span>"
+		to_chat(user, "<span class='boldannounce'>It looks like the proboscis has been removed.</span>")
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/O,mob/m, params)
 	if(O.force)
@@ -106,9 +106,11 @@ var/const/MAX_ACTIVE_TIME = 400
 		return
 	if(stat == CONSCIOUS)
 		icon_state = "[initial(icon_state)]_thrown"
-		spawn(15)
-			if(icon_state == "[initial(icon_state)]_thrown")
-				icon_state = "[initial(icon_state)]"
+		addtimer(CALLBACK(src, .proc/clear_throw_icon_state), 15)
+
+/obj/item/clothing/mask/facehugger/proc/clear_throw_icon_state()
+	if(icon_state == "[initial(icon_state)]_thrown")
+		icon_state = "[initial(icon_state)]"
 
 /obj/item/clothing/mask/facehugger/throw_impact(atom/hit_atom)
 	..()
@@ -152,14 +154,6 @@ var/const/MAX_ACTIVE_TIME = 400
 	// probiscis-blocker handling
 	if(iscarbon(M))
 		var/mob/living/carbon/target = M
-		if(target.wear_mask)
-			var/obj/item/clothing/W = target.wear_mask
-			if(W.flags & NODROP)
-				return FALSE
-			if(!istype(W,/obj/item/clothing/mask/facehugger))
-				target.dropItemToGround(W)
-				target.visible_message("<span class='danger'>[src] tears [W] off of [target]'s face!</span>", \
-									"<span class='userdanger'>[src] tears [W] off of [target]'s face!</span>")
 
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
@@ -168,13 +162,18 @@ var/const/MAX_ACTIVE_TIME = 400
 									"<span class='userdanger'>[src] smashes against [H]'s [H.head]!</span>")
 				Die()
 				return FALSE
+
+		if(target.wear_mask)
+			var/obj/item/clothing/W = target.wear_mask
+			if(!istype(W,/obj/item/clothing/mask/facehugger) && target.dropItemToGround(W))
+				target.visible_message("<span class='danger'>[src] tears [W] off of [target]'s face!</span>", \
+									"<span class='userdanger'>[src] tears [W] off of [target]'s face!</span>")
 		forceMove(target)
 		target.equip_to_slot_if_possible(src, slot_wear_mask, 0, 1, 1)
 	// early returns and validity checks done: attach.
 	attached++
 	//ensure we detach once we no longer need to be attached
-	spawn(MAX_IMPREGNATION_TIME)
-		attached = 0
+	addtimer(CALLBACK(src, .proc/detach), MAX_IMPREGNATION_TIME)
 
 	if (iscorgi(M))
 		var/mob/living/simple_animal/pet/dog/corgi/C = M
@@ -188,10 +187,12 @@ var/const/MAX_ACTIVE_TIME = 400
 
 	GoIdle() //so it doesn't jump the people that tear it off
 
-	spawn(rand(MIN_IMPREGNATION_TIME,MAX_IMPREGNATION_TIME))
-		Impregnate(M)
+	addtimer(CALLBACK(src, .proc/Impregnate, M), rand(MIN_IMPREGNATION_TIME, MAX_IMPREGNATION_TIME))
 
 	return TRUE // time for a smoke
+
+/obj/item/clothing/mask/facehugger/proc/detach()
+	attached = 0
 
 /obj/item/clothing/mask/facehugger/proc/Impregnate(mob/living/target)
 	if(!target || target.stat == DEAD) //was taken off or something
@@ -236,9 +237,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	stat = UNCONSCIOUS
 	icon_state = "[initial(icon_state)]_inactive"
 
-	spawn(rand(MIN_ACTIVE_TIME,MAX_ACTIVE_TIME))
-		GoActive()
-	return
+	addtimer(CALLBACK(src, .proc/GoActive), rand(MIN_ACTIVE_TIME, MAX_ACTIVE_TIME))
 
 /obj/item/clothing/mask/facehugger/proc/Die()
 	if(stat == DEAD)
@@ -268,3 +267,9 @@ var/const/MAX_ACTIVE_TIME = 400
 			return 0
 		return 1
 	return 0
+
+#undef MIN_ACTIVE_TIME
+#undef MAX_ACTIVE_TIME
+
+#undef MIN_IMPREGNATION_TIME
+#undef MAX_IMPREGNATION_TIME
