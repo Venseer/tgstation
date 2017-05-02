@@ -3,6 +3,7 @@
 	GLOB.dead_mob_list -= src
 	GLOB.living_mob_list -= src
 	GLOB.all_clockwork_mobs -= src
+	GLOB.mob_directory -= tag
 	if(observers && observers.len)
 		for(var/M in observers)
 			var/mob/dead/observe = M
@@ -22,12 +23,18 @@
 /mob/Initialize()
 	tag = "mob_[next_mob_id++]"
 	GLOB.mob_list += src
+	GLOB.mob_directory[tag] = src
 	if(stat == DEAD)
 		GLOB.dead_mob_list += src
 	else
 		GLOB.living_mob_list += src
 	prepare_huds()
 	can_ride_typecache = typecacheof(can_ride_typecache)
+	for(var/v in GLOB.active_alternate_appearances)
+		if(!v)
+			continue
+		var/datum/atom_hud/alternate_appearance/AA = v
+		AA.onNewMob(src)
 	..()
 
 /atom/proc/prepare_huds()

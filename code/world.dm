@@ -17,7 +17,7 @@
 	log_world("World loaded at [time_stamp()]")
 
 #if (PRELOAD_RSC == 0)
-	external_rsc_urls = file2list("config/external_rsc_urls.txt","\n")
+	external_rsc_urls = world.file2list("config/external_rsc_urls.txt","\n")
 	var/i=1
 	while(i<=external_rsc_urls.len)
 		if(external_rsc_urls[i])
@@ -114,7 +114,7 @@
 
 		s["map_name"] = SSmapping.config.map_name
 
-		if(key_valid && SSticker && SSticker.mode)
+		if(key_valid && SSticker.HasRoundStarted())
 			s["real_mode"] = SSticker.mode.name
 			// Key-authed callers may know the truth behind the "secret"
 
@@ -134,11 +134,7 @@
 		if(!key_valid)
 			return "Bad Key"
 		else
-#define CHAT_PULLR	64 //defined in preferences.dm, but not available here at compilation time
-			for(var/client/C in GLOB.clients)
-				if(C.prefs && (C.prefs.chat_toggles & CHAT_PULLR))
-					to_chat(C, "<span class='announce'>PR: [input["announce"]]</span>")
-#undef CHAT_PULLR
+			AnnouncePR(input["announce"], json_decode(input["payload"]))
 
 	else if("crossmessage" in input)
 		if(!key_valid)
@@ -174,7 +170,27 @@
 	else if("server_hop" in input)
 		show_server_hop_transfer_screen(input["server_hop"])
 
+#define PR_ANNOUNCEMENTS_PER_ROUND 5 //The number of unique PR announcements allowed per round
+									//This makes sure that a single person can only spam 3 reopens and 3 closes before being ignored
+
+/world/proc/AnnouncePR(announcement, list/payload)
+	var/static/list/PRcounts = list()	//PR id -> number of times announced this round
+	var/id = "[payload["pull_request"]["id"]]"
+	if(!PRcounts[id])
+		PRcounts[id] = 1
+	else
+		++PRcounts[id]
+		if(PRcounts[id] > PR_ANNOUNCEMENTS_PER_ROUND)
+			return
+
+#define CHAT_PULLR	64 //defined in preferences.dm, but not available here at compilation time
+	for(var/client/C in GLOB.clients)
+		if(C.prefs && (C.prefs.chat_toggles & CHAT_PULLR))
+			C << "<span class='announce'>PR: [announcement]</span>"
+#undef CHAT_PULLR
+
 #define WORLD_REBOOT(X) log_world("World rebooted at [time_stamp()]"); ..(X); return;
+
 /world/Reboot(var/reason, var/feedback_c, var/feedback_r, var/time)
 	if (reason == 1) //special reboot, do none of the normal stuff
 		if (usr)
@@ -208,11 +224,9 @@
 #undef WORLD_REBOOT
 
 /world/proc/OnReboot(reason, feedback_c, feedback_r, round_end_sound_sent)
-	feedback_set_details("[feedback_c]","[feedback_r]")
+	SSblackbox.set_details("[feedback_c]","[feedback_r]")
 	log_game("<span class='boldannounce'>Rebooting World. [reason]</span>")
-	feedback_set("ahelp_unresolved", GLOB.ahelp_tickets.active_tickets.len)
-	if(GLOB.blackbox)
-		GLOB.blackbox.save_all_data_to_sql()
+	SSblackbox.set_val("ahelp_unresolved", GLOB.ahelp_tickets.active_tickets.len)
 	Master.Shutdown()	//run SS shutdowns
 	RoundEndAnimation(round_end_sound_sent)
 	kick_clients_in_lobby("<span class='boldannounce'>The round came to an end with you in the lobby.</span>", 1) //second parameter ensures only afk clients are kicked
@@ -251,7 +265,7 @@
 	world << sound(round_end_sound)
 
 /world/proc/load_mode()
-	var/list/Lines = file2list("data/mode.txt")
+	var/list/Lines = world.file2list("data/mode.txt")
 	if(Lines.len)
 		if(Lines[1])
 			GLOB.master_mode = Lines[1]
@@ -315,3 +329,6 @@
 		s += ": [jointext(features, ", ")]"
 
 	status = s
+
+/world/proc/has_round_started()
+	return SSticker.HasRoundStarted()
