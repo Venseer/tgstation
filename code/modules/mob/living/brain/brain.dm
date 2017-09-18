@@ -1,5 +1,3 @@
-
-
 /mob/living/brain
 	var/obj/item/device/mmi/container = null
 	var/timeofhostdeath = 0
@@ -9,7 +7,7 @@
 	see_invisible = SEE_INVISIBLE_LIVING
 
 /mob/living/brain/Initialize()
-	..()
+	. = ..()
 	create_dna(src)
 	stored_dna.initialize_dna(random_blood_type())
 	if(isturf(loc)) //not spawned in an MMI or brain organ (most likely adminspawned)
@@ -65,3 +63,11 @@
 	..()
 	if(stored_dna)
 		stored_dna.real_name = real_name
+
+/mob/living/brain/ClickOn(atom/A, params)
+	..()
+	if(istype(loc, /obj/item/device/mmi))
+		var/obj/item/device/mmi/MMI = loc
+		var/obj/mecha/M = MMI.mecha
+		if((src == MMI.brainmob) && istype(M))
+			return M.click_action(A,src,params)

@@ -4,22 +4,17 @@ GLOBAL_PROTECT(admin_verbs_default)
 GLOBAL_LIST_INIT(admin_verbs_default, world.AVerbsDefault())
 /world/proc/AVerbsDefault()
 	return list(
-	/client/proc/toggleadminhelpsound,	/*toggles whether we hear a sound when adminhelps/PMs are used*/
-	/client/proc/toggleannouncelogin, /*toggles if an admin's login is announced during a round*/
 	/client/proc/deadmin,				/*destroys our own admin datum so we can play as a regular player*/
 	/client/proc/cmd_admin_say,			/*admin-only ooc chat*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
-	/client/proc/deadchat,				/*toggles deadchat on/off*/
 	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
-	/client/proc/toggleprayers,			/*toggles prayers on/off*/
-	/client/verb/toggleprayersounds,	/*Toggles prayer sounds (HALLELUJAH!)*/
-	/client/proc/toggle_hear_radio,		/*toggles whether we hear the radio*/
 	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
 	/client/proc/secrets,
+	/client/proc/toggle_hear_radio,		/*allows admins to hide all radio output*/
 	/client/proc/reload_admins,
-	/client/proc/reestablish_db_connection,/*reattempt a connection to the database*/
+	/client/proc/reestablish_db_connection, /*reattempt a connection to the database*/
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_pm_panel,		/*admin-pm list*/
 	/client/proc/cmd_admin_ticket_panel,
@@ -29,7 +24,6 @@ GLOBAL_PROTECT(admin_verbs_admin)
 GLOBAL_LIST_INIT(admin_verbs_admin, world.AVerbsAdmin())
 /world/proc/AVerbsAdmin()
 	return list(
-	/client/proc/player_panel_new,		/*shows an interface for all players, with links to various panels*/
 	/client/proc/invisimin,				/*allows our mob to go invisible/visible*/
 //	/datum/admins/proc/show_traitor_panel,	/*interface which shows a mob's mind*/ -Removed due to rare practical use. Moved to debug verbs ~Errorage
 	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
@@ -40,19 +34,17 @@ GLOBAL_LIST_INIT(admin_verbs_admin, world.AVerbsAdmin())
 	/datum/admins/proc/toggleenter,		/*toggles whether people can join the current game*/
 	/datum/admins/proc/toggleguests,	/*toggles whether guests can join the current game*/
 	/datum/admins/proc/announce,		/*priority announce something to all clients.*/
-	/datum/admins/proc/set_admin_notice,/*announcement all clients see when joining the server.*/
+	/datum/admins/proc/set_admin_notice, /*announcement all clients see when joining the server.*/
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/toggle_view_range,		/*changes how far we can see*/
-	/datum/admins/proc/view_txt_log,	/*shows the server log (diary) for today*/
+	/datum/admins/proc/view_txt_log,	/*shows the server log (world_game_log) for today*/
 	/datum/admins/proc/view_atk_log,	/*shows the server combat-log, doesn't do anything presently*/
 	/client/proc/cmd_admin_subtle_message,	/*send an message to somebody as a 'voice in their head'*/
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
 	/client/proc/cmd_admin_check_contents,	/*displays the contents of an instance*/
 	/client/proc/check_antagonists,		/*shows all antags*/
 	/datum/admins/proc/access_news_network,	/*allows access of newscasters*/
-	/client/proc/giveruntimelog,		/*allows us to give access to runtime logs to somebody*/
-	/client/proc/getruntimelog,			/*allows us to access runtime logs to somebody*/
-	/client/proc/getserverlog,			/*allows us to fetch server logs (diary) for other days*/
+	/client/proc/getserverlog,			/*allows us to fetch server logs (world_game_log) for other days*/
 	/client/proc/jumptocoord,			/*we ghost and jump to a coordinate*/
 	/client/proc/Getmob,				/*teleports a mob to our location*/
 	/client/proc/Getkey,				/*teleports a mob with a certain ckey to our location*/
@@ -68,16 +60,21 @@ GLOBAL_LIST_INIT(admin_verbs_admin, world.AVerbsAdmin())
 	/client/proc/cmd_admin_local_narrate,	/*sends text to all mobs within view of atom*/
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/cmd_change_command_name,
+	/client/proc/cmd_admin_check_player_exp, /* shows players by playtime */
 	/client/proc/toggle_antag_hud, 	/*toggle display of the admin antag hud*/
 	/client/proc/toggle_AI_interact, /*toggle admin ability to interact with machines as an AI*/
 	/client/proc/customiseSNPC, /* Customise any interactive crewmembers in the world */
 	/client/proc/resetSNPC, /* Resets any interactive crewmembers in the world */
-	/client/proc/open_shuttle_manipulator /* Opens shuttle manipulator UI */
+	/client/proc/open_shuttle_manipulator, /* Opens shuttle manipulator UI */
+	/client/proc/deadchat,
+	/client/proc/toggleprayers,
+	/client/proc/toggleadminhelpsound,
+	/client/proc/respawn_character
 	)
 GLOBAL_PROTECT(admin_verbs_ban)
-GLOBAL_LIST_INIT(admin_verbs_ban, list(/client/proc/unban_panel,/client/proc/DB_ban_panel,/client/proc/stickybanpanel))
+GLOBAL_LIST_INIT(admin_verbs_ban, list(/client/proc/unban_panel, /client/proc/DB_ban_panel, /client/proc/stickybanpanel))
 GLOBAL_PROTECT(admin_verbs_sounds)
-GLOBAL_LIST_INIT(admin_verbs_sounds, list(/client/proc/play_local_sound,/client/proc/play_sound,/client/proc/set_round_end_sound))
+GLOBAL_LIST_INIT(admin_verbs_sounds, list(/client/proc/play_local_sound, /client/proc/play_sound, /client/proc/set_round_end_sound))
 GLOBAL_PROTECT(admin_verbs_fun)
 GLOBAL_LIST_INIT(admin_verbs_fun, list(
 	/client/proc/cmd_admin_dress,
@@ -87,7 +84,6 @@ GLOBAL_LIST_INIT(admin_verbs_fun, list(
 	/client/proc/drop_dynex_bomb,
 	/client/proc/cinematic,
 	/client/proc/one_click_antag,
-	/client/proc/send_space_ninja,
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/object_say,
 	/client/proc/toggle_random_events,
@@ -103,7 +99,7 @@ GLOBAL_LIST_INIT(admin_verbs_fun, list(
 	/client/proc/smite
 	))
 GLOBAL_PROTECT(admin_verbs_spawn)
-GLOBAL_LIST_INIT(admin_verbs_spawn, list(/datum/admins/proc/spawn_atom,/datum/admins/proc/spawn_atom_adv,/client/proc/respawn_character))
+GLOBAL_LIST_INIT(admin_verbs_spawn, list(/datum/admins/proc/spawn_atom, /client/proc/respawn_character))
 GLOBAL_PROTECT(admin_verbs_server)
 GLOBAL_LIST_INIT(admin_verbs_server, world.AVerbsServer())
 /world/proc/AVerbsServer()
@@ -113,7 +109,6 @@ GLOBAL_LIST_INIT(admin_verbs_server, world.AVerbsServer())
 	/datum/admins/proc/end_round,
 	/datum/admins/proc/delay,
 	/datum/admins/proc/toggleaban,
-	/client/proc/toggle_log_hrefs,
 	/client/proc/everyone_random,
 	/datum/admins/proc/toggleAI,
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
@@ -163,11 +158,11 @@ GLOBAL_LIST_INIT(admin_verbs_debug, world.AVerbsDebug())
 	/client/proc/cmd_display_init_log
 	)
 GLOBAL_PROTECT(admin_verbs_possess)
-GLOBAL_LIST_INIT(admin_verbs_possess, list(/proc/possess,/proc/release))
+GLOBAL_LIST_INIT(admin_verbs_possess, list(/proc/possess, /proc/release))
 GLOBAL_PROTECT(admin_verbs_permissions)
-GLOBAL_LIST_INIT(admin_verbs_permissions, list(/client/proc/edit_admin_permissions,/client/proc/create_poll))
-GLOBAL_PROTECT(admin_verbs_rejuv)
-GLOBAL_LIST_INIT(admin_verbs_rejuv, list(/client/proc/respawn_character))
+GLOBAL_LIST_INIT(admin_verbs_permissions, list(/client/proc/edit_admin_permissions))
+GLOBAL_PROTECT(admin_verbs_poll)
+GLOBAL_LIST_INIT(admin_verbs_poll, list(/client/proc/create_poll))
 
 //verbs which can be hidden - needs work
 GLOBAL_PROTECT(admin_verbs_hideable)
@@ -175,9 +170,6 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 	/client/proc/set_ooc,
 	/client/proc/reset_ooc,
 	/client/proc/deadmin,
-	/client/proc/deadchat,
-	/client/proc/toggleprayers,
-	/client/proc/toggle_hear_radio,
 	/datum/admins/proc/show_traitor_panel,
 	/datum/admins/proc/toggleenter,
 	/datum/admins/proc/toggleguests,
@@ -206,7 +198,6 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 	/client/proc/get_dynex_power,
 	/client/proc/set_dynex_scale,
 	/client/proc/cinematic,
-	/client/proc/send_space_ninja,
 	/client/proc/cmd_admin_add_freeform_ai_law,
 	/client/proc/cmd_admin_create_centcom_report,
 	/client/proc/cmd_change_command_name,
@@ -216,7 +207,6 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 	/datum/admins/proc/restart,
 	/datum/admins/proc/delay,
 	/datum/admins/proc/toggleaban,
-	/client/proc/toggle_log_hrefs,
 	/client/proc/everyone_random,
 	/datum/admins/proc/toggleAI,
 	/client/proc/restart_controller,
@@ -267,10 +257,12 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 			verbs += GLOB.admin_verbs_permissions
 		if(rights & R_STEALTH)
 			verbs += /client/proc/stealth
-		if(rights & R_REJUVINATE)
-			verbs += GLOB.admin_verbs_rejuv
+		if(rights & R_ADMIN)
+			verbs += GLOB.admin_verbs_poll
 		if(rights & R_SOUNDS)
 			verbs += GLOB.admin_verbs_sounds
+			if(config.invoke_youtubedl)
+				verbs += /client/proc/play_web_sound
 		if(rights & R_SPAWN)
 			verbs += GLOB.admin_verbs_spawn
 
@@ -291,12 +283,12 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 		GLOB.admin_verbs_possess,
 		GLOB.admin_verbs_permissions,
 		/client/proc/stealth,
-		GLOB.admin_verbs_rejuv,
+		GLOB.admin_verbs_poll,
 		GLOB.admin_verbs_sounds,
+		/client/proc/play_web_sound,
 		GLOB.admin_verbs_spawn,
 		/*Debug verbs added by "show debug verbs"*/
 		/client/proc/Cell,
-		/client/proc/do_not_use_these,
 		/client/proc/camera_view,
 		/client/proc/sec_camera_report,
 		/client/proc/intercom_view,
@@ -309,7 +301,8 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 		/client/proc/startSinglo,
 		/client/proc/set_server_fps,
 		/client/proc/cmd_admin_grantfullaccess,
-		/client/proc/cmd_admin_areatest,
+		/client/proc/cmd_admin_areatest_all,
+		/client/proc/cmd_admin_areatest_station,
 		/client/proc/readmin
 		)
 	if(holder)
@@ -391,13 +384,6 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 			mob.invisibility = INVISIBILITY_OBSERVER
 			to_chat(mob, "<span class='adminnotice'><b>Invisimin on. You are now as invisible as a ghost.</b></span>")
 
-/client/proc/player_panel_new()
-	set name = "Player Panel"
-	set category = "Admin"
-	if(holder)
-		holder.player_panel_new()
-	SSblackbox.add_details("admin_verb","Player Panel New") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
 /client/proc/check_antagonists()
 	set name = "Check Antagonists"
 	set category = "Admin"
@@ -475,7 +461,7 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 				mob.invisibility = INVISIBILITY_MAXIMUM //JUST IN CASE
 				mob.alpha = 0 //JUUUUST IN CASE
 				mob.name = " "
-				mob.mouse_opacity = 0
+				mob.mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 		log_admin("[key_name(usr)] has turned stealth mode [holder.fakekey ? "ON" : "OFF"]")
 		message_admins("[key_name_admin(usr)] has turned stealth mode [holder.fakekey ? "ON" : "OFF"]")
 	SSblackbox.add_details("admin_verb","Stealth Mode") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -630,19 +616,6 @@ GLOBAL_LIST_INIT(admin_verbs_hideable, list(
 	if(src.mob)
 		togglebuildmode(src.mob)
 	SSblackbox.add_details("admin_verb","Toggle Build Mode") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/client/proc/toggle_log_hrefs()
-	set name = "Toggle href logging"
-	set category = "Server"
-	if(!holder)
-		return
-	if(config)
-		if(config.log_hrefs)
-			config.log_hrefs = 0
-			to_chat(src, "<b>Stopped logging hrefs</b>")
-		else
-			config.log_hrefs = 1
-			to_chat(src, "<b>Started logging hrefs</b>")
 
 /client/proc/check_ai_laws()
 	set name = "Check AI Laws"
