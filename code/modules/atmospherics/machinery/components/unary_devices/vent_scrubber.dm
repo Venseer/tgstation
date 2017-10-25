@@ -34,6 +34,8 @@
 	var/radio_filter_out
 	var/radio_filter_in
 
+	pipe_state = "scrubber"
+
 /obj/machinery/atmospherics/components/unary/vent_scrubber/New()
 	..()
 	if(!id_tag)
@@ -171,6 +173,9 @@
 	var/datum/gas_mixture/air_contents = AIR1
 	var/list/env_gases = environment.gases
 
+	if(air_contents.return_pressure() >= 50*ONE_ATMOSPHERE)
+		return FALSE
+
 	if(scrubbing & SCRUBBING)
 		var/should_we_scrub = FALSE
 		for(var/id in env_gases)
@@ -238,8 +243,6 @@
 			tile.air_update_turf()
 
 	else //Just siphoning all air
-		if(air_contents.return_pressure()>=50*ONE_ATMOSPHERE)
-			return FALSE
 
 		var/transfer_moles = environment.total_moles()*(volume_rate/environment.volume)
 
