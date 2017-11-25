@@ -78,7 +78,7 @@
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/on_deconstruction()
 	if(beaker)
-		beaker.forceMove(loc)
+		beaker.forceMove(drop_location())
 		beaker = null
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/update_icon()
@@ -96,7 +96,6 @@
 
 		if(ismonkey(occupant)) // Monkey
 			occupant_overlay = image(CRYOMOBS, "monkey")
-			occupant_overlay.copy_overlays(occupant)
 		else if(isalienadult(occupant))
 			if(isalienroyal(occupant)) // Queen and prae
 				occupant_overlay = image(CRYOMOBS, "alienq")
@@ -108,9 +107,6 @@
 				occupant_overlay = image(CRYOMOBS, "aliend")
 
 		else if(ishuman(occupant) || islarva(occupant) || (isanimal(occupant) && !ismegafauna(occupant))) // Mobs that are smaller than cryotube
-			occupant_overlay = image(occupant.icon, occupant.icon_state)
-
-		if(ishuman(occupant) || islarva(occupant) || (isanimal(occupant) && !ismegafauna(occupant))) // Mobs that are smaller than cryotube
 			occupant_overlay = image(occupant.icon, occupant.icon_state)
 			occupant_overlay.copy_overlays(occupant)
 
@@ -384,7 +380,7 @@
 			. = TRUE
 		if("ejectbeaker")
 			if(beaker)
-				beaker.forceMove(loc)
+				beaker.forceMove(drop_location())
 				if(Adjacent(usr) && !issilicon(usr))
 					usr.put_in_hands(beaker)
 				beaker = null
