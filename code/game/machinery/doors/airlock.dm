@@ -135,7 +135,7 @@
 				for(var/turf/closed/T in range(2, src))
 					here.ChangeTurf(T.type)
 					return INITIALIZE_HINT_QDEL
-				here.ChangeTurf(/turf/closed/wall)
+				here.PlaceOnTop(/turf/closed/wall)
 			if(9 to 11)
 				lights = FALSE
 				locked = TRUE
@@ -569,6 +569,8 @@
 
 /obj/machinery/door/airlock/examine(mob/user)
 	..()
+	if(emagged)
+		to_chat(user, "<span class='warning'>Its access panel is smoking slightly.</span>")
 	if(charge && !panel_open && in_range(user, src))
 		to_chat(user, "<span class='warning'>The maintenance panel seems haphazardly fastened.</span>")
 	if(charge && panel_open)
@@ -1232,7 +1234,6 @@
 		if(!open())
 			update_icon(AIRLOCK_CLOSED, 1)
 		emagged = TRUE
-		desc = "<span class='warning'>Its access panel is smoking slightly.</span>"
 		lights = FALSE
 		locked = TRUE
 		loseMainPower()
