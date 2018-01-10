@@ -122,6 +122,10 @@
 	flags_1 = ABSTRACT_1 | NODROP_1
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 
+/obj/item/twohanded/offhand/Destroy()
+	wielded = FALSE
+	return ..()
+
 /obj/item/twohanded/offhand/unwield()
 	if(wielded)//Only delete if we're wielded
 		wielded = FALSE
@@ -657,7 +661,8 @@
 		user.visible_message("<span class='danger'>[user] blasts \the [target] with \the [src]!</span>")
 		playsound(target, 'sound/magic/disintegrate.ogg', 100, 1)
 		W.break_wall()
-		return 1
+		W.ScrapeAway()
+		return
 	..()
 
 //HF blade
