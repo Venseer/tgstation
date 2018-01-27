@@ -1837,18 +1837,10 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = 32
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /turf/open/floor/plating,
@@ -3007,7 +2999,7 @@
 	dir = 4;
 	light_color = "#e8eaff"
 	},
-/obj/structure/sign/nosmoking_2{
+/obj/structure/sign/warning/nosmoking{
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/dark,
@@ -3042,7 +3034,7 @@
 /area/security/main)
 "ajn" = (
 /obj/structure/table,
-/obj/structure/sign/goldenplaque{
+/obj/structure/sign/plaques/golden{
 	pixel_y = 32
 	},
 /obj/machinery/light{
@@ -3100,7 +3092,6 @@
 /area/maintenance/department/crew_quarters/dorms)
 "aju" = (
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/crew_quarters/dorms)
@@ -3370,7 +3361,7 @@
 "akb" = (
 /obj/machinery/disposal/bin,
 /obj/structure/disposalpipe/trunk,
-/obj/structure/sign/atmosplaque{
+/obj/structure/sign/plaques/atmos{
 	desc = "An embossed piece of paper from the University of Nanotrasen at Portpoint.";
 	icon_state = "kiddieplaque";
 	name = "\improper 'Diploma' frame";
@@ -4121,7 +4112,6 @@
 /area/space/nearstation)
 "alP" = (
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/dorms)
@@ -4503,7 +4493,6 @@
 /area/space/nearstation)
 "amF" = (
 /turf/open/floor/wood{
-	broken = 1;
 	icon_state = "wood-broken"
 	},
 /area/maintenance/department/crew_quarters/dorms)
@@ -5528,11 +5517,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 5
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = 32;
 	pixel_y = -32
 	},
@@ -5848,11 +5833,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = 32
 	},
 /turf/open/floor/plating,
@@ -6314,7 +6295,8 @@
 	launch_status = 0;
 	name = "monastery shuttle";
 	port_direction = 2;
-	width = 5
+	width = 5;
+	timid = 0
 	},
 /turf/open/floor/mineral/titanium/blue,
 /area/shuttle/pod_1)
@@ -6714,7 +6696,7 @@
 	network = list("SS13")
 	},
 /obj/structure/table,
-/obj/structure/sign/biohazard{
+/obj/structure/sign/warning/biohazard{
 	pixel_x = -32
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -6771,7 +6753,7 @@
 	pixel_y = 4
 	},
 /obj/item/device/radio/off,
-/obj/structure/sign/biohazard{
+/obj/structure/sign/warning/biohazard{
 	pixel_x = 32
 	},
 /obj/item/device/radio/off,
@@ -6786,7 +6768,6 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/dorms)
@@ -7306,11 +7287,7 @@
 /obj/machinery/light/small{
 	dir = 4
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = 32
 	},
 /obj/structure/closet/emcloset/anchored,
@@ -7522,7 +7499,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 5
 	},
-/obj/structure/sign/securearea,
+/obj/structure/sign/warning/securearea,
 /turf/closed/wall,
 /area/bridge)
 "atM" = (
@@ -7539,7 +7516,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 5
 	},
-/obj/structure/sign/securearea,
+/obj/structure/sign/warning/securearea,
 /turf/closed/wall,
 /area/bridge)
 "atO" = (
@@ -7661,7 +7638,7 @@
 /obj/item/bikehorn/golden,
 /obj/item/ammo_box/a357,
 /obj/item/tank/internals/plasma/full,
-/obj/item/disk/fakenucleardisk,
+/obj/item/disk/nuclear/fake,
 /obj/item/ore/diamond,
 /obj/item/gun/energy/disabler,
 /turf/open/floor/plasteel/vault{
@@ -7730,7 +7707,7 @@
 /area/crew_quarters/dorms)
 "aul" = (
 /obj/machinery/computer/shuttle/monastery_shuttle,
-/obj/structure/sign/pods{
+/obj/structure/sign/warning/pods{
 	pixel_y = 32
 	},
 /turf/open/floor/plasteel/dark,
@@ -8000,11 +7977,7 @@
 /area/bridge)
 "auU" = (
 /obj/structure/closet/emcloset/anchored,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /obj/machinery/light/small{
@@ -8022,7 +7995,7 @@
 /turf/closed/wall/r_wall,
 /area/ai_monitored/nuke_storage)
 "auX" = (
-/obj/structure/sign/securearea,
+/obj/structure/sign/warning/securearea,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 10
 	},
@@ -8041,7 +8014,7 @@
 /turf/open/floor/plasteel/vault,
 /area/ai_monitored/nuke_storage)
 "auZ" = (
-/obj/structure/sign/securearea,
+/obj/structure/sign/warning/securearea,
 /turf/closed/wall/r_wall,
 /area/ai_monitored/nuke_storage)
 "ava" = (
@@ -8068,7 +8041,7 @@
 /turf/open/floor/plasteel,
 /area/gateway)
 "avc" = (
-/obj/structure/sign/securearea,
+/obj/structure/sign/warning/securearea,
 /turf/closed/wall/r_wall,
 /area/gateway)
 "avd" = (
@@ -8094,7 +8067,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	desc = "Under the painting a plaque reads: 'While the meat grinder may not have spared you, fear not. Not one part of you has gone to waste... You were delicious.'";
 	icon_state = "monkey_painting";
 	name = "Mr. Deempisi portrait";
@@ -8195,29 +8168,17 @@
 /turf/open/floor/mineral/titanium/blue,
 /area/shuttle/labor)
 "avp" = (
-/obj/machinery/door/airlock/titanium{
-	id_tag = "prisonshuttle";
-	name = "Labor Shuttle Airlock"
-	},
-/obj/docking_port/mobile{
-	dir = 8;
-	dwidth = 2;
-	height = 5;
-	id = "laborcamp";
-	name = "labor camp shuttle";
-	port_direction = 4;
-	width = 9
-	},
 /obj/docking_port/stationary{
 	dir = 8;
 	dwidth = 2;
 	height = 5;
 	id = "laborcamp_home";
 	name = "fore bay 1";
+	roundstart_template = /datum/map_template/shuttle/labour/box;
 	width = 9
 	},
-/turf/open/floor/mineral/titanium/blue,
-/area/shuttle/labor)
+/turf/open/space/basic,
+/area/space)
 "avq" = (
 /obj/machinery/door/airlock/external{
 	name = "Labor Camp Shuttle Airlock"
@@ -9204,7 +9165,7 @@
 /turf/open/floor/plasteel,
 /area/hallway/primary/fore)
 "axJ" = (
-/obj/structure/sign/security{
+/obj/structure/sign/departments/security{
 	pixel_y = 32
 	},
 /turf/open/floor/plasteel,
@@ -9415,7 +9376,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	desc = "Under the painting a plaque reads: 'While the meat grinder may not have spared you, fear not. Not one part of you has gone to waste... You were delicious.'";
 	icon_state = "monkey_painting";
 	name = "Mr. Deempisi portrait";
@@ -9525,11 +9486,7 @@
 /area/solar/port)
 "ayz" = (
 /obj/effect/spawner/structure/window/reinforced,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /turf/open/floor/plating,
@@ -9579,11 +9536,7 @@
 	},
 /area/hallway/primary/fore)
 "ayF" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_y = 32
 	},
 /turf/open/floor/plasteel,
@@ -10136,7 +10089,6 @@
 	icon_state = "4-8"
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/security/brig)
@@ -10519,7 +10471,6 @@
 /area/maintenance/solars/port)
 "aAZ" = (
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/security/brig)
@@ -10533,7 +10484,6 @@
 	icon_state = "1-2"
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/security/brig)
@@ -10844,7 +10794,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	desc = "Under the painting a plaque reads: 'While the meat grinder may not have spared you, fear not. Not one part of you has gone to waste... You were delicious.'";
 	icon_state = "monkey_painting";
 	name = "Mr. Deempisi portrait";
@@ -10965,7 +10915,6 @@
 "aCd" = (
 /obj/effect/spawner/lootdrop/maintenance,
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/security/brig)
@@ -11497,7 +11446,7 @@
 /area/crew_quarters/dorms)
 "aDi" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden,
-/obj/structure/sign/restroom{
+/obj/structure/sign/departments/restroom{
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel/white/corner,
@@ -11758,7 +11707,7 @@
 /obj/machinery/porta_turret/ai{
 	dir = 8
 	},
-/obj/structure/sign/kiddieplaque{
+/obj/structure/sign/plaques/kiddie{
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/darkblue/side{
@@ -12393,11 +12342,7 @@
 /turf/open/floor/plating,
 /area/maintenance/department/cargo)
 "aFg" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_y = 32
 	},
 /turf/open/floor/plating,
@@ -13499,7 +13444,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
 	},
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	pixel_y = 32
 	},
 /turf/open/floor/plasteel/blue/corner{
@@ -13597,7 +13542,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 1
 	},
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	pixel_y = 32
 	},
 /turf/open/floor/plasteel/blue/corner{
@@ -13675,7 +13620,7 @@
 /obj/machinery/airalarm{
 	pixel_y = 22
 	},
-/obj/structure/sign/restroom{
+/obj/structure/sign/departments/restroom{
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/white/corner,
@@ -14188,7 +14133,6 @@
 	dir = 4
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/cargo)
@@ -14216,7 +14160,6 @@
 	},
 /obj/effect/decal/cleanable/blood/old,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/cargo)
@@ -14298,11 +14241,7 @@
 /turf/open/floor/mineral/plastitanium/brig,
 /area/shuttle/escape)
 "aJD" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /turf/open/floor/plasteel/red/side{
@@ -14387,7 +14326,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/sign/restroom{
+/obj/structure/sign/departments/restroom{
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel,
@@ -14617,7 +14556,6 @@
 /area/maintenance/department/cargo)
 "aKo" = (
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/cargo)
@@ -15701,7 +15639,6 @@
 "aNf" = (
 /obj/structure/reagent_dispensers/watertank,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -15724,7 +15661,6 @@
 	icon_state = "1-2"
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -16184,7 +16120,7 @@
 	},
 /area/hallway/secondary/exit/departure_lounge)
 "aOs" = (
-/obj/structure/sign/evac,
+/obj/structure/sign/departments/evac,
 /turf/closed/wall,
 /area/hallway/secondary/exit/departure_lounge)
 "aOt" = (
@@ -16227,7 +16163,6 @@
 "aOw" = (
 /obj/structure/grille/broken,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -16714,13 +16649,11 @@
 	icon_state = "plant-22"
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/crew_quarters/bar)
 "aPz" = (
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -17019,11 +16952,7 @@
 /turf/open/floor/carpet,
 /area/shuttle/escape)
 "aQr" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /turf/open/floor/plasteel/escape{
@@ -17156,7 +17085,6 @@
 	dir = 10
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -17169,7 +17097,6 @@
 	},
 /obj/effect/landmark/blobstart,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -17183,7 +17110,6 @@
 	dir = 4
 	},
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -17267,7 +17193,6 @@
 	dir = 4
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -17395,7 +17320,7 @@
 /area/hallway/primary/central)
 "aRe" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/sign/cargo{
+/obj/structure/sign/departments/cargo{
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/brown/corner{
@@ -17684,7 +17609,6 @@
 	opacity = 1
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -18481,9 +18405,6 @@
 /turf/open/floor/mineral/titanium,
 /area/shuttle/escape)
 "aTH" = (
-/obj/machinery/door/airlock/titanium{
-	name = "Emergency Shuttle Airlock"
-	},
 /obj/docking_port/stationary{
 	dheight = 0;
 	dir = 8;
@@ -18493,17 +18414,8 @@
 	name = "PubbyStation emergency evac bay";
 	width = 20
 	},
-/obj/docking_port/mobile/emergency{
-	dheight = 0;
-	dir = 8;
-	dwidth = 4;
-	height = 15;
-	name = "Pubby emergency shuttle";
-	port_direction = 4;
-	width = 18
-	},
-/turf/open/floor/plating,
-/area/shuttle/escape)
+/turf/open/space/basic,
+/area/space)
 "aTI" = (
 /obj/machinery/light,
 /turf/open/floor/plating,
@@ -18850,13 +18762,6 @@
 /turf/open/floor/plating,
 /area/quartermaster/storage)
 "aUA" = (
-/obj/machinery/door/airlock/titanium{
-	name = "Supply Shuttle Airlock";
-	req_access_txt = "31"
-	},
-/obj/docking_port/mobile/supply{
-	dir = 4
-	},
 /obj/docking_port/stationary{
 	dir = 4;
 	dwidth = 5;
@@ -18865,8 +18770,8 @@
 	name = "Cargo Bay";
 	width = 12
 	},
-/turf/open/floor/plating,
-/area/shuttle/supply)
+/turf/open/space/basic,
+/area/space)
 "aUB" = (
 /obj/structure/rack,
 /obj/effect/spawner/lootdrop/maintenance,
@@ -18908,7 +18813,7 @@
 	pixel_y = 3
 	},
 /obj/item/crowbar,
-/obj/structure/sign/nosmoking_2{
+/obj/structure/sign/warning/nosmoking{
 	pixel_x = 32
 	},
 /obj/machinery/light{
@@ -19598,7 +19503,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	desc = "Under the painting a plaque reads: 'While the meat grinder may not have spared you, fear not. Not one part of you has gone to waste... You were delicious.'";
 	icon_state = "monkey_painting";
 	name = "Mr. Deempisi portrait";
@@ -19890,7 +19795,7 @@
 /area/hallway/secondary/exit/departure_lounge)
 "aWM" = (
 /obj/machinery/washing_machine,
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	desc = "Under the painting a plaque reads: 'While the meat grinder may not have spared you, fear not. Not one part of you has gone to waste... You were delicious.'";
 	icon_state = "monkey_painting";
 	name = "Mr. Deempisi portrait";
@@ -20110,7 +20015,7 @@
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/sign/cargo{
+/obj/structure/sign/departments/cargo{
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/brown/corner{
@@ -20375,7 +20280,7 @@
 /area/hydroponics)
 "aXY" = (
 /obj/machinery/hydroponics/constructable,
-/obj/structure/sign/botany{
+/obj/structure/sign/departments/botany{
 	pixel_y = 32
 	},
 /obj/machinery/light{
@@ -21943,11 +21848,7 @@
 /area/maintenance/solars/starboard)
 "bbO" = (
 /obj/effect/spawner/structure/window/reinforced,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = 32
 	},
 /turf/open/floor/plating,
@@ -22196,14 +22097,12 @@
 "bcx" = (
 /obj/effect/decal/cleanable/cobweb,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/cargo)
 "bcy" = (
 /obj/item/chair,
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/cargo)
@@ -22404,11 +22303,7 @@
 /turf/open/floor/plasteel/airless/solarpanel,
 /area/solar/starboard)
 "bcW" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_y = 32
 	},
 /obj/effect/spawner/structure/window/reinforced,
@@ -22571,7 +22466,6 @@
 /area/crew_quarters/bar)
 "bdz" = (
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/cargo)
@@ -22795,7 +22689,7 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/structure/sign/custodian{
+/obj/structure/sign/departments/custodian{
 	pixel_x = 32
 	},
 /turf/open/floor/plasteel/neutral/corner,
@@ -23500,12 +23394,17 @@
 /turf/open/floor/plating,
 /area/quartermaster/miningdock)
 "bfK" = (
-/obj/machinery/door/airlock/titanium{
-	name = "Mining Shuttle Airlock";
-	req_access_txt = "48"
+/obj/docking_port/stationary{
+	dir = 4;
+	dwidth = 3;
+	height = 5;
+	id = "mining_home";
+	name = "mining shuttle bay";
+	roundstart_template = /datum/map_template/shuttle/mining/delta;
+	width = 7
 	},
-/turf/open/floor/plating,
-/area/shuttle/labor)
+/turf/open/space/basic,
+/area/space)
 "bfL" = (
 /obj/machinery/door/airlock/titanium{
 	name = "Mining Shuttle Airlock";
@@ -23977,24 +23876,17 @@
 /turf/open/floor/mineral/titanium/blue,
 /area/shuttle/arrival)
 "bgS" = (
-/obj/structure/shuttle/engine/propulsion{
-	dir = 4
-	},
-/obj/docking_port/mobile/arrivals{
-	height = 13;
-	name = "pubby arrivals shuttle";
-	width = 6
-	},
 /obj/docking_port/stationary{
 	dir = 8;
 	dwidth = 3;
 	height = 13;
 	id = "arrivals_stationary";
 	name = "pubby arrivals";
+	roundstart_template = /datum/map_template/shuttle/arrival/pubby;
 	width = 6
 	},
-/turf/open/floor/plating/airless,
-/area/shuttle/arrival)
+/turf/open/space/basic,
+/area/space)
 "bgU" = (
 /obj/structure/table/wood,
 /obj/item/device/flashlight/lamp/green{
@@ -24580,7 +24472,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/sign/bluecross_2{
+/obj/structure/sign/departments/medbay/alt{
 	pixel_x = 32;
 	pixel_y = -32
 	},
@@ -24962,7 +24854,7 @@
 /turf/open/floor/plating,
 /area/medical/medbay/central)
 "bje" = (
-/obj/structure/sign/bluecross_2,
+/obj/structure/sign/departments/medbay/alt,
 /turf/closed/wall,
 /area/medical/medbay/central)
 "bjf" = (
@@ -25030,7 +24922,7 @@
 /turf/open/floor/plasteel/green/corner,
 /area/science/research/lobby)
 "bjs" = (
-/obj/structure/sign/science,
+/obj/structure/sign/departments/science,
 /turf/closed/wall,
 /area/science/research/lobby)
 "bjt" = (
@@ -25536,7 +25428,6 @@
 	},
 /obj/effect/landmark/revenantspawn,
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/cargo)
@@ -26020,7 +25911,7 @@
 /turf/open/floor/engine,
 /area/science/explab)
 "blV" = (
-/obj/structure/sign/kiddieplaque/perfect_drone{
+/obj/structure/sign/plaques/kiddie/perfect_drone{
 	pixel_y = 32
 	},
 /turf/open/floor/engine,
@@ -26090,7 +25981,6 @@
 	icon_state = "2-4"
 	},
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/engine)
@@ -26100,7 +25990,6 @@
 	},
 /obj/effect/spawner/lootdrop/maintenance,
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/engine)
@@ -26525,7 +26414,6 @@
 	dir = 1
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/cargo)
@@ -26534,7 +26422,6 @@
 	dir = 8
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/cargo)
@@ -26581,7 +26468,6 @@
 	icon_state = "1-2"
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/engine)
@@ -27364,11 +27250,7 @@
 /turf/open/floor/plasteel/white,
 /area/science/xenobiology)
 "bpq" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'HIGH VOLTAGE'";
-	icon_state = "shock";
-	name = "HIGH VOLTAGE"
-	},
+/obj/structure/sign/warning/electricshock,
 /turf/closed/wall/r_wall,
 /area/science/xenobiology)
 "bpr" = (
@@ -28587,7 +28469,7 @@
 /turf/open/floor/plasteel/white,
 /area/science/xenobiology)
 "brR" = (
-/obj/structure/sign/biohazard,
+/obj/structure/sign/warning/biohazard,
 /turf/closed/wall,
 /area/science/xenobiology)
 "brS" = (
@@ -28668,7 +28550,7 @@
 /turf/open/floor/plasteel,
 /area/science/xenobiology)
 "brZ" = (
-/obj/structure/sign/xenobio,
+/obj/structure/sign/departments/xenobio,
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 9
 	},
@@ -28788,12 +28670,7 @@
 /turf/open/floor/pod/light,
 /area/shuttle/transport)
 "bsl" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK"
-	},
+/obj/structure/sign/warning/vacuum/external,
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
 /area/hallway/secondary/entry)
@@ -29374,7 +29251,7 @@
 	dir = 8
 	},
 /obj/effect/landmark/xeno_spawn,
-/obj/structure/sign/xenobio{
+/obj/structure/sign/departments/xenobio{
 	pixel_x = -32
 	},
 /turf/open/floor/plasteel/floorgrime,
@@ -29391,7 +29268,7 @@
 /area/science/xenobiology)
 "btC" = (
 /obj/effect/spawner/structure/window/reinforced,
-/obj/structure/sign/biohazard,
+/obj/structure/sign/warning/biohazard,
 /turf/open/floor/plating,
 /area/science/xenobiology)
 "btD" = (
@@ -29432,18 +29309,6 @@
 /turf/open/floor/pod/dark,
 /area/shuttle/transport)
 "btK" = (
-/obj/machinery/door/airlock/titanium,
-/obj/docking_port/mobile{
-	dir = 8;
-	dwidth = 2;
-	height = 13;
-	id = "ferry";
-	name = "ferry shuttle";
-	port_direction = 1;
-	preferred_direction = 4;
-	roundstart_move = "ferry_away";
-	width = 5
-	},
 /obj/docking_port/stationary{
 	dir = 8;
 	dwidth = 2;
@@ -29453,8 +29318,8 @@
 	turf_type = /turf/open/space;
 	width = 5
 	},
-/turf/open/floor/pod/light,
-/area/shuttle/transport)
+/turf/open/space/basic,
+/area/space)
 "btL" = (
 /obj/machinery/door/airlock/external{
 	cyclelinkeddir = 4;
@@ -30345,7 +30210,7 @@
 	name = "research shutters"
 	},
 /obj/machinery/door/firedoor/heavy,
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	pixel_x = 32
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -30709,7 +30574,6 @@
 	icon_state = "1-2"
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/engine)
@@ -31608,7 +31472,6 @@
 	icon_state = "1-2"
 	},
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/engine)
@@ -31945,7 +31808,7 @@
 	},
 /obj/machinery/door/firedoor/heavy,
 /obj/effect/turf_decal/stripes/line,
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	pixel_x = 32
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -32333,7 +32196,7 @@
 /obj/structure/chair{
 	dir = 4
 	},
-/obj/structure/sign/holy{
+/obj/structure/sign/departments/holy{
 	pixel_x = -32
 	},
 /turf/open/floor/plasteel/dark,
@@ -32371,7 +32234,6 @@
 	dir = 4
 	},
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/engine)
@@ -32548,7 +32410,7 @@
 /turf/open/floor/plasteel/whiteblue/corner,
 /area/medical/medbay/central)
 "bzY" = (
-/obj/structure/sign/bluecross_2,
+/obj/structure/sign/departments/medbay/alt,
 /turf/closed/wall,
 /area/crew_quarters/heads/cmo)
 "bzZ" = (
@@ -32860,7 +32722,6 @@
 	},
 /obj/item/extinguisher,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/engine)
@@ -32969,7 +32830,7 @@
 /turf/open/floor/plasteel/white,
 /area/medical/virology)
 "bAY" = (
-/obj/structure/sign/biohazard,
+/obj/structure/sign/warning/biohazard,
 /turf/closed/wall,
 /area/medical/virology)
 "bAZ" = (
@@ -33798,7 +33659,7 @@
 /turf/open/floor/engine,
 /area/science/storage)
 "bCS" = (
-/obj/structure/sign/fire,
+/obj/structure/sign/warning/fire,
 /turf/closed/wall,
 /area/science/storage)
 "bCT" = (
@@ -35248,7 +35109,7 @@
 	icon_state = "1-2"
 	},
 /obj/structure/disposalpipe/segment,
-/obj/structure/sign/examroom{
+/obj/structure/sign/departments/examroom{
 	pixel_x = -32
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -35264,7 +35125,7 @@
 /turf/open/floor/plasteel/yellow/corner,
 /area/hallway/primary/aft)
 "bGa" = (
-/obj/structure/sign/science,
+/obj/structure/sign/departments/science,
 /turf/closed/wall,
 /area/hallway/primary/aft)
 "bGb" = (
@@ -36400,7 +36261,7 @@
 /obj/structure/cable{
 	icon_state = "4-8"
 	},
-/obj/structure/sign/nosmoking_2{
+/obj/structure/sign/warning/nosmoking{
 	pixel_y = -32
 	},
 /obj/effect/turf_decal/stripes/corner{
@@ -36494,12 +36355,7 @@
 /area/chapel/dock)
 "bIV" = (
 /obj/effect/spawner/structure/window/reinforced,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK"
-	},
+/obj/structure/sign/warning/vacuum/external,
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
 /turf/open/floor/plating,
 /area/chapel/dock)
@@ -37087,7 +36943,7 @@
 /area/medical/virology)
 "bKq" = (
 /obj/effect/spawner/structure/window,
-/obj/structure/sign/deathsposal,
+/obj/structure/sign/warning/deathsposal,
 /turf/open/floor/plating,
 /area/medical/virology)
 "bKr" = (
@@ -37896,11 +37752,7 @@
 	frequency = 1441;
 	id = "inc_in"
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /turf/open/floor/engine/vacuum,
@@ -37925,11 +37777,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /turf/open/floor/plating,
@@ -38332,9 +38180,7 @@
 "bNs" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating/airless,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bNt" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on{
 	dir = 4
@@ -38717,7 +38563,7 @@
 /turf/open/floor/plating,
 /area/engine/atmos)
 "bOs" = (
-/obj/structure/sign/fire,
+/obj/structure/sign/warning/fire,
 /turf/closed/wall/r_wall,
 /area/science/mixing)
 "bOt" = (
@@ -38745,9 +38591,7 @@
 /area/space/nearstation)
 "bOw" = (
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bOx" = (
 /obj/structure/cable{
 	icon_state = "1-2"
@@ -39326,24 +39170,18 @@
 	network = list("SS13","Monastery")
 	},
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bQd" = (
 /obj/structure/flora/ausbushes/leafybush,
 /obj/structure/flora/ausbushes/reedbush,
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bQe" = (
 /obj/item/device/flashlight/lantern{
 	on = 1
 	},
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bQf" = (
 /obj/structure/cable{
 	icon_state = "1-2"
@@ -39351,16 +39189,12 @@
 /turf/open/floor/plasteel/asteroid{
 	icon_plating = "asteroid"
 	},
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bQg" = (
 /turf/open/floor/plasteel/asteroid{
 	icon_plating = "asteroid"
 	},
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bQh" = (
 /obj/machinery/camera{
 	c_tag = "Monastery Asteroid Dock Staboard";
@@ -39368,9 +39202,7 @@
 	network = list("SS13","Monastery")
 	},
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bQi" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -39820,10 +39652,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'RADIOACTIVE AREA'";
-	icon_state = "radiation";
-	name = "RADIOACTIVE AREA";
+/obj/structure/sign/warning/radiation/rad_area{
 	pixel_x = -32
 	},
 /obj/effect/turf_decal/stripes/corner{
@@ -40311,9 +40140,7 @@
 "bSm" = (
 /obj/structure/flora/ausbushes,
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bSn" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -40425,10 +40252,7 @@
 /turf/closed/wall/r_wall,
 /area/storage/tech)
 "bSE" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'RADIOACTIVE AREA'";
-	icon_state = "radiation";
-	name = "RADIOACTIVE AREA";
+/obj/structure/sign/warning/radiation/rad_area{
 	pixel_x = -32
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -40513,7 +40337,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
 	},
-/obj/structure/sign/engineering{
+/obj/structure/sign/departments/engineering{
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel/yellow/corner,
@@ -40532,7 +40356,7 @@
 	icon_state = "plant-02"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/structure/sign/engineering{
+/obj/structure/sign/departments/engineering{
 	pixel_y = -32
 	},
 /turf/open/floor/plasteel/yellow/corner,
@@ -40923,7 +40747,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/visible{
 	dir = 4
 	},
-/obj/structure/sign/atmosplaque{
+/obj/structure/sign/plaques/atmos{
 	pixel_y = 32
 	},
 /obj/machinery/light{
@@ -41050,7 +40874,6 @@
 /area/maintenance/department/engine)
 "bTY" = (
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/engine)
@@ -41082,7 +40905,7 @@
 /turf/open/floor/plating,
 /area/maintenance/department/engine)
 "bUf" = (
-/obj/structure/sign/securearea,
+/obj/structure/sign/warning/securearea,
 /turf/closed/wall/r_wall,
 /area/storage/tech)
 "bUg" = (
@@ -41094,7 +40917,7 @@
 /turf/open/floor/plasteel/dark,
 /area/storage/tech)
 "bUh" = (
-/obj/structure/sign/securearea,
+/obj/structure/sign/warning/securearea,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/closed/wall/r_wall,
 /area/storage/tech)
@@ -41287,9 +41110,7 @@
 "bUC" = (
 /obj/structure/flora/ausbushes/fernybush,
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bUD" = (
 /obj/structure/lattice,
 /obj/structure/disposalpipe/segment{
@@ -42042,9 +41863,7 @@
 	network = list("SS13","Monastery")
 	},
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bWj" = (
 /obj/machinery/portable_atmospherics/canister/air,
 /turf/open/floor/plating{
@@ -42066,7 +41885,6 @@
 "bWm" = (
 /obj/structure/reagent_dispensers/fueltank,
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/engine)
@@ -42663,32 +42481,26 @@
 	cyclelinkeddir = 4
 	},
 /turf/open/floor/plating,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bXM" = (
 /obj/machinery/light/small{
 	dir = 1
 	},
 /turf/open/floor/plating,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bXN" = (
 /obj/machinery/door/airlock/external{
 	cyclelinkeddir = 8
 	},
 /turf/open/floor/plating,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "bXS" = (
 /obj/structure/grille/broken,
 /obj/machinery/disposal/bin,
 /obj/structure/disposalpipe/trunk{
 	dir = 4
 	},
-/obj/structure/sign/deathsposal{
+/obj/structure/sign/warning/deathsposal{
 	pixel_x = -32
 	},
 /turf/open/floor/plating{
@@ -42781,11 +42593,7 @@
 /area/engine/engineering)
 "bYf" = (
 /obj/effect/spawner/structure/window/reinforced,
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'HIGH VOLTAGE'";
-	icon_state = "shock";
-	name = "HIGH VOLTAGE"
-	},
+/obj/structure/sign/warning/electricshock,
 /turf/open/floor/plating,
 /area/engine/engine_smes)
 "bYg" = (
@@ -43616,7 +43424,7 @@
 /turf/open/floor/engine,
 /area/maintenance/disposal/incinerator)
 "bZV" = (
-/obj/structure/sign/fire,
+/obj/structure/sign/warning/fire,
 /turf/closed/wall/r_wall,
 /area/maintenance/disposal/incinerator)
 "bZY" = (
@@ -43625,7 +43433,6 @@
 "caa" = (
 /obj/structure/disposalpipe/segment,
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/engine)
@@ -44011,9 +43818,7 @@
 /area/maintenance/disposal/incinerator)
 "caS" = (
 /turf/closed/wall,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "caT" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced/tinted/fulltile,
@@ -44130,11 +43935,7 @@
 /turf/open/floor/plasteel,
 /area/engine/engineering)
 "cbj" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'RADIOACTIVE AREA'";
-	icon_state = "radiation";
-	name = "RADIOACTIVE AREA"
-	},
+/obj/structure/sign/warning/radiation/rad_area,
 /turf/closed/wall/r_wall,
 /area/engine/engineering)
 "cbk" = (
@@ -44536,9 +44337,7 @@
 "ccu" = (
 /obj/structure/flora/ausbushes/leafybush,
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "ccv" = (
 /obj/machinery/light/small{
 	dir = 8
@@ -44581,15 +44380,11 @@
 /turf/open/floor/plasteel/asteroid{
 	icon_plating = "asteroid"
 	},
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "ccM" = (
 /obj/structure/chair,
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "ccN" = (
 /obj/structure/closet/crate/medical,
 /obj/item/stack/medical/gauze,
@@ -44763,11 +44558,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_y = 32
 	},
 /turf/open/floor/plating,
@@ -44853,9 +44644,7 @@
 /obj/item/trash/plate,
 /obj/item/kitchen/fork,
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cdE" = (
 /obj/structure/chair,
 /obj/item/cigbutt,
@@ -45121,9 +44910,7 @@
 	dir = 1
 	},
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cep" = (
 /obj/machinery/light{
 	dir = 1
@@ -45338,11 +45125,7 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = 32
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -45391,11 +45174,7 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /turf/open/floor/plating,
@@ -45595,9 +45374,7 @@
 /area/chapel/main/monastery)
 "cfK" = (
 /turf/open/floor/plasteel/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cfL" = (
 /obj/structure/flora/ausbushes/fernybush,
 /obj/machinery/camera{
@@ -45606,20 +45383,14 @@
 	network = list("SS13","Monastery")
 	},
 /turf/open/floor/plasteel/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cfM" = (
 /obj/structure/flora/ausbushes,
 /turf/open/floor/plasteel/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cfN" = (
 /turf/closed/mineral,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cfO" = (
 /obj/structure/transit_tube,
 /obj/effect/turf_decal/stripes/line{
@@ -45865,7 +45636,7 @@
 /area/chapel/main/monastery)
 "cgM" = (
 /obj/structure/dresser,
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	desc = "Under the painting a plaque reads: 'While the meat grinder may not have spared you, fear not. Not one part of you has gone to waste... You were delicious.'";
 	icon_state = "monkey_painting";
 	name = "Mr. Deempisi portrait";
@@ -45902,11 +45673,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /turf/open/floor/plating,
@@ -46255,9 +46022,7 @@
 /obj/structure/flora/ausbushes/leafybush,
 /obj/structure/flora/ausbushes/fernybush,
 /turf/open/floor/plating/asteroid,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "chU" = (
 /obj/structure/sink{
 	dir = 4;
@@ -46699,16 +46464,12 @@
 /area/engine/engineering)
 "cju" = (
 /turf/closed/mineral,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "cjv" = (
 /turf/closed/wall,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "cjw" = (
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	desc = "A warning sign which reads 'BOMB RANGE";
 	name = "BOMB RANGE"
 	},
@@ -46717,14 +46478,10 @@
 	icon_state = "riveted";
 	name = "hyper-reinforced wall"
 	},
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "cjx" = (
 /turf/open/floor/plating/asteroid/airless,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "cjy" = (
 /obj/structure/chair{
 	dir = 4
@@ -46742,22 +46499,6 @@
 /turf/open/floor/plating/abductor,
 /area/shuttle/abandoned)
 "cjB" = (
-/obj/machinery/door/airlock/public/glass{
-	name = "Shuttle Airlock"
-	},
-/obj/docking_port/mobile{
-	dheight = 0;
-	dir = 8;
-	dwidth = 4;
-	height = 9;
-	id = "whiteship";
-	launch_status = 0;
-	name = "White Ship";
-	port_direction = 4;
-	preferred_direction = 1;
-	roundstart_move = "whiteship_away";
-	width = 9
-	},
 /obj/docking_port/stationary{
 	dir = 8;
 	dwidth = 11;
@@ -46767,14 +46508,10 @@
 	turf_type = /turf/open/space;
 	width = 35
 	},
-/turf/open/floor/plasteel/dark,
-/area/shuttle/abandoned)
+/turf/open/space/basic,
+/area/space)
 "cjC" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_y = 32
 	},
 /obj/machinery/light/small{
@@ -46850,9 +46587,7 @@
 	use_power = 0
 	},
 /turf/open/floor/plating/asteroid/airless,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "cjW" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -47007,9 +46742,7 @@
 "ckt" = (
 /obj/effect/spawner/lootdrop/maintenance,
 /turf/open/floor/plating/asteroid/airless,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "cku" = (
 /obj/structure/chair/wood/normal,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -47108,21 +46841,17 @@
 /turf/open/floor/plasteel/dark,
 /area/library)
 "ckJ" = (
-/obj/structure/sign/securearea,
+/obj/structure/sign/warning/securearea,
 /turf/closed/wall/r_wall,
 /area/engine/engineering)
 "ckK" = (
 /turf/closed/mineral/random/low_chance,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "ckL" = (
 /obj/item/device/radio/beacon,
 /obj/effect/landmark/revenantspawn,
 /turf/open/floor/plating/airless,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "ckM" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -47244,9 +46973,7 @@
 	on = 1
 	},
 /turf/open/floor/plating/asteroid/airless,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "clk" = (
 /obj/machinery/light/small{
 	dir = 8
@@ -47270,9 +46997,7 @@
 "cls" = (
 /obj/effect/spawner/lootdrop/maintenance,
 /turf/closed/mineral,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "clt" = (
 /obj/docking_port/stationary{
 	dheight = 9;
@@ -47297,9 +47022,7 @@
 /area/space/nearstation)
 "clv" = (
 /turf/closed/mineral/iron,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "clw" = (
 /turf/closed/wall/r_wall,
 /area/tcommsat/computer)
@@ -47357,9 +47080,7 @@
 "clF" = (
 /obj/effect/spawner/lootdrop/maintenance,
 /turf/closed/mineral/random/low_chance,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "clG" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
@@ -47928,18 +47649,14 @@
 	use_power = 0
 	},
 /turf/open/floor/plating/asteroid/airless,
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "cnq" = (
 /turf/closed/indestructible{
 	desc = "A wall impregnated with Fixium, able to withstand massive explosions with ease";
 	icon_state = "riveted";
 	name = "hyper-reinforced wall"
 	},
-/area/mine/explored{
-	name = "Bomb Testing Asteroid"
-	})
+/area/asteroid/nearstation/bomb_site)
 "cnr" = (
 /obj/structure/table,
 /obj/item/stock_parts/subspace/amplifier,
@@ -48129,7 +47846,6 @@
 	dir = 5
 	},
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/dorms)
@@ -48261,7 +47977,6 @@
 	dir = 4
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -48274,7 +47989,6 @@
 	},
 /obj/effect/spawner/lootdrop/maintenance,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -48286,7 +48000,6 @@
 	dir = 4
 	},
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/bar)
@@ -48851,9 +48564,7 @@
 "cqW" = (
 /obj/effect/spawner/structure/window/reinforced,
 /turf/closed/mineral,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cqX" = (
 /obj/structure/disposalpipe/segment,
 /obj/structure/lattice,
@@ -48897,17 +48608,10 @@
 /turf/open/floor/plasteel/dark,
 /area/chapel/main/monastery)
 "crl" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK"
-	},
+/obj/structure/sign/warning/vacuum/external,
 /obj/effect/spawner/structure/window/reinforced,
 /turf/open/floor/plating,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "crm" = (
 /obj/structure/lattice,
 /obj/structure/disposalpipe/segment,
@@ -48950,11 +48654,7 @@
 /turf/open/floor/plating,
 /area/maintenance/department/engine)
 "crA" = (
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_y = 32
 	},
 /obj/structure/disposalpipe/segment{
@@ -49087,9 +48787,7 @@
 "crV" = (
 /obj/structure/flora/ausbushes/pointybush,
 /turf/closed/mineral,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "crX" = (
 /obj/machinery/atmospherics/components/unary/vent_pump/on,
 /turf/open/floor/plasteel/dark,
@@ -50089,11 +49787,7 @@
 /obj/machinery/light/small{
 	dir = 8
 	},
-/obj/structure/sign/securearea{
-	desc = "A warning sign which reads 'EXTERNAL AIRLOCK'";
-	icon_state = "space";
-	layer = 4;
-	name = "EXTERNAL AIRLOCK";
+/obj/structure/sign/warning/vacuum/external{
 	pixel_x = -32
 	},
 /obj/machinery/camera{
@@ -50554,15 +50248,11 @@
 /obj/structure/lattice,
 /obj/structure/lattice,
 /turf/closed/mineral,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cyM" = (
 /obj/structure/lattice,
 /turf/closed/mineral,
-/area/chapel/asteroid{
-	name = "Monastery Asteroid"
-	})
+/area/chapel/asteroid/monastery)
 "cyP" = (
 /obj/structure/bookcase/random/nonfiction,
 /obj/machinery/light/small{
@@ -50632,7 +50322,7 @@
 /area/library)
 "czp" = (
 /obj/structure/table/wood,
-/obj/item/disk/fakenucleardisk,
+/obj/item/disk/nuclear/fake,
 /obj/item/barcodescanner,
 /turf/open/floor/plasteel/dark,
 /area/library)
@@ -50977,7 +50667,6 @@
 "cBm" = (
 /obj/item/cigbutt/cigarbutt,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/dorms)
@@ -51077,14 +50766,12 @@
 /area/maintenance/department/crew_quarters/dorms)
 "cBz" = (
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg1"
 	},
 /area/maintenance/department/crew_quarters/dorms)
 "cBA" = (
 /obj/structure/grille/broken,
 /turf/open/floor/plating{
-	burnt = 1;
 	icon_state = "panelscorched"
 	},
 /area/maintenance/department/crew_quarters/dorms)
@@ -51094,7 +50781,6 @@
 	dir = 8
 	},
 /turf/open/floor/plating{
-	broken = 1;
 	icon_state = "platingdmg3"
 	},
 /area/maintenance/department/crew_quarters/dorms)
@@ -51113,7 +50799,7 @@
 /turf/open/floor/plating,
 /area/maintenance/department/engine)
 "cBM" = (
-/obj/structure/sign/securearea{
+/obj/structure/sign/warning/securearea{
 	desc = "Under the painting a plaque reads: 'While the meat grinder may not have spared you, fear not. Not one part of you has gone to waste... You were delicious.'";
 	icon_state = "monkey_painting";
 	name = "Mr. Deempisi portrait";
@@ -60119,11 +59805,11 @@ aaa
 aaa
 aaa
 aaa
-cil
-cja
-cin
-cja
-cil
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -60375,13 +60061,13 @@ aaa
 aaa
 aaa
 aaa
-cil
-cil
-ciw
-cix
-ciw
-cil
-cil
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -60631,15 +60317,15 @@ aaa
 aaa
 aaa
 aaa
-cil
-cil
-ciw
-ciw
-cix
-ciw
-ciw
-cil
-cil
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -60888,15 +60574,15 @@ aaa
 aaa
 aaa
 aaa
-cim
-ciw
-ciw
-cjb
-cjy
-cjW
-ciw
-ciw
-ckY
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -61145,15 +60831,15 @@ aaa
 aaa
 aaa
 aaa
-cin
-cix
-cix
-cjc
-cjz
-cjX
-cix
-cix
-cin
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -61402,15 +61088,15 @@ aaa
 aaa
 aaa
 aaa
-cim
-ciw
-ciw
-cjd
-cjA
-cjY
-ciw
-ciw
-ckY
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -61659,15 +61345,15 @@ aaa
 aaa
 aaa
 aaa
-cil
-cil
-ciw
-ciw
-cix
-ciw
-ciw
-cil
-cil
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -61917,13 +61603,13 @@ aaa
 aaa
 aaa
 aaa
-cil
-cil
-ciw
-cix
-ciw
-cil
-cil
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -62175,11 +61861,11 @@ aaa
 aaa
 aaa
 aaa
-cil
-cje
+aaa
+aaa
 cjB
-cje
-cil
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -65430,21 +65116,21 @@ aaa
 aaa
 aaa
 aaa
-aFS
-cBN
-cBN
-aKs
-aFS
-aFS
-cBN
-cBN
-aFS
-aKs
-aFS
-aKs
-aFS
-aFS
-aFS
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -65687,21 +65373,21 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aIs
-aJx
-aJx
-cBN
-aMI
-aNZ
-aNZ
-aNZ
-aMI
-aNZ
-aMI
-aNZ
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -65944,21 +65630,21 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aIt
-aJx
-aJx
-aLp
-aIx
-aIx
-aIx
-aIx
-aIx
-aIx
-aIx
-aIx
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -66201,21 +65887,21 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aIu
-aJy
-aKt
-cBN
-aIx
-aOa
-aOa
-aOa
-aIx
-aIx
-aOe
-aOe
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -66458,22 +66144,22 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aFS
-aFS
-aFS
-aHv
-aMJ
-aOb
-aOb
-aOb
-aRA
-aHv
-aFS
-aFS
-aFS
-aFS
-aFS
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -66713,24 +66399,24 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aFS
-aHv
-aIv
-aJz
-aKu
-aLq
-aIx
-aIx
-aIx
-aIx
-aIx
-aFS
-aTF
-aUE
-aTF
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -66970,24 +66656,24 @@ aaa
 aaa
 aaa
 aaa
-cBN
-aGQ
-aHw
-aIw
-aIw
-cBN
-aIx
-aIx
-aOc
-aPj
-aOc
-aIx
-cBN
-aMI
-aMI
-aMI
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -67227,24 +66913,24 @@ aaa
 aaa
 aaa
 aaa
-aFT
-aGR
-aHx
-aIx
-aIx
-aKv
-aIx
-aIx
-aOd
-aPk
-aQq
-aIx
-aSp
-aMI
-aMI
-aMI
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -67484,24 +67170,24 @@ aaa
 aaa
 aaa
 aaa
-aFT
-aGS
-aHy
-aIy
-aIy
-aFT
-aIx
-aIx
-aOc
-aPl
-aOc
-aIx
-aFT
-aMI
-aNZ
-aNZ
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -67741,24 +67427,24 @@ axB
 aaa
 aaa
 aaa
-aFS
-aFS
-aHv
-aIz
-aJA
-aKu
-aLq
-aIx
-aIx
-aIx
-aIx
-aIx
-aFS
-aTG
-aUF
-aVK
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -68000,22 +67686,22 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aFS
-aFS
-aFS
-aHv
-aMJ
-aOa
-aOa
-aOa
-aRA
-aHv
-aFS
-aFS
-aFS
-aFS
-aFS
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -68257,21 +67943,21 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aIA
-aJB
-aKw
-aFT
-aIx
-aOb
-aOb
-aOb
-aIx
-aIx
-aNZ
-aNZ
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -68514,21 +68200,21 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aIA
-aJC
-aJC
-aLr
-aIx
-aIx
-aIx
-aIx
-aIx
-aIx
-aIx
-aIx
-aVJ
-aWD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -68771,21 +68457,6 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aIA
-aJC
-aJC
-aFT
-aMI
-aOe
-aOe
-aOe
-aMI
-aOe
-aMI
-aOe
-aVJ
-aWD
 aaa
 aaa
 aaa
@@ -68807,7 +68478,22 @@ aaa
 aaa
 aaa
 aaa
-bsg
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -69028,21 +68714,18 @@ aaa
 aaa
 aaa
 aaa
-aFS
-aFT
-aFT
-aKx
-aFS
-aFS
-aFT
-aFT
-aFS
-aKs
-aFS
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aTH
-aFS
-aFS
-aFS
 aaa
 aaa
 aaa
@@ -69063,9 +68746,12 @@ aaa
 aaa
 aaa
 aaa
-bsg
-btG
-bsg
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -69308,10 +68994,6 @@ aaa
 aaa
 aaa
 aaa
-beV
-bgP
-bgP
-beV
 aaa
 aaa
 aaa
@@ -69320,9 +69002,13 @@ aaa
 aaa
 aaa
 aaa
-bsh
-bsk
-buX
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -69565,10 +69251,6 @@ aaa
 aaa
 aaa
 aaa
-beV
-bfR
-bhC
-beV
 aaa
 aaa
 aaa
@@ -69577,9 +69259,13 @@ aaa
 aaa
 aaa
 aaa
-bqP
-btH
-bqP
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -69821,23 +69507,23 @@ aZx
 aZx
 aaa
 aaa
-beV
-beV
-bgQ
-bgQ
-beV
-beV
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aZx
 aZx
 aZx
 aZx
-bqP
-bqP
-btI
-bqP
-bqP
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -70038,15 +69724,15 @@ amI
 anu
 aog
 aiu
-apC
-apC
-apD
-apC
-apC
-apD
-apC
-apC
-apC
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aiu
 azW
 aBa
@@ -70078,23 +69764,23 @@ baJ
 aZx
 bcW
 aZx
-beV
-bfQ
-bfR
-bfR
-bhX
-beV
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aZx
 aZx
 aZx
 baJ
 bon
 aZx
-bqQ
-bsi
-bsk
-buY
-cqq
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -70295,15 +69981,15 @@ amJ
 anv
 aoh
 aiu
-apD
-aqj
-are
-ass
-atr
-auv
-avo
-awG
-axD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aiu
 azX
 aBb
@@ -70335,23 +70021,23 @@ baK
 bbQ
 bcX
 bdV
-beW
-bfR
-bgR
-bgR
-bfR
-beW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 bbQ
 bcX
 bdV
 baK
 bon
 aZx
-bqP
-bsi
-bsk
-buY
-bqP
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -70552,15 +70238,15 @@ amK
 anw
 aoh
 aiu
-apD
-aqk
-arf
-apC
-ats
-atr
-atr
-awG
-axD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aiu
 azY
 aiu
@@ -70592,23 +70278,23 @@ baK
 aZx
 aZx
 aZx
-beV
-bfS
-bfR
-bfR
-bhY
-beV
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aZx
 aZx
 aZx
 baK
 bon
 aZx
-bqP
-bsj
-bsk
-bsk
-bqP
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -70809,15 +70495,15 @@ akA
 akA
 aoi
 aiu
-apD
-aql
-arg
-ast
-att
-auw
-atr
-awG
-axD
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aiu
 azZ
 aiu
@@ -70849,23 +70535,23 @@ baK
 bbR
 bcY
 aZx
-beX
-bfT
-bgR
-bgR
-bfR
-beX
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aZx
 bkQ
 bbR
 baK
 bon
 aZx
-bqR
-bsk
-btJ
-bsk
-bwp
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -71066,15 +70752,15 @@ amL
 anx
 aoj
 aiu
-apC
-apC
-arh
-apC
-apC
-apC
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 avp
-apC
-apC
+aaa
+aaa
 aiu
 aAa
 aiu
@@ -71106,23 +70792,23 @@ baL
 baK
 bcZ
 aZx
-beX
-bfU
-bfR
-bfR
-bfR
-beX
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aZx
 bkR
 baK
 baL
 bon
 aZx
-bqP
-bsk
-bsk
-buZ
-bqP
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -71363,23 +71049,23 @@ baK
 bbS
 bda
 aZx
-beX
-bfR
-bgR
-bgR
-bfR
-beX
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aZx
 bkS
 bbS
 baK
 bon
 aZx
-bqP
-bsi
-bsk
-buY
-bqP
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -71620,23 +71306,23 @@ baM
 aZx
 aZx
 aZx
-beV
-bfV
-bgR
-bgR
-bhZ
-beV
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aZx
 aZx
 aZx
 bno
 boo
 aZx
-bqQ
-bsi
-bsk
-buY
-cqq
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -71877,23 +71563,23 @@ baN
 bbQ
 bcX
 bdV
-beW
-bfR
-bfR
-bfR
-bfR
-beW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 bbQ
 bcX
 bdV
 bnp
 bon
 aZx
-bqP
-bqQ
+aaa
+aaa
 btK
-bqQ
-bqP
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -72134,12 +71820,12 @@ baN
 aZx
 bcW
 aZx
-beV
-bfW
-bfW
-bfW
-bfW
-beV
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aZx
 aZx
 aZx
@@ -72391,12 +72077,12 @@ baN
 bbR
 bbR
 aYG
-beV
-bfX
+aaa
+aaa
 bgS
-bhD
-bia
-beV
+aaa
+aaa
+aaa
 aYG
 bbR
 bbR
@@ -90878,10 +90564,10 @@ aJm
 aKg
 cDa
 aMo
-cDd
-cDf
-cDg
-cDh
+cDa
+cDa
+cDa
+cDa
 aLg
 aTj
 aUu
@@ -91909,8 +91595,8 @@ aMs
 aNO
 aPb
 aQe
-cDi
-cDj
+cDa
+cDa
 aTn
 aUx
 aVA
@@ -92167,7 +91853,7 @@ aNP
 aPb
 aNO
 aNP
-cDk
+cDa
 aTo
 aSk
 aTm
@@ -92424,7 +92110,7 @@ aNO
 aPc
 aQf
 aRq
-cDl
+cDa
 aTp
 aSk
 aTm
@@ -92681,7 +92367,7 @@ aNQ
 aNO
 aQg
 aNP
-cDm
+cDa
 aTq
 aSk
 aVB
@@ -92932,13 +92618,13 @@ aEd
 aEd
 aEd
 cCX
-cDb
-cDc
-cDe
+cDa
+cDa
+cDa
 coL
 coL
 coL
-cDn
+cDa
 aTr
 aUy
 aPd
@@ -93707,25 +93393,25 @@ aKq
 aJs
 aEj
 aaa
-aQh
-aQh
-aQh
-aTt
-aUA
-aQh
-aWC
-aXB
-aQh
-aQh
-aQh
 aaa
-apC
-apC
-apD
+aaa
+aaa
+aaa
+aUA
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 bfK
-apD
-apC
-apC
+aaa
+aaa
+aaa
 aEj
 aTx
 bkE
@@ -93963,26 +93649,26 @@ aKn
 aKn
 aMy
 aEj
-aPe
-aQh
-aQh
-aRr
-aRr
-aRr
-aVC
-aRr
-aRr
-aRr
-aRr
-aQh
 aaa
-apC
-bdN
-atr
-atr
-beQ
-bhw
-apC
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aEj
 aTx
 bkE
@@ -94220,26 +93906,26 @@ aEj
 aLk
 aLk
 aEj
-aPe
-aQi
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aQh
 aaa
-apD
-bdO
-beQ
-atr
-beQ
-bhx
-bhW
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aEj
 bjz
 bkE
@@ -94477,26 +94163,26 @@ aKo
 aLl
 aMz
 aEj
-aPe
-aQi
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aZu
-aQh
 aaa
-apC
-bdP
-atr
-atr
-beQ
-bhy
-apC
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aEj
 aTx
 bkF
@@ -94734,26 +94420,26 @@ aFi
 aFi
 aEj
 aEj
-aPe
-aQi
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aRr
-aQh
 aaa
-apC
-apC
-apD
-bfL
-apD
-apC
-apC
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aEj
 aTx
 bkF
@@ -94991,18 +94677,18 @@ aKp
 aFi
 aMA
 aEj
-aPe
-aQh
-aQh
-aRr
-aRr
-aRr
-aVD
-aRr
-aRr
-aRr
-aRr
-aQh
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -95249,17 +94935,17 @@ aFi
 aFi
 aEj
 aaa
-aQh
-aQh
-aQh
-aQh
-aQh
-aQh
-aQh
-aQh
-aQh
-aQh
-aQh
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
+aaa
 aaa
 aaa
 aaa
