@@ -75,6 +75,7 @@
 	var/static/image/drained_overlay = image(icon = 'icons/obj/guns/energy.dmi', icon_state = "esniper_empty")
 
 	var/datum/action/item_action/zoom_lock_action/zoom_lock_action
+	var/datum/component/mobhook
 
 /obj/item/gun/energy/beam_rifle/debug
 	delay = 0
@@ -189,6 +190,7 @@
 	STOP_PROCESSING(SSfastprocess, src)
 	set_user(null)
 	QDEL_LIST(current_tracers)
+	QDEL_NULL(mobhook)
 	return ..()
 
 /obj/item/gun/energy/beam_rifle/emp_act(severity)
@@ -258,7 +260,7 @@
 		delay_penalty(difference * aiming_time_increase_angle_multiplier)
 		lastangle = angle
 
-/obj/item/gun/energy/beam_rifle/on_mob_move()
+/obj/item/gun/energy/beam_rifle/proc/on_mob_move()
 	check_user()
 	if(aiming)
 		delay_penalty(aiming_time_increase_user_movement)
@@ -284,12 +286,14 @@
 	if(user == current_user)
 		return
 	stop_aiming(current_user)
+	QDEL_NULL(mobhook)
 	if(istype(current_user))
 		LAZYREMOVE(current_user.mousemove_intercept_objects, src)
 		current_user = null
 	if(istype(user))
 		current_user = user
 		LAZYADD(current_user.mousemove_intercept_objects, src)
+		mobhook = user.AddComponent(/datum/component/redirect, list(COMSIG_MOVABLE_MOVED), CALLBACK(src, .proc/on_mob_move))
 
 /obj/item/gun/energy/beam_rifle/onMouseDrag(src_object, over_object, src_location, over_location, params, mob)
 	if(aiming)
@@ -480,11 +484,9 @@
 	if(!do_pierce)
 		return FALSE
 	if(pierced[target])		//we already pierced them go away
-		forceMove(get_turf(target))
 		return TRUE
 	if(isclosedturf(target))
 		if(wall_pierce++ < wall_pierce_amount)
-			forceMove(target)
 			if(prob(wall_devastate))
 				if(iswallturf(target))
 					var/turf/closed/wall/W = target
@@ -500,7 +502,6 @@
 					var/obj/O = AM
 					O.take_damage((impact_structure_damage + aoe_structure_damage) * structure_bleed_coeff * get_damage_coeff(AM), BURN, "energy", FALSE)
 				pierced[AM] = TRUE
-				forceMove(AM.drop_location())
 				structure_pierce++
 				return TRUE
 	return FALSE
@@ -535,6 +536,9 @@
 /obj/item/projectile/beam/beam_rifle/Collide(atom/target)
 	if(check_pierce(target))
 		permutated += target
+		trajectory_ignore_forcemove = TRUE
+		forceMove(target)
+		trajectory_ignore_forcemove = FALSE
 		return FALSE
 	if(!QDELETED(target))
 		cached = get_turf(target)
@@ -552,7 +556,7 @@
 	tracer_type = /obj/effect/projectile/tracer/tracer/beam_rifle
 	var/constant_tracer = FALSE
 
-/obj/item/projectile/beam/beam_rifle/hitscan/generate_hitscan_tracers(cleanup = TRUE, duration = 5, highlander)
+/obj/item/projectile/beam/beam_rifle/hitscan/generate_hitscan_tracers(cleanup = TRUE, duration = 5, impacting = TRUE, highlander)
 	set waitfor = FALSE
 	if(isnull(highlander))
 		highlander = constant_tracer

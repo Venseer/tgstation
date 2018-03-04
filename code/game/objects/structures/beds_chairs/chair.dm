@@ -37,7 +37,6 @@
 
 	if(istype(L))
 		if(!user.canUseTopic(src, BE_CLOSE, ismonkey(user)))
-			to_chat(user, "<span class='warning'>You can't do that right now!</span>")
 			return FALSE
 		else
 			return TRUE
@@ -73,7 +72,7 @@
 
 /obj/structure/chair/attackby(obj/item/W, mob/user, params)
 	if(istype(W, /obj/item/wrench) && !(flags_1&NODECONSTRUCT_1))
-		playsound(src.loc, W.usesound, 50, 1)
+		W.play_tool_sound(src)
 		deconstruct()
 	else if(istype(W, /obj/item/assembly/shock_kit))
 		if(!user.temporarilyRemoveItemFromInventory(W))
@@ -226,7 +225,6 @@
 		if(!item_chair || !usr.can_hold_items() || has_buckled_mobs() || src.flags_1 & NODECONSTRUCT_1)
 			return
 		if(!usr.canUseTopic(src, BE_CLOSE, ismonkey(usr)))
-			to_chat(usr, "<span class='warning'>You can't do that right now!</span>")
 			return
 		usr.visible_message("<span class='notice'>[usr] grabs \the [src.name].</span>", "<span class='notice'>You grab \the [src.name].</span>")
 		var/C = new item_chair(loc)
@@ -393,3 +391,17 @@
 		user.visible_message("<span class='notice'>[user] stops [src]'s uncontrollable spinning.</span>", \
 		"<span class='notice'>You grab [src] and stop its wild spinning.</span>")
 		STOP_PROCESSING(SSfastprocess, src)
+
+/obj/structure/chair/bronze
+	name = "brass chair"
+	desc = "A spinny chair made of bronze. It has little cogs for wheels!"
+	anchored = FALSE
+	icon_state = "brass_chair"
+	buildstacktype = /obj/item/stack/tile/bronze
+	buildstackamount = 1
+	item_chair = null
+
+/obj/structure/chair/bronze/Moved()
+	. = ..()
+	if(has_gravity())
+		playsound(src, 'sound/machines/clockcult/integration_cog_install.ogg', 50, TRUE)

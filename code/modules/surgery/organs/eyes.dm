@@ -26,6 +26,8 @@
 			HMN.regenerate_icons()
 		else
 			eye_color = HMN.eye_color
+		if(HMN.has_trait(TRAIT_NIGHT_VISION) && !lighting_alpha)
+			lighting_alpha = LIGHTING_PLANE_ALPHA_NV_TRAIT
 	M.update_tint()
 	owner.update_sight()
 
@@ -128,12 +130,14 @@
 	eye.on = TRUE
 	eye.forceMove(M)
 	eye.update_brightness(M)
+	M.become_blind("flashlight_eyes")
 
 
 /obj/item/organ/eyes/robotic/flashlight/Remove(var/mob/living/carbon/M, var/special = 0)
 	eye.on = FALSE
 	eye.update_brightness(M)
 	eye.forceMove(src)
+	M.cure_blind("flashlight_eyes")
 	..()
 
 // Welding shield implant
@@ -161,6 +165,7 @@
 	var/list/obj/effect/abstract/eye_lighting/eye_lighting
 	var/obj/effect/abstract/eye_lighting/on_mob
 	var/image/mob_overlay
+	var/datum/component/mobhook
 
 /obj/item/organ/eyes/robotic/glow/Initialize()
 	. = ..()
@@ -227,15 +232,20 @@
 	if(active)
 		deactivate(silent = TRUE)
 
-/obj/item/organ/eyes/robotic/glow/on_mob_move()
-	if(QDELETED(owner) || !active)
-		return
-	update_visuals()
+/obj/item/organ/eyes/robotic/glow/Insert(var/mob/living/carbon/M)
+	. = ..()
+	if (mobhook && mobhook.parent != M)
+		QDEL_NULL(mobhook)
+	if (!mobhook)
+		mobhook = M.AddComponent(/datum/component/redirect, list(COMSIG_ATOM_DIR_CHANGE), CALLBACK(src, .proc/update_visuals))
 
-/obj/item/organ/eyes/robotic/glow/on_mob_turn()
-	if(QDELETED(owner) || !active)
-		return
-	update_visuals()
+/obj/item/organ/eyes/robotic/glow/Remove(mob/living/carbon/M)
+	. = ..()
+	QDEL_NULL(mobhook)
+
+/obj/item/organ/eyes/robotic/glow/Destroy()
+	QDEL_NULL(mobhook) // mobhook is not our component
+	return ..()
 
 /obj/item/organ/eyes/robotic/glow/proc/activate(silent = FALSE)
 	start_visuals()
@@ -251,11 +261,13 @@
 	active = FALSE
 	remove_mob_overlay()
 
-/obj/item/organ/eyes/robotic/glow/proc/update_visuals()
+/obj/item/organ/eyes/robotic/glow/proc/update_visuals(olddir, newdir)
 	if((LAZYLEN(eye_lighting) < light_beam_distance) || !on_mob)
 		regenerate_light_effects()
 	var/turf/scanfrom = get_turf(owner)
 	var/scandir = owner.dir
+	if (newdir && scandir != newdir) // COMSIG_ATOM_DIR_CHANGE happens before the dir change, but with a reference to the new direction.
+		scandir = newdir
 	if(!istype(scanfrom))
 		clear_visuals()
 	var/turf/scanning = scanfrom
