@@ -1,8 +1,8 @@
 /obj/item/organ/eyes
-	name = "eyes"
+	name = BODY_ZONE_PRECISE_EYES
 	icon_state = "eyeballs"
 	desc = "I see you!"
-	zone = "eyes"
+	zone = BODY_ZONE_PRECISE_EYES
 	slot = ORGAN_SLOT_EYES
 	gender = PLURAL
 
@@ -76,6 +76,10 @@
 	name = "burning red eyes"
 	desc = "Even without their shadowy owner, looking at these eyes gives you a sense of dread."
 	icon_state = "burning_eyes"
+
+/obj/item/organ/eyes/night_vision/mushroom
+	name = "fung-eye"
+	desc = "While on the outside they look inert and dead, the eyes of mushroom people are actually very advanced."
 
 ///Robotic
 
