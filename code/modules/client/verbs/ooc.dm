@@ -19,7 +19,7 @@
 		if(prefs.muted & MUTE_OOC)
 			to_chat(src, "<span class='danger'>You cannot use OOC (muted).</span>")
 			return
-	if(jobban_isbanned(src.mob, "OOC"))
+	if(is_banned_from(ckey, "OOC"))
 		to_chat(src, "<span class='danger'>You have been banned from OOC.</span>")
 		return
 	if(QDELETED(src))
@@ -50,9 +50,7 @@
 		to_chat(src, "<span class='danger'>You have OOC muted.</span>")
 		return
 
-
-	log_talk(mob,"[key_name(src)] : [raw_msg]",LOGOOC)
-	mob.log_message("[key]: [raw_msg]", INDIVIDUAL_OOC_LOG)
+	mob.log_talk(raw_msg, LOG_OOC)
 
 	var/keyname = key
 	if(prefs.unlock_content)
@@ -109,7 +107,7 @@ GLOBAL_VAR_INIT(normal_ooc_colour, OOC_COLOR)
 	set name = "Set Your OOC Color"
 	set category = "Preferences"
 
-	if(!holder || check_rights_for(src, R_ADMIN))
+	if(!holder || !check_rights_for(src, R_ADMIN))
 		if(!is_content_unlocked())
 			return
 
@@ -125,7 +123,7 @@ GLOBAL_VAR_INIT(normal_ooc_colour, OOC_COLOR)
 	set desc = "Returns your OOC Color to default"
 	set category = "Preferences"
 
-	if(!holder || check_rights_for(src, R_ADMIN))
+	if(!holder || !check_rights_for(src, R_ADMIN))
 		if(!is_content_unlocked())
 			return
 

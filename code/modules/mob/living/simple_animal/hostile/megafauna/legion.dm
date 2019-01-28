@@ -104,7 +104,7 @@ Difficulty: Medium
 		adjustHealth(-maxHealth) //heal ourself to full in prep for splitting
 		var/mob/living/simple_animal/hostile/megafauna/legion/L = new(loc)
 
-		L.maxHealth = maxHealth * 0.6
+		L.maxHealth = round(maxHealth * 0.6,DAMAGE_PRECISION)
 		maxHealth = L.maxHealth
 
 		L.health = L.maxHealth
@@ -195,7 +195,7 @@ Difficulty: Medium
 		A.name = "staff storm"
 		log_game("[user] ([key_name(user)]) has summoned [A] at [AREACOORD(user_turf)]")
 		if (is_special_character(user))
-			message_admins("[A] has been summoned in [ADMIN_VERBOSEJMP(user_turf)] by [user] ([key_name_admin(user)], a non-antagonist")
+			message_admins("[A] has been summoned in [ADMIN_VERBOSEJMP(user_turf)] by [ADMIN_LOOKUPFLW(user)], a non-antagonist")
 		A.area_type = user_area.type
 		A.telegraph_duration = 100
 		A.end_duration = 100

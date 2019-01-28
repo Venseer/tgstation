@@ -3,7 +3,7 @@
 	verb_say = "chimpers"
 	initial_language_holder = /datum/language_holder/monkey
 	icon = 'icons/mob/monkey.dmi'
-	icon_state = ""
+	icon_state = "monkey1"
 	gender = NEUTER
 	pass_flags = PASSTABLE
 	ventcrawler = VENTCRAWLER_NUDE
@@ -14,8 +14,7 @@
 	unique_name = TRUE
 	bodyparts = list(/obj/item/bodypart/chest/monkey, /obj/item/bodypart/head/monkey, /obj/item/bodypart/l_arm/monkey,
 					 /obj/item/bodypart/r_arm/monkey, /obj/item/bodypart/r_leg/monkey, /obj/item/bodypart/l_leg/monkey)
-
-
+	hud_type = /datum/hud/monkey
 
 /mob/living/carbon/monkey/Initialize(mapload, cubespawned=FALSE, mob/spawner)
 	verbs += /mob/living/proc/mob_sleep
@@ -27,7 +26,6 @@
 
 	//initialize limbs
 	create_bodyparts()
-
 	create_internal_organs()
 
 	. = ..()
@@ -59,26 +57,32 @@
 	internal_organs += new /obj/item/organ/stomach
 	..()
 
-/mob/living/carbon/monkey/movement_delay()
-	if(reagents)
-		if(reagents.has_reagent("morphine"))
-			return -1
-
-		if(reagents.has_reagent("nuka_cola"))
-			return -1
-
+/mob/living/carbon/monkey/on_reagent_change()
 	. = ..()
-	var/health_deficiency = (100 - health)
-	if(health_deficiency >= 45)
-		. += (health_deficiency / 25)
+	remove_movespeed_modifier(MOVESPEED_ID_MONKEY_REAGENT_SPEEDMOD, TRUE)
+	var/amount
+	if(reagents.has_reagent("morphine"))
+		amount = -1
+	if(reagents.has_reagent("nuka_cola"))
+		amount = -1
+	if(amount)
+		add_movespeed_modifier(MOVESPEED_ID_MONKEY_REAGENT_SPEEDMOD, TRUE, 100, override = TRUE, multiplicative_slowdown = amount)
 
+/mob/living/carbon/monkey/updatehealth()
+	. = ..()
+	var/slow = 0
+	if(!has_trait(TRAIT_IGNOREDAMAGESLOWDOWN))
+		var/health_deficiency = (maxHealth - health)
+		if(health_deficiency >= 45)
+			slow += (health_deficiency / 25)
+	add_movespeed_modifier(MOVESPEED_ID_MONKEY_HEALTH_SPEEDMOD, TRUE, 100, override = TRUE, multiplicative_slowdown = slow)
+
+/mob/living/carbon/monkey/adjust_bodytemperature(amount)
+	. = ..()
+	var/slow = 0
 	if (bodytemperature < 283.222)
-		. += (283.222 - bodytemperature) / 10 * 1.75
-
-	var/static/config_monkey_delay
-	if(isnull(config_monkey_delay))
-		config_monkey_delay = CONFIG_GET(number/monkey_delay)
-	. += config_monkey_delay
+		slow += ((283.222 - bodytemperature) / 10) * 1.75
+	add_movespeed_modifier(MOVESPEED_ID_MONKEY_TEMPERATURE_SPEEDMOD, TRUE, 100, override = TRUE, multiplicative_slowdown = slow)
 
 /mob/living/carbon/monkey/Stat()
 	..()
@@ -142,7 +146,7 @@
 			threatcount += 4 //trigger look_for_perp() since they're nonhuman and very likely hostile
 
 	//mindshield implants imply trustworthyness
-	if(isloyal())
+	if(has_trait(TRAIT_MINDSHIELD))
 		threatcount -= 1
 
 	return threatcount
